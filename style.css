@@ -648,7 +648,7 @@ button {
 .quantity .input-group {
     display: flex;
     align-items: center;
-    border: 1px solid #4C5262;
+    border: 1px solid rgba(76, 82, 98, 0.55);
     border-radius: 4px;
     overflow: hidden;
     height: 35px;
@@ -663,8 +663,8 @@ button {
 .quantity .input-group input {
     width: 50px;
     text-align: center;
-    border-left: 1px solid #4C5262;
-    border-right: 1px solid #4C5262;
+    border-left: 1px solid rgba(76, 82, 98, 0.3);
+    border-right: 1px solid rgba(76, 82, 98, 0.3);
     border-top: none;
     border-bottom: none;
     padding: 20px;
