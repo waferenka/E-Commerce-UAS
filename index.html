@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script>
+            let sliderIndex = 0;
+
+            function slideLeft() {
+                const slider = document.querySelector('.slider1');
+                const items = document.querySelectorAll('.slider1-item');
+                const itemsPerPage = 5;
+                sliderIndex = Math.max(sliderIndex - itemsPerPage, 0);
+                const itemWidth = items[0].clientWidth + parseInt(getComputedStyle(items[0]).marginRight);
+                slider.style.transform = `translateX(-${sliderIndex * itemWidth}px)`;
+            }
+
+            function slideRight() {
+                const slider = document.querySelector('.slider1');
+                const items = document.querySelectorAll('.slider1-item');
+                const itemsPerPage = 5;
+                const maxIndex = items.length - itemsPerPage;
+                sliderIndex = Math.min(sliderIndex + itemsPerPage, maxIndex-1.);
+                const itemWidth = items[0].clientWidth + parseInt(getComputedStyle(items[0]).marginRight);
+                slider.style.transform = `translateX(-${sliderIndex * itemWidth}px)`;
+            }
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                const defaultCategory = 'd1';
+                showCategory(defaultCategory);
+
+                document.querySelectorAll('.category').forEach(category => {
+                    category.addEventListener('click', function() {
+                        const selectedCategory = this.getAttribute('data-category');
+                        showCategory(selectedCategory);
+
+                        document.querySelectorAll('.category').forEach(cat => {
+                            cat.classList.remove('active');
+                        });
+
+                        this.classList.add('active');
+                    });
+                });
+
+                function showCategory(category) {
+                    document.querySelectorAll('.product').forEach(product => {
+                        product.classList.remove('active');
+                    });
+
+                    document.querySelectorAll(`.product[data-category="${category}"]`).forEach(product => {
+                        product.classList.add('active');
+                    });
+
+                    document.querySelectorAll('.category').forEach(cat => {
+                        if (cat.getAttribute('data-category') === category) {
+                            cat.classList.add('active');
+                        } else {
+                            cat.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        </script>
+        <title>Influx</title>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <img src="imgs/ic.png"> Influx
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" style="color: #FF7D32;">Home</a></li>
+                    <li><a href="product.html">Product</a></li>
+                    <li><a href="help.html">Help</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for Product">
+                <img src="imgs/search.png">
+            </div>
+        </header>
+        <main>
+            <section class="item">
+                <div class="slider">
+                    <div class="slides">
+                        <img src="imgs/slide1.png" alt="Slide 1">
+                        <img src="imgs/slide2.png" alt="Slide 2">
+                        <img src="imgs/slide3.png" alt="Slide 3">
+                        <img src="imgs/slide4.png" alt="Slide 4">
+                        <img src="imgs/slide5.png" alt="Slide 5">
+                        <img src="imgs/slide1.png" alt="Slide 1">
+                    </div>
+                    <h1>Belanja Adalah Trend!</h1>
+                    <p>Temukan koleksi terbaru fashion, elektronik, dan lainnya. Temukan gaya Anda, belanja favorit Anda, dan nikmati penawaran eksklusif!</p>
+                </div>
+            </section>
+            <center>
+                <section class="offers">
+                    <div class="offer" style="margin-right: 6px;">
+                        <img src="imgs/promo.png">
+                        <h3>Promo Terbaru Hari Ini</h3>
+                        <p>Dapatkan Promo Spesial Hari Ini, Promo Besar-besaran Mulai Dari Cashback, Diskon s/d 90% dan MasiH Banyak Lagi!</p>
+                        <a href="#" class="view-more">Selengkapnya</a>
+                    </div>
+                    <div class="offer" style="margin-left: 6px;">
+                        <img src="imgs/laris.png">
+                        <h3>Barang Terlaris Tahun Ini</h3>
+                        <p>Bingung Mau Beli Apa? Jangan Khawatir, Kamu akan Mendapatkan Rekomendasi Barang Terlaris Yang Bisa Menunjang Kebutuhanmu!</p>
+                        <a href="#" class="view-more">Selengkapnya</a>
+                    </div>
+                </section>
+            </center>
+
+            <div class="garis"></div>
+
+            <div class="slider1-container">
+                <h2>Hanya Untukmu</h2>
+                <button class="prev" onclick="slideLeft()">&#10094;</button>
+                <div class="slider1">
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a1.png" alt="Slide 1">
+                        <h3>Kursi Biasa</h3>
+                        <p>Rp150.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a2.png" alt="Slide 1">
+                        <h3>Kursi Biasa</h3>
+                        <p>Rp100.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a3.png" alt="Slide 1">
+                        <h3>Kursi Biasa</h3>
+                        <p>Rp210.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a4.png" alt="Slide 1">
+                        <h3>Kursi Biasa</h3>
+                        <p>Rp165.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a5.png" alt="Slide 1">
+                        <h3>Kursi Biasa</h3>
+                        <p>Rp100.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a6.png" alt="Slide 1">
+                        <h3>Kursi Biasa</h3>
+                        <p>Rp220.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a7.png" alt="Slide 1">
+                        <h3>Lampu Biasa</h3>
+                        <p>Rp110.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a8.png" alt="Slide 1">
+                        <h3>Meja Biasa</h3>
+                        <p>Rp134.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a9.png" alt="Slide 1">
+                        <h3>Lampu Biasa</h3>
+                        <p>Rp109.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a10.png" alt="Slide 1">
+                        <h3>Meja Biasa</h3>
+                        <p>Rp244.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a11.png" alt="Slide 1">
+                        <h3>Lampu Biasa</h3>
+                        <p>Rp134.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a12.png" alt="Slide 1">
+                        <h3>Meja Biasa</h3>
+                        <p>Rp94.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                    <a class="slider1-item" href="productCont.html">
+                        <img src="imgs/a13.png" alt="Slide 1">
+                        <h3>Mejaaa</h3>
+                        <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                    </a>
+                </div>
+                <button class="next" onclick="slideRight()">&#10095;</button>
+            </div>
+
+            <div class="garist"></div>
+
+            <section class="categories">
+                <h2>Product Categories</h2>
+                <div class="category-list">
+                    <div class="category" style="background-color: #FF6C59;" data-category="d1">Elektronik</div>
+                    <div class="category" style="background-color: #FFADA2;" data-category="d2">Fashion</div>
+                    <div class="category" style="background-color: #FFD3A2;" data-category="d3">Furniture</div>
+                    <div class="category" style="background-color: #F2D7B7;" data-category="d4">Aksesoris</div>
+                    <div class="category" style="background-color: #B4B7F0;" data-category="d5">Pakaian</div>
+                    <div class="category" style="background-color: #F89F5B;" data-category="d6">Kendaraan</div>
+                </div>
+            </section>
+
+            <section class="products">
+                <div class="product" data-category="d1">
+                    <img src="imgs/a1.png">
+                    <h3>Buku</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d1">
+                    <img src="imgs/a2.png">
+                    <h3>Laptop</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d1">
+                    <img src="imgs/a3.png">
+                    <h3>Meja</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d2">
+                    <img src="imgs/a4.png">
+                    <h3>Kursi</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d2">
+                    <img src="imgs/a5.png">
+                    <h3>Buku</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d2">
+                    <img src="imgs/a7.png">
+                    <h3>Laptop</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d2">
+                    <img src="imgs/a8.png">
+                    <h3>Meja</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d3">
+                    <img src="imgs/a9.png">
+                    <h3>Kursi</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d3">
+                    <img src="imgs/a1.png">
+                    <h3>Buku</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d3">
+                    <img src="imgs/a2.png">
+                    <h3>Laptop</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d3">
+                    <img src="imgs/a3.png">
+                    <h3>Meja</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d4">
+                    <img src="imgs/a4.png">
+                    <h3>Kursi</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d4">
+                    <img src="imgs/a5.png">
+                    <h3>Buku</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d4">
+                    <img src="imgs/a7.png">
+                    <h3>Laptop</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d4">
+                    <img src="imgs/a8.png">
+                    <h3>Meja</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d5">
+                    <img src="imgs/a9.png">
+                    <h3>Kursi</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d5">
+                    <img src="imgs/a8.png">
+                    <h3>Meja</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d5">
+                    <img src="imgs/a9.png">
+                    <h3>Kursi</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d6">
+                    <img src="imgs/a8.png">
+                    <h3>Meja</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d6">
+                    <img src="imgs/a9.png">
+                    <h3>Kursi</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+                <div class="product" data-category="d6">
+                    <img src="imgs/a9.png">
+                    <h3>Kursi</h3>
+                    <p>Rp124.000</p>
+                        <div class="rating">
+                            <span>⭐</span> 4.3 | 3 rb+ terjual
+                        </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <div class="footer-top">
+                <div>
+                    <h3>TOP CATEGORIES</h3>
+                    <ul>
+                        <li><a href="#">Elektronik</a></li>
+                        <li><a href="#">Fashion</a></li>
+                        <li><a href="#">Furniture</a></li>
+                        <li><a href="#">Aksesoris</a></li>
+                        <li><a href="#">Pakaian</a></li>
+                        <li><a href="#">Kendaraan</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>HELP</h3>
+                    <ul>
+                        <li><a href="#">Pesanan</a></li>
+                        <li><a href="#">Pembayaran</a></li>
+                        <li><a href="#">Lacak Paket</a></li>
+                        <li><a href="#">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>ABOUT US</h3>
+                    <ul>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Responsibility</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>FOLLOW US</h3>
+                    <div class="social-icons">
+                        <a href="#"><img src="imgs/facebook.png" alt="Facebook"></a>
+                        <a href="#"><img src="imgs/twitter.png" alt="Twitter"></a>
+                        <a href="#"><img src="imgs/whatsapp.png" alt="WhatsApp"></a>
+                        <a href="#"><img src="imgs/instagram.png" alt="Instagram"></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
