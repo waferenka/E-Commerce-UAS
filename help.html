@@ -5,46 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel ="shortcut icon" href ="favicon.ico"/>
         <link rel="stylesheet" href="style.css">
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const defaultCategory = 'd1';
-                showCategory(defaultCategory);
-
-                document.querySelectorAll('.help').forEach(help => {
-                    help.addEventListener('click', function() {
-                        const selectedCategory = this.getAttribute('data-category');
-                        showCategory(selectedCategory);
-
-                        document.querySelectorAll('.help').forEach(cat => {
-                            cat.classList.remove('active');
-                        });
-
-                        this.classList.add('active');
-                    });
-                });
-
-                function showCategory(help) {
-                    document.querySelectorAll('.helpcontent').forEach(helpcontent => {
-                        helpcontent.classList.remove('active');
-                    });
-
-                    document.querySelectorAll(`.helpcontent[data-category="${help}"]`).forEach(helpcontent => {
-                        helpcontent.classList.add('active');
-                    });
-
-                    document.querySelectorAll('.help').forEach(cat => {
-                        if (cat.getAttribute('data-category') === help) {
-                            cat.classList.add('active');
-                        } else {
-                            cat.classList.remove('active');
-                        }
-                    });
-                }
-            });
-        </script>
         <title>Layanan Bantuan</title>
     </head>
     <body>
+        <div class="overlay"></div>
         <header>
             <div class="logo">
                 <img src="imgs/ic.png"> Influx
@@ -53,52 +17,70 @@
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="product.html">Product</a></li>
-                    <li><a href="#" style="color: #FF7D32;">Help</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#" style="color: #FFD700;">Help</a></li>
                 </ul>
             </nav>
             <div class="search-bar">
-                <input type="text" placeholder="Search for Product">
-                <img src="imgs/search.png">
+                <input type="text" id="search-input" placeholder="Search for Product">
+                <img src="imgs/search.png" class="se">
+                <div class="search-results" id="search-results"></div>
             </div>
         </header>
+
+        <script src="script.js"></script>
+
         <main>
             <section class="hero">
                 <h1>Layanan Bantuan</h1>
             </section>
 
-            <div class="helph3">
-                
-            </div>
-
             <section class="helps">
                 <h2>Bagaimana Kami Bisa Membantumu</h2>
                 <section class="helpsl">
-                    <div class="help"style="background-color: #FF6C59;" data-category="d1">
+                    <div class="help item1" data-category="d1">
                         <h3>Pesanan</h3>
+                        <div class="underlineT"></div>
+                        <div class="underlineB"></div>
                     </div>
-                    <div class="help"style="background-color: #FFADA2;" data-category="d2">
+                    <div class="help item2" data-category="d2">
                         <h3>Pembayaran</h3>
+                        <div class="underlineT"></div>
+                        <div class="underlineB"></div>
                     </div>
-                    <div class="help"style="background-color: #FFD3A2;" data-category="d3">
+                    <div class="help item3" data-category="d3">
                         <h3>Lacak Paket</h3>
+                        <div class="underlineT"></div>
+                        <div class="underlineB"></div>
                     </div>
-                    <div class="help"style="background-color: #F2D7B7;" data-category="d4">
+                    <div class="help item4" data-category="d4">
                         <h3>Hubungi Kami</h3>
+                        <div class="underlineT"></div>
+                        <div class="underlineB"></div>
                     </div>
+                    <div class="vertical-line"></div>
+                    <div class="horizontal-line"></div>
                 </section>
+                
                 <section class="helpsr">
                     <div class="helpcontent" data-category="d1">
-                        <h3>Pesanan1</h3>
+                        <h3>Bantuan Pesanan</h3>
+                        <p>Untuk bantuan terkait pesanan, termasuk cara melakukan pemesanan, memeriksa status pesanan, atau pembatalan pesanan, silakan hubungi kami.</p>
+                        <a href="#"><buttonhlp>Hubungi Kami</buttonhlp></a>
                     </div>
                     <div class="helpcontent" data-category="d2">
-                        <h3>Pesanan2</h3>
+                        <h3>Informasi Pembayaran</h3>
+                        <p>Jika Anda memiliki pertanyaan tentang metode pembayaran, cara mengamankan pembayaran, atau masalah transaksi, tim dukungan kami siap membantu.</p>
+                        <a href="#"><buttonhlp>Bantuan Pembayaran</buttonhlp></a>
                     </div>
                     <div class="helpcontent" data-category="d3">
-                        <h3>Pesanan3</h3>
+                        <h3>Lacak Paket</h3>
+                        <p>Anda dapat melacak paket Anda secara real-time menggunakan fitur pelacakan kami. Masukkan nomor resi di halaman lacak paket kami.</p>
+                        <a href="#"><buttonhlp>Lacak Paket</buttonhlp></a>
                     </div>
                     <div class="helpcontent" data-category="d4">
-                        <h3>Pesanan4</h3>
+                        <h3>Hubungi kami</h3>
+                        <p>Jika Anda memerlukan bantuan lebih lanjut atau ingin menghubungi tim layanan pelanggan kami, silakan kunjungi halaman kontak kami.</p>
+                        <a href="#"><buttonhlp>Kontak Kami</buttonhlp></a>
                     </div>
                 </section>
             </section>
@@ -106,40 +88,38 @@
         <footer>
             <div class="footer-top">
                 <div>
-                    <h3>TOP CATEGORIES</h3>
+                    <h3>KATEGORI</h3>
                     <ul>
-                        <li><a href="#">Elektronik</a></li>
-                        <li><a href="#">Fashion</a></li>
-                        <li><a href="#">Furniture</a></li>
-                        <li><a href="#">Aksesoris</a></li>
-                        <li><a href="#">Pakaian</a></li>
-                        <li><a href="#">Kendaraan</a></li>
+                        <li><a href="product.html">Elektronik</a></li>
+                        <li><a href="product.html">Fashion</a></li>
+                        <li><a href="product.html">Furniture</a></li>
+                        <li><a href="product.html">Dapur</a></li>
+                        <li><a href="product.html">Pakaian</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3>HELP</h3>
                     <ul>
-                        <li><a href="#">Pesanan</a></li>
-                        <li><a href="#">Pembayaran</a></li>
-                        <li><a href="#">Lacak Paket</a></li>
-                        <li><a href="#">Hubungi Kami</a></li>
+                        <li><a href="help.html">Pesanan</a></li>
+                        <li><a href="help.html">Pembayaran</a></li>
+                        <li><a href="help.html">Lacak Paket</a></li>
+                        <li><a href="help.html">Hubungi Kami</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3>ABOUT US</h3>
                     <ul>
-                        <li><a href="#">Terms & Conditions</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Responsibility</a></li>
+                        <li><a href="syarat.html">Syarat & Ketentuan</a></li>
+                        <li><a href="privasi.html">Kebijakan Privasi</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3>FOLLOW US</h3>
                     <div class="social-icons">
-                        <a href="#"><img src="imgs/facebook.png" alt="Facebook"></a>
-                        <a href="#"><img src="imgs/twitter.png" alt="Twitter"></a>
-                        <a href="#"><img src="imgs/whatsapp.png" alt="WhatsApp"></a>
-                        <a href="#"><img src="imgs/instagram.png" alt="Instagram"></a>
+                        <a href="https://facebook.com"><img src="imgs/facebook.png" alt="Facebook"></a>
+                        <a href="https://x.com"><img src="imgs/twitter.png" alt="Twitter"></a>
+                        <a href="https://whatsapp.com"><img src="imgs/whatsapp.png" alt="WhatsApp"></a>
+                        <a href="https://instagram.com"><img src="imgs/instagram.png" alt="Instagram"></a>
                     </div>
                 </div>
             </div>
