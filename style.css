@@ -865,6 +865,12 @@ button {
     margin-bottom: 10px;
 }
 
+.actions .bp {
+    text-decoration: none;
+    color: #4C5262;
+    margin-top: 10px;
+}
+
 .actions button1 {
     padding: 10px 20px;
     border: none;
@@ -912,7 +918,7 @@ footer {
     padding: 20px 0;
 }
 
-.footer-top {
+.footerc {
 	border-top: 1px solid rgba(115, 124, 150, 0.25);
     display: flex;
     margin: 0 auto;
@@ -920,25 +926,31 @@ footer {
     padding: 40px 50px 10px 50px;
 }
 
-.footer-top div {
+.footerc div {
     flex: 1;
 }
 
-.footer-top h3 {
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(115, 124, 150, 0.25);
+}
+
+.footerc h3 {
     padding-bottom: 10px;
     padding-left: 60px;
 }
 
-.footer-top ul {
+.footerc ul {
     list-style: none;
     padding-left: 60px;
 }
 
-.footer-top ul li {
+.footerc ul li {
     margin: 10px 0;
 }
 
-.footer-top ul li a {
+.footerc ul li a {
     text-decoration: none;
     color: #4C5262;
 }
