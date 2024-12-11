@@ -25,13 +25,16 @@ if (isset($_SESSION['username'])) {
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- My Style -->
+    <link rel="stylesheet" href="../css/bootstrap_style.css">
 </head>
 
 <body>
     <!-- Navbar Start -->
     <nav class=" navbar navbar-expand-lg bg-body-secondary">
-        <div class="container-fluid mt-1 mb-1 ms-4 me-4">
-            <a class="navbar-brand me-4" href="../index.php">Data Mahasiswa</a>
+        <div class="container-fluid ms-3 me-3">
+            <a class="navbar-brand me-4 logo" href="../index.php">
+                <img class="me-3" src="../favicon.ico" alt="">Influx</a>
         </div>
     </nav>
     <!-- Navbar End -->

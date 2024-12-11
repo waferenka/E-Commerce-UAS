@@ -1,0 +1,24 @@
+:root {
+  --primary-color: white;
+  --secondary-color: #e6c403;
+  --background-color: #eeeeee;
+}
+
+@font-face {
+  font-family: Rubik;
+  src: url("../font/Rubik-Regular.ttf");
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  color: #4c5262;
+}
+
+.logo img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}

@@ -1,12 +1,6 @@
-:root {
-  --primary-color: white;
-  --secondary-color: #e6c403;
-  --background-color: #eeeeee;
-}
-
 @font-face {
   font-family: Rubik;
-  src: url("Rubik-Regular.ttf");
+  src: url("../font/Rubik-Regular.ttf");
 }
 
 * {
@@ -476,7 +470,7 @@ button {
 }
 
 .hero {
-  background: url("imgs/a6.png") no-repeat center center/cover;
+  background: url("../imgs/a6.png") no-repeat center center/cover;
   height: 300px;
   display: flex;
   justify-content: center;
