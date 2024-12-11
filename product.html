@@ -1,255 +1,250 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel ="shortcut icon" href ="favicon.ico"/>
-        <link rel="stylesheet" href="style.css">
-        <title>Pilihan Produk</title>
-    </head>
-    <body>
-        <div class="overlay"></div>
-        <header>
-            <div class="logo">
-                <img src="imgs/ic.png"> Influx
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="#" style="color: #FFD700;">Product</a></li>
-                    <li><a href="help.html">Help</a></li>
-                </ul>
-            </nav>
-            <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Search for Product">
-                <img src="imgs/search.png" class="se">
-                <div class="search-results" id="search-results"></div>
-            </div>
-        </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Pilihan Produk</title>
+  </head>
+  <body>
+    <div class="overlay"></div>
+    <header>
+      <div class="logo"><img src="imgs/ic.png" /> Influx</div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#" style="color: #ffd700">Product</a></li>
+          <li><a href="help.html">Help</a></li>
+        </ul>
+      </nav>
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search for Product" />
+        <img src="imgs/search.png" class="se" />
+        <div class="search-results" id="search-results"></div>
+      </div>
+    </header>
 
-        <script src="script.js"></script>
+    <script src="js/script.js"></script>
 
-        <main>
-            <section class="hero">
-                <h1>Pilihan Produk</h1>
-            </section>
-            
-            <section class="categories">
-                <h2>Kategori Produk</h2>
-                <div class="category-list">
-                    <div class="category" style="background-color: #FF6C59;" data-category="d1">Elektronik</div>
-                    <div class="category" style="background-color: #FFADA2;" data-category="d2">Fashion</div>
-                    <div class="category" style="background-color: #FFD3A2;" data-category="d3">Furniture</div>
-                    <div class="category" style="background-color: #F2D7B7;" data-category="d4">Dapur</div>
-                    <div class="category" style="background-color: #B4B7F0;" data-category="d5">Pakaian</div>
-                </div>
-            </section>
+    <main>
+      <section class="hero">
+        <h1>Pilihan Produk</h1>
+      </section>
 
-            <section class="products">
-                <a class="product" data-category="d1" href="productCont.html">
-                    <img src="imgs/f1.png">
-                    <h3>HP Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d1" href="productCont.html">
-                    <img src="imgs/f2.png">
-                    <h3>Speaker Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d1" href="productCont.html">
-                    <img src="imgs/f3.png">
-                    <h3>HP Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d1" href="productCont.html">
-                    <img src="imgs/f4.png">
-                    <h3>Laptop Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d2" href="productCont.html">
-                    <img src="imgs/b1.png">
-                    <h3>Jam Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d2" href="productCont.html">
-                    <img src="imgs/b2.png">
-                    <h3>Jam Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d2" href="productCont.html">
-                    <img src="imgs/b3.png">
-                    <h3>Jam Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d2" href="productCont.html">
-                    <img src="imgs/b4.png">
-                    <h3>Topi Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d3" href="productCont.html">
-                    <img src="imgs/a10.png">
-                    <h3>Meja Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d3" href="productCont.html">
-                    <img src="imgs/a2.png">
-                    <h3>Kursi Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d3" href="productCont.html">
-                    <img src="imgs/a8.png">
-                    <h3>Meja Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d3" href="productCont.html">
-                    <img src="imgs/a4.png">
-                    <h3>Kursi Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d4" href="productCont.html">
-                    <img src="imgs/d1.png">
-                    <h3>Spatula Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d4" href="productCont.html">
-                    <img src="imgs/d2.png">
-                    <h3>Panci Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d4" href="productCont.html">
-                    <img src="imgs/d3.png">
-                    <h3>Pisau Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d4" href="productCont.html">
-                    <img src="imgs/d4.png">
-                    <h3>Teflon Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d5" href="productCont.html">
-                    <img src="imgs/e1.png">
-                    <h3>Hoodie Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d5" href="productCont.html">
-                    <img src="imgs/e2.png">
-                    <h3>Hoodie Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d5" href="productCont.html">
-                    <img src="imgs/e3.png">
-                    <h3>Sweeter Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-                <a class="product" data-category="d5" href="productCont.html">
-                    <img src="imgs/e4.png">
-                    <h3>Sweeter Biasa</h3>
-                    <p>Rp124.000</p>
-                        <div class="rating">
-                            <span>⭐</span> 4.3 | 3 rb+ terjual
-                        </div>
-                </a>
-            </section>
-        </main>
-        <footer>
-            <div class="footerc">
-                <div>
-                    <h3>KATEGORI</h3>
-                    <ul>
-                        <li><a href="product.html">Elektronik</a></li>
-                        <li><a href="product.html">Fashion</a></li>
-                        <li><a href="product.html">Furniture</a></li>
-                        <li><a href="product.html">Dapur</a></li>
-                        <li><a href="product.html">Pakaian</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>HELP</h3>
-                    <ul>
-                        <li><a href="help.html">Pesanan</a></li>
-                        <li><a href="help.html">Pembayaran</a></li>
-                        <li><a href="help.html">Lacak Paket</a></li>
-                        <li><a href="help.html">Hubungi Kami</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>ABOUT US</h3>
-                    <ul>
-                        <li><a href="syarat.html">Syarat & Ketentuan</a></li>
-                        <li><a href="privasi.html">Kebijakan Privasi</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>FOLLOW US</h3>
-                    <div class="social-icons">
-                        <a href="https://facebook.com"><img src="imgs/facebook.png" alt="Facebook"></a>
-                        <a href="https://x.com"><img src="imgs/twitter.png" alt="Twitter"></a>
-                        <a href="https://whatsapp.com"><img src="imgs/whatsapp.png" alt="WhatsApp"></a>
-                        <a href="https://instagram.com"><img src="imgs/instagram.png" alt="Instagram"></a>
-                    </div>
-                </div>
-                
-            </div>
-            <div class="copyright">
-                <p><b>© 2024, Influx</b></p>
-            </div>
-        </footer>
-    </body>
+      <section class="categories">
+        <h2>Kategori Produk</h2>
+        <div class="category-list">
+          <div
+            class="category"
+            style="background-color: #ff6c59"
+            data-category="d1"
+          >
+            Elektronik
+          </div>
+          <div
+            class="category"
+            style="background-color: #ffada2"
+            data-category="d2"
+          >
+            Fashion
+          </div>
+          <div
+            class="category"
+            style="background-color: #ffd3a2"
+            data-category="d3"
+          >
+            Furniture
+          </div>
+          <div
+            class="category"
+            style="background-color: #f2d7b7"
+            data-category="d4"
+          >
+            Dapur
+          </div>
+          <div
+            class="category"
+            style="background-color: #b4b7f0"
+            data-category="d5"
+          >
+            Pakaian
+          </div>
+        </div>
+      </section>
+
+      <section class="products">
+        <a class="product" data-category="d1" href="productCont.html">
+          <img src="imgs/f1.png" />
+          <h3>HP Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d1" href="productCont.html">
+          <img src="imgs/f2.png" />
+          <h3>Speaker Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d1" href="productCont.html">
+          <img src="imgs/f3.png" />
+          <h3>HP Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d1" href="productCont.html">
+          <img src="imgs/f4.png" />
+          <h3>Laptop Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d2" href="productCont.html">
+          <img src="imgs/b1.png" />
+          <h3>Jam Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d2" href="productCont.html">
+          <img src="imgs/b2.png" />
+          <h3>Jam Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d2" href="productCont.html">
+          <img src="imgs/b3.png" />
+          <h3>Jam Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d2" href="productCont.html">
+          <img src="imgs/b4.png" />
+          <h3>Topi Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d3" href="productCont.html">
+          <img src="imgs/a10.png" />
+          <h3>Meja Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d3" href="productCont.html">
+          <img src="imgs/a2.png" />
+          <h3>Kursi Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d3" href="productCont.html">
+          <img src="imgs/a8.png" />
+          <h3>Meja Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d3" href="productCont.html">
+          <img src="imgs/a4.png" />
+          <h3>Kursi Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d4" href="productCont.html">
+          <img src="imgs/d1.png" />
+          <h3>Spatula Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d4" href="productCont.html">
+          <img src="imgs/d2.png" />
+          <h3>Panci Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d4" href="productCont.html">
+          <img src="imgs/d3.png" />
+          <h3>Pisau Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d4" href="productCont.html">
+          <img src="imgs/d4.png" />
+          <h3>Teflon Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d5" href="productCont.html">
+          <img src="imgs/e1.png" />
+          <h3>Hoodie Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d5" href="productCont.html">
+          <img src="imgs/e2.png" />
+          <h3>Hoodie Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d5" href="productCont.html">
+          <img src="imgs/e3.png" />
+          <h3>Sweeter Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+        <a class="product" data-category="d5" href="productCont.html">
+          <img src="imgs/e4.png" />
+          <h3>Sweeter Biasa</h3>
+          <p>Rp124.000</p>
+          <div class="rating"><span>⭐</span> 4.3 | 3 rb+ terjual</div>
+        </a>
+      </section>
+    </main>
+    <footer>
+      <div class="footerc">
+        <div>
+          <h3>KATEGORI</h3>
+          <ul>
+            <li><a href="product.html">Elektronik</a></li>
+            <li><a href="product.html">Fashion</a></li>
+            <li><a href="product.html">Furniture</a></li>
+            <li><a href="product.html">Dapur</a></li>
+            <li><a href="product.html">Pakaian</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>HELP</h3>
+          <ul>
+            <li><a href="help.html">Pesanan</a></li>
+            <li><a href="help.html">Pembayaran</a></li>
+            <li><a href="help.html">Lacak Paket</a></li>
+            <li><a href="help.html">Hubungi Kami</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>ABOUT US</h3>
+          <ul>
+            <li><a href="syarat.html">Syarat & Ketentuan</a></li>
+            <li><a href="privasi.html">Kebijakan Privasi</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>FOLLOW US</h3>
+          <div class="social-icons">
+            <a href="https://facebook.com"
+              ><img src="imgs/facebook.png" alt="Facebook"
+            /></a>
+            <a href="https://x.com"
+              ><img src="imgs/twitter.png" alt="Twitter"
+            /></a>
+            <a href="https://whatsapp.com"
+              ><img src="imgs/whatsapp.png" alt="WhatsApp"
+            /></a>
+            <a href="https://instagram.com"
+              ><img src="imgs/instagram.png" alt="Instagram"
+            /></a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p><b>© 2024, Influx</b></p>
+      </div>
+    </footer>
+  </body>
 </html>
