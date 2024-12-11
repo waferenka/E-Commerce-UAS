@@ -1,0 +1,5 @@
+email: rangga@example.com
+password: rangga123
+
+email: admin@example.com
+password: admin123
