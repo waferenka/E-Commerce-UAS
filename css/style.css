@@ -1,6 +1,7 @@
 :root {
   --primary-color: white;
-  --secondary-color: #ffd700;
+  --secondary-color: #e6c403;
+  --background-color: #eeeeee;
 }
 
 @font-face {
