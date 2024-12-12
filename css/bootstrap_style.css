@@ -23,17 +23,3 @@
   margin-right: 10px;
 }
 
-#carouselExampleSlidesOnly {
-  max-width: 600px; /* Atur lebar maksimal carousel */
-  max-height: 400px; /* Atur tinggi maksimal carousel */
-  margin: auto; /* Memusatkan carousel */
-  border-radius: 20px; /* Menambahkan lekukan sudut */
-  overflow: hidden; /* Memastikan gambar tidak keluar dari sudut */
-}
-
-#carouselExampleSlidesOnly img {
-  object-fit: cover; /* Mengatur gambar agar pas dengan area */
-  height: 100%; /* Pastikan gambar sesuai dengan tinggi carousel */
-  width: 100%; /* Pastikan gambar sesuai dengan lebar carousel */
-  border-radius: inherit; /* Mengikuti lekukan carousel */
-}
