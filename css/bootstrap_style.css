@@ -1,6 +1,6 @@
 :root {
   --primary-color: white;
-  --secondary-color: #e6c403;
+  --secondary-color: #ffd700
   --background-color: #eeeeee;
 }
 
@@ -21,4 +21,14 @@
   width: 30px;
   height: 30px;
   margin-right: 10px;
+}
+
+.form-control:focus {
+  border-color: #ffeb90;
+  box-shadow: 0 0 0 0.2rem #ffd700;
+  background-color: white;
+} 
+
+form .form-group .a {
+text-decoration: none;
 }
