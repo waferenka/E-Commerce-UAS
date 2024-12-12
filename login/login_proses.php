@@ -40,6 +40,6 @@ if ($cek > 0) {
     }
 } else {
     // Alihkan ke halaman login kembali dengan pesan error
-    header("Location: login_form.php?error=email atau password salah");
+    header("Location: login_form.php?error=Email atau Password salah");
 }
 ?>
