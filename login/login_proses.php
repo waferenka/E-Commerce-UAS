@@ -6,20 +6,20 @@ session_start();
 include '../koneksi.php';
 
 // Menangkap data yang dikirim dari form login
-$username = $_POST['username'];
+$email = $_POST['email'];
 $password = sha1($_POST['password']);
 
-// Menyeleksi data user dengan username dan password yang sesuai
-$login = mysqli_query($conn, "SELECT * FROM tbluser WHERE username='$username' AND password='$password'");
+// Menyeleksi data user dengan email dan password yang sesuai
+$login = mysqli_query($conn, "SELECT * FROM tbluser WHERE email='$email' AND password='$password'");
 // Menghitung jumlah data yang ditemukan
 $cek = mysqli_num_rows($login);
 
-// Cek apakah username dan password ditemukan pada database
+// Cek apakah email dan password ditemukan pada database
 if ($cek > 0) {
     $data = mysqli_fetch_assoc($login);
 
-    // Buat session login dan username
-    $_SESSION['username'] = $username;
+    // Buat session login dan email
+    $_SESSION['email'] = $email;
     $_SESSION['level'] = $data['level'];
 
     // Cek jika user login sebagai admin
@@ -40,6 +40,6 @@ if ($cek > 0) {
     }
 } else {
     // Alihkan ke halaman login kembali dengan pesan error
-    header("Location: login_form.php?error=Username atau password salah");
+    header("Location: login_form.php?error=email atau password salah");
 }
 ?>

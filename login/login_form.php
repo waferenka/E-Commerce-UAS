@@ -1,12 +1,12 @@
 <!-- Seesion Start -->
 <?php
 session_start();
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['email'])) {
     if ($_SESSION['level'] == "admin") {
         header("Location: ../index.php");
-    } elseif ($_SESSION['level'] == "dosen") {
+    } elseif ($_SESSION['level'] == "penjual") {
         header("Location: ../index_dosen.php");
-    } elseif ($_SESSION['level'] == "mahasiswa") {
+    } elseif ($_SESSION['level'] == "pembeli") {
         header("Location: ../index_mahasiswa.php");
     } else {
         header("Location: login_form.php");
@@ -41,7 +41,7 @@ if (isset($_SESSION['username'])) {
     <div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
         <div class="card shadow p-4" style="width: 25rem;">
             <div class="card-body"">
-                <h2 class=" text-center mt-2 mb-4">Login Form</h2>
+                <h2 class=" text-center mt-2 mb-4">Login</h2>
                 <?php
                 if (isset($_GET['error']) && $_GET['error'] != '') {
                     echo '<div class="alert alert-danger text-center">' . htmlspecialchars($_GET['error']) . '</div>';
@@ -49,8 +49,8 @@ if (isset($_SESSION['username'])) {
                 ?>
                 <form action="login_proses.php" method="post">
                     <div class="form-group mb-3">
-                        <label for="username" class="form-label">Username:</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="text" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="form-group mb-4">
                         <label for="password" class="form-label">Password:</label>
@@ -68,7 +68,7 @@ if (isset($_SESSION['username'])) {
     </div>
 
     <footer class="text-center">
-        <p>Create by Influx Team | &copy 2024</p>
+        <p>Create by Alzi Petshop | &copy 2024</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
