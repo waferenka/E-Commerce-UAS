@@ -34,7 +34,7 @@ if (isset($_SESSION['username'])) {
     <nav class=" navbar navbar-expand-lg bg-body-secondary">
         <div class="container-fluid ms-3 me-3">
             <a class="navbar-brand me-4 logo" href="../index.php">
-                <img class="me-3" src="../favicon.ico" alt="">Influx</a>
+                <img class="me-3" src="../favicon.ico" alt="">Alzi Petshop</a>
         </div>
     </nav>
     <!-- Navbar End -->
@@ -57,7 +57,7 @@ if (isset($_SESSION['username'])) {
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
                     <div class="form-group text-center mb-3">
-                        <button type="submit" class="btn btn-primary form-control">Login</button>
+                        <button type="submit" class="btn btn-warning form-control">Login</button>
                     </div>
                     <div class="form-group text-center">
                         <p class="mb-0">Anda tidak punya akun? <a href="www.google.com">Klik disini</a></p>
