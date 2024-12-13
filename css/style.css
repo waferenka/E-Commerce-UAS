@@ -10,6 +10,7 @@ body {
   animation-name: fade;
   animation-duration: 1s;
   user-select: none;
+  text-align: justify;
 }
 
 /*Fade Halaman*/
@@ -70,8 +71,8 @@ body {
 .search-box input:focus {
   width: 400px;
   font-size: 0.85rem;
-  border-color: #ffcc00;
-  box-shadow: 0 0 5px #ffcc00;
+  border-color: rgba(255, 220, 0, 0.5);
+  box-shadow: 0 0 5px rgba(255, 220, 0, 0.5);
   outline: none;
 }
 
@@ -275,16 +276,16 @@ body {
     border-radius: 8px;
   }
   .carousel-caption-custom h1 {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   .carousel-caption-custom p {
-    font-size: 0.5rem;
+    font-size: 0.6rem;
   }
   .categories h2 {
-    font-size: 18px;
+    font-size: 20px;
   }
   .category {
-    font-size: 10px;
+    font-size: 16px;
     margin: 5px;
     padding: 5px 10px;
     border-radius: 5px;
@@ -308,6 +309,9 @@ body {
   }
   .navbar-brand {
     display: flex;
+  }
+  .navbar-item {
+    margin: 0px 20px;
   }
   #user {
     display: inline;
@@ -358,6 +362,9 @@ body {
   }
   .navbar-brand {
     display: flex;
+  }
+  .navbar-item {
+    margin: 0px 20px;
   }
   #user {
     display: inline;
