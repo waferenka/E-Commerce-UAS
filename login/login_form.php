@@ -72,7 +72,7 @@ if (isset($_SESSION['email'])) {
                         <button type="submit" class="btn btn-warning form-control">Login</button>
                     </div>
                     <div class="form-group text-center">
-                        <p class="mb-0">Anda tidak punya akun? <a href="www.google.com">Klik disini</a></p>
+                        <p class="mb-0">Anda tidak punya akun? <a href="register.php">Klik disini</a></p>
                     </div>
                 </form>
             </div>
