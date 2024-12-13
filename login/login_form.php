@@ -27,13 +27,25 @@ if (isset($_SESSION['email'])) {
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- My Style -->
     <link rel="stylesheet" href="../css/bootstrap_style.css">
+    <style>
+    html,
+    body {
+        overflow-y: hidden;
+    }
+
+    footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+    }
+    </style>
 </head>
 
 <body>
     <!-- Navbar Start -->
-    <nav class=" navbar navbar-expand-lg bg-body-secondary">
+    <nav class="navbar bg-body-secondary">
         <div class="container-fluid ms-3 me-3">
-            <a class="navbar-brand me-4 logo" href="../index.php">
+            <a class="navbar-brand me-4 logo" href="#">
                 <img class="me-3" src="../favicon.ico" alt="">Alzi Petshop</a>
         </div>
     </nav>
