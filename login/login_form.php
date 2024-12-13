@@ -52,7 +52,7 @@ if (isset($_SESSION['email'])) {
     <!-- Navbar End -->
     <div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
         <div class="card shadow p-4" style="width: 25rem;">
-            <div class="card-body"">
+            <div class="card-body">
                 <h2 class=" text-center mt-2 mb-4">Login</h2>
                 <?php
                 if (isset($_GET['error']) && $_GET['error'] != '') {
