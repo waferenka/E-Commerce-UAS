@@ -9,6 +9,10 @@
   src: url("../font/Rubik-Regular.ttf");
 }
 
+body {
+  font-family: Rubik;
+}
+
 .logo {
   font-size: 24px;
   font-weight: bold;
