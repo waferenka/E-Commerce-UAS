@@ -52,7 +52,7 @@ if (isset($_POST['register'])) {
                 <label for="password" class="form-label">Password</label>
                 <input type="password" name="password" id="password" class="form-control" required>
             </div>
-            <button type="submit" name="register" class="btn btn-warning w-100">Register</button>
+            <button type="submit" name="register" class="btn btn-warning w-100 mt-2">Register</button>
         </form>
     </div>
 </body>
