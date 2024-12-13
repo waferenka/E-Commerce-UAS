@@ -1,6 +1,6 @@
 :root {
   --primary-color: white;
-  --secondary-color: #ffd700
+  --secondary-color: #978000;
   --background-color: #eeeeee;
 }
 
@@ -13,26 +13,12 @@ body {
   font-family: Rubik;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  color: #4c5262;
-}
-
-.logo img {
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-}
-
 .form-control:focus {
   border-color: #ffeb90;
   box-shadow: 0 0 0 0.2rem #ffd700;
   background-color: white;
-} 
+}
 
 .form-group a {
-text-decoration: none;
+  text-decoration: none;
 }
