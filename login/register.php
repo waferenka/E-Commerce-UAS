@@ -1,23 +1,23 @@
 <?php
-    require '../koneksi.php';
+require '../koneksi.php';
 
-    if (isset($_POST['register'])) {
-        $nama = $_POST['nama'];
-        $email = $_POST['email'];
-        $password = sha1($_POST['password'], PASSWORD_BCRYPT);
-        $level = "Pembeli";
+if (isset($_POST['register'])) {
+    $nama = $_POST['nama'];
+    $email = $_POST['email'];
+    $password = sha1($_POST['password']);
+    $level = "Pembeli";
 
-        $query = "INSERT INTO tbluser (nama, email, password, level) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param('sss', $nama, $email, $password, $level);
+    $query = "INSERT INTO tbluser (nama, email, password, level) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('ssss', $nama, $email, $password, $level);
 
-        if ($stmt->execute()) {
-            header('Location: login_form.php');
-            exit;
-        } else {
-            $error = "Pendaftaran gagal. Email mungkin sudah digunakan.";
-        }
+    if ($stmt->execute()) {
+        header('Location: login_form.php');
+        exit;
+    } else {
+        $error = "Pendaftaran gagal. Email mungkin sudah digunakan.";
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
