@@ -55,6 +55,10 @@ if ($result->num_rows > 0) {
         height: 100%;
     }
 
+    .navbar {
+        position: sticky;
+    }
+
     .container {
         width: 100%;
         height: 100%;
@@ -69,7 +73,6 @@ if ($result->num_rows > 0) {
     }
 
     footer {
-        position: fixed;
         bottom: 0;
         width: 100%;
     }
@@ -79,6 +82,10 @@ if ($result->num_rows > 0) {
         font-weight: bold;
     }
 
+    table {
+        height: 100%;
+    }
+
     table a {
         color: var(--secondary-color);
         text-decoration: none;
@@ -86,6 +93,10 @@ if ($result->num_rows > 0) {
 
     table a:hover {
         color: black;
+    }
+
+    table td {
+        text-align: left;
     }
 
     form {
@@ -104,10 +115,7 @@ if ($result->num_rows > 0) {
 
     .row {
         width: 100%;
-        height: 100%;
         display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     .profile-img {
@@ -125,7 +133,11 @@ if ($result->num_rows > 0) {
         }
 
         .container {
-            margin-top: 5rem;
+            margin-top: 7rem;
+        }
+
+        .img-user {
+            margin-bottom: 5rem;
         }
 
         .navbar {
@@ -174,10 +186,10 @@ if ($result->num_rows > 0) {
     <br>
     <div class="container">
         <div class="row">
-            <div class="col-md-3 p-3">
+            <div class="col-md-3">
                 <div class="img-user text-center">
-                    <img src="<?php echo $foto; ?>" class="profile-img" alt="Foto Profil">
-                    <h3 class="mt-3" id="user"><?php echo $nama; ?></h3>
+                    <img src="<?php echo $foto; ?>" class="profile-img mb-3" alt="Foto Profil">
+                    <h3 class="" id="user"><?php echo $nama; ?></h3>
                     <a href="#" class="container-fluid btn btn-warning mt-3">Ubah Foto Profil</a>
                     <a href="#" class="container-fluid btn btn-warning mt-2">Ubah Kata Sandi</a>
                     <a class="container-fluid btn btn-danger mt-2" href="login/logout.php">Logout</a>
