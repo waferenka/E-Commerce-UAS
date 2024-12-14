@@ -5,9 +5,9 @@ if (isset($_SESSION['email'])) {
     if ($_SESSION['level'] == "admin") {
         header("Location: ../index.php");
     } elseif ($_SESSION['level'] == "penjual") {
-        header("Location: ../index_dosen.php");
+        header("Location: ../index.php");
     } elseif ($_SESSION['level'] == "pembeli") {
-        header("Location: ../index_mahasiswa.php");
+        header("Location: ../index.php");
     } else {
         header("Location: login_form.php");
     }
@@ -28,25 +28,32 @@ if (isset($_SESSION['email'])) {
     <!-- My Style -->
     <link rel="stylesheet" href="../css/bootstrap_style.css">
     <style>
-    html,
-    body {
-        overflow-y: hidden;
-    }
+        html, body {
+            overflow-y: auto;
+        }
 
-    footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-    }
+        .navbar {
+            position: fixed;
+            z-index: 1000;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        footer {
+            width: 100%;
+            background-color: white;
+        }
     </style>
 </head>
 
 <body>
     <!-- Navbar Start -->
-    <nav class="navbar bg-body-secondary">
+    <nav class="navbar">
         <div class="container-fluid ms-3 me-3">
-            <a class="navbar-brand me-4 logo" href="#">
-                <img class="me-3" src="../favicon.ico" alt="">Alzi Petshop</a>
+            <a class="navbar-brand" style="font-weight: bold;" href="#">
+                Alzi Petshop
+            </a>
         </div>
     </nav>
     <!-- Navbar End -->
@@ -55,9 +62,9 @@ if (isset($_SESSION['email'])) {
             <div class="card-body">
                 <h2 class=" text-center mt-2 mb-4">Login</h2>
                 <?php
-                if (isset($_GET['error']) && $_GET['error'] != '') {
-                    echo '<div class="alert alert-danger text-center">' . htmlspecialchars($_GET['error']) . '</div>';
-                }
+                    if (isset($_GET['error']) && $_GET['error'] != '') {
+                        echo '<div class="alert alert-danger text-center">' . htmlspecialchars($_GET['error']) . '</div>';
+                    }
                 ?>
                 <form action="login_proses.php" method="post">
                     <div class="form-group mb-3">
@@ -78,9 +85,9 @@ if (isset($_SESSION['email'])) {
             </div>
         </div>
     </div>
-
-    <footer class="text-center">
-        <p>Create by Alzi Petshop | &copy 2024</p>
+    <br><br><br>
+    <footer class="fixed-bottom text-center">
+        <p class="pt-3">Create by Alzi Petshop | &copy 2024</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">

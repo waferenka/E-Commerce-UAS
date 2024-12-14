@@ -51,7 +51,6 @@ if ($result->num_rows > 0) {
     <style>
     html,
     body {
-        overflow-y: hidden;
         width: 100%;
         height: 100%;
     }
@@ -63,6 +62,10 @@ if ($result->num_rows > 0) {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+    }
+
+    #user {
+        font-size: 1.3rem;
     }
 
     footer {
@@ -138,8 +141,7 @@ if ($result->num_rows > 0) {
         }
 
         footer {
-            position: static;
-            bottom: 0;
+            background-color: white;
             width: 100%;
         }
     }
@@ -169,14 +171,16 @@ if ($result->num_rows > 0) {
             </div>
     </nav>
     <!-- End Navbar, Search, Keranjang, User -->
+    <br>
     <div class="container">
         <div class="row">
-            <div class="col-md-3 pe-5">
+            <div class="col-md-3 p-3">
                 <div class="img-user text-center">
                     <img src="<?php echo $foto; ?>" class="profile-img" alt="Foto Profil">
-                    <h3 class="mt-3"><?php echo $nama; ?></h3>
+                    <h3 class="mt-3" id="user"><?php echo $nama; ?></h3>
                     <a href="#" class="container-fluid btn btn-warning mt-3">Ubah Foto Profil</a>
                     <a href="#" class="container-fluid btn btn-warning mt-2">Ubah Kata Sandi</a>
+                    <a class="container-fluid btn btn-danger mt-2" href="login/logout.php">Logout</a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -193,52 +197,52 @@ if ($result->num_rows > 0) {
                             <th>Nama</th>
                             <td>:</td>
                             <td><?php echo $nama; ?></td>
-                            <td><a href="#">ubah</a></td>
+                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Email</th>
                             <td>:</td>
                             <td><?php echo $email; ?></td>
-                            <td><a href="#">ubah</a></td>
+                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Level</th>
                             <td>:</td>
                             <td><?php echo $level; ?></td>
-                            <td><a href="#">ubah</a></td>
+                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Jenis Kelamin</th>
                             <td>:</td>
                             <td><?php echo $jenis_kelamin; ?></td>
-                            <td><a href="#">ubah</a></td>
+                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Tanggal Lahir</th>
                             <td>:</td>
                             <td><?php echo $tanggal_lahir; ?></td>
-                            <td><a href="#">ubah</a></td>
+                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Alamat</th>
                             <td>:</td>
                             <td><?php echo $alamat; ?></td>
-                            <td><a href="#">ubah</a></td>
+                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>No. Telepon</th>
                             <td>:</td>
                             <td><?php echo $no_telepon; ?></td>
-                            <td><a href="#">ubah</a></td>
+                            <td><a href="#">Ubah</a></td>
                         </tr>
                     </tbody>
                 </table>
+                <br><br><br>
             </div>
         </div>
     </div>
-
-    <footer class="text-center">
-        <p>Create by Alzi Petshop | &copy 2024</p>
+    <footer class="fixed-bottom text-center">
+        <p class="pt-3">Create by Alzi Petshop | &copy 2024</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
