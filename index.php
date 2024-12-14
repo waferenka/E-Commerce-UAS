@@ -42,6 +42,12 @@
 	        $products[] = $row;
 	    }
 	}
+
+    //Nama Depan
+    function getFirstName($fullName) {
+        $parts = explode(" ", $fullName);
+        return $parts[0];
+    }
 ?>
 <!-- End PHP Data Js Search -->
 <!DOCTYPE html>
@@ -70,8 +76,10 @@
             </div>
             <div class="navbar-item">
                 <a href="#"><img class="me-3" src="imgs/cart.png"></a>
-                <a href="detail.php"><img src="<?php echo $foto; ?>"
-                        class="rounded-circle me-2"><?php echo $nama; ?></a>
+                <a href="detail.php">
+                    <img src="<?php echo $foto; ?>"class="rounded-circle me-2">
+                    <span id="user"><?php echo getFirstName($nama); ?></span>
+                </a>
             </div>
         </div>
     </nav>
