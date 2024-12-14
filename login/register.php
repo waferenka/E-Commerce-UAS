@@ -31,28 +31,29 @@ if (isset($_POST['register'])) {
     <!-- My Style -->
     <link rel="stylesheet" href="../css/bootstrap_style.css">
     <style>
-        @font-face {
-          font-family: Rubik;
-          src: url("../font/Rubik-Regular.ttf");
-        }
+    @font-face {
+        font-family: Rubik;
+        src: url("../font/Rubik-Regular.ttf");
+    }
 
-        html, body {
-            font-family: Rubik;
-            overflow-y: auto;
-        }
+    html,
+    body {
+        font-family: Rubik;
+        overflow-y: auto;
+    }
 
-        .navbar {
-            position: fixed;
-            z-index: 1000;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            background-color: white;
-        }
+    .navbar {
+        position: fixed;
+        z-index: 1000;
+        width: 100%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background-color: white;
+    }
 
-        footer {
-            width: 100%;
-            background-color: white;
-        }
+    footer {
+        width: 100%;
+        background-color: white;
+    }
     </style>
 </head>
 
@@ -90,8 +91,9 @@ if (isset($_POST['register'])) {
                     </div>
                     <div class="form-group text-center mb-3">
                         <div class="form-group text-center mb-3">
-                            <button type="submit" name="register" class="btn btn-warning form-control">Login</button>
-                            <a href="../index.php" type="reset" name="cancel" class="btn btn-danger w-100 mt-2">Cancel</a>
+                            <button type="submit" name="register" class="btn btn-warning form-control">Register</button>
+                            <a href="../index.php" type="reset" name="cancel"
+                                class="btn btn-danger w-100 mt-2">Cancel</a>
                         </div>
                     </div>
                 </form>
@@ -108,4 +110,3 @@ if (isset($_POST['register'])) {
 </body>
 
 </html>
-

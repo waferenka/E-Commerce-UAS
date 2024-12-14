@@ -1,5 +1,4 @@
-email: rangga@example.com
+email: rangga@gmail.com
 password: rangga123
-
-email: admin@example.com
+email: adit@gmail.com
 password: admin123
