@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 14, 2024 at 06:20 AM
+-- Generation Time: Dec 15, 2024 at 05:32 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -97,7 +97,8 @@ INSERT INTO `user_detail` (`id`, `foto`, `jenis_kelamin`, `tanggal_lahir`, `alam
 (1, 'imgs/a1.png', 'Laki-laki', '1990-01-01', 'Jl. Contoh No. 1', '08123456789'),
 (2, 'imgs/a2.png', 'Laki-laki', '1992-02-02', 'Jl. Contoh No. 2', '08123456780'),
 (3, 'path/to/foto3.jpg', 'Laki-laki', '1993-03-03', 'Jl. Contoh No. 3', '08123456781'),
-(4, 'path/to/foto4.jpg', 'Perempuan', '1994-04-04', 'Jl. Contoh No. 4', '08123456782');
+(4, 'path/to/foto4.jpg', 'Perempuan', '1994-04-04', 'Jl. Contoh No. 4', '08123456782'),
+(7, 'imgs/user.png', 'Laki-laki', '2005-12-08', NULL, NULL);
 
 --
 -- Indexes for dumped tables
