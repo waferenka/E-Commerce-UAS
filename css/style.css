@@ -54,9 +54,8 @@ footer {
   color: black;
 }
 
-.navbar-brand img {
-  height: 40px;
-  margin-right: 10px;
+#user {
+  font-weight: bold;
 }
 
 .search-box {
@@ -260,6 +259,7 @@ footer {
 /*End Item Produk*/
 
 /*Custom Size Responsive*/
+/* Mobile S */
 @media (min-width: 320px) {
   .navbar {
     padding: 0.8rem 0rem;
@@ -311,8 +311,12 @@ footer {
   .product p {
     font-size: 10px;
   }
+  footer {
+  	font-size: 10px;
+  }
 }
 
+/* Mobile M */
 @media (min-width: 375px) {
   .navbar {
     padding: 0.8rem 0rem;
@@ -364,8 +368,12 @@ footer {
   .product p {
     font-size: 11px;
   }
+  footer {
+  	font-size: 11px;
+  }
 }
 
+/* Mobile L */
 @media (min-width: 425px) {
   .navbar {
     padding: 0.8rem 0rem;
@@ -417,8 +425,12 @@ footer {
   .product p {
     font-size: 13px;
   }
+  footer {
+  	font-size: 13px;
+  }
 }
 
+/* Tablet */
 @media (min-width: 768px) {
   .navbar {
     padding: 0.5rem 1rem;
@@ -470,10 +482,14 @@ footer {
     font-weight: bold;
   }
   .product p {
-    font-size: 11px;
+    font-size: 12px;
+  }
+  footer {
+  	font-size: 13px;
   }
 }
 
+/* Laptop + Laptop L */
 @media (min-width: 1024px) {
   .navbar {
     padding: 0.5rem 1rem;
@@ -526,5 +542,8 @@ footer {
   }
   .product p {
     font-size: 17px;
+  }
+  footer {
+  	font-size: 15px;
   }
 }

@@ -49,14 +49,12 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    html,
-    body {
+    html, body {
         width: 100%;
-        height: 100%;
     }
 
     .navbar {
-        position: sticky;
+        position: fixed;
     }
 
     .container {
@@ -72,8 +70,7 @@ if ($result->num_rows > 0) {
         font-size: 1.3rem;
     }
 
-    footer {
-        bottom: 0;
+    footer {;
         width: 100%;
     }
 
@@ -125,10 +122,40 @@ if ($result->num_rows > 0) {
         border-radius: 50%;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 320px) {
+        .container {
+            font-size: 13px;
+        }
+        .img-user {
+            padding: 0 20px;
+        }
+        .btn {
+            font-size: 14px;
+        }
 
-        html,
-        body {
+        h4 {
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .container {
+            font-size: 13px;
+        }
+        .img-user {
+            padding: 0 20px;
+        }
+        .btn {
+            font-size: 14px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        html, body {
             overflow-y: auto;
         }
 
@@ -176,14 +203,15 @@ if ($result->num_rows > 0) {
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
                 <div class="navbar-item">
-                    <a href="#"><img class="me-3" src="imgs/cart.png"></a>
+                    <a href="#"><img class="me-3" src="imgs/keranjang.png"></a>
                     <a href="detail.php"><img src="<?php echo $foto; ?>"
                             class="rounded-circle me-2"><?php echo $nama; ?></a>
                 </div>
             </div>
+        </div>
     </nav>
     <!-- End Navbar, Search, Keranjang, User -->
-    <br>
+    
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -249,16 +277,14 @@ if ($result->num_rows > 0) {
                         </tr>
                     </tbody>
                 </table>
-                <br><br><br>
             </div>
         </div>
     </div>
-    <footer class="fixed-bottom text-center">
-        <p class="pt-3">Create by Alzi Petshop | &copy 2024</p>
+    <footer class="text-center">
+        <p class="p-3">Create by Alzi Petshop | &copy 2024</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 </body>
-
 </html>
