@@ -114,7 +114,7 @@
 		                        </div>
 		                    `;
                     item.addEventListener('click', () => {
-                        window.location.href = `shopping_page.php?product_id=${product.id}`;
+                        window.location.href = `produk.php?product_id=${product.id}`;
                     });
                     searchResults.appendChild(item);
                 });
@@ -126,10 +126,10 @@
         }
     });
 
-    searchInput.addEventListener('blur', function() {
-        searchInput.value = '';
-        searchResults.style.display = 'none';
-    });
+    // searchInput.addEventListener('blur', function() {
+    //     searchInput.value = '';
+    //     searchResults.style.display = 'none';
+    // });
     </script>
     <!-- End Js Search -->
     <!-- Slider Otomatis Carousel Bootstrap v5.3 -->
@@ -178,24 +178,34 @@
     <!-- List Produk Sesuai Kategori -->
     <div class="products" id="product-list">
         <?php
-	        	$sql = "SELECT * FROM products";
-    			$result = $conn->query($sql);
-		        
-		        if ($result->num_rows > 0) {
-		            while ($row = $result->fetch_assoc()) {
-		                echo '<div class="product" data-category="' . htmlspecialchars($row['category']) . '">';
-		                echo '<img src="' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['name']) . '">
-		                      <h3>' . htmlspecialchars($row['name']) . '</h3>
-		                      <p>' . rupiah($row['price']) . '</p>';
-		                echo '</div>';
-		            }
-		        } else {
-		            echo '<p>No products available.</p>';
-		        }
+            $sql = "SELECT * FROM products";
+            $result = $conn->query($sql);
 
-		        $conn->close();
-	        ?>
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo '<div class="product" data-id="' . htmlspecialchars($row['id']) . '" data-category="' . htmlspecialchars($row['category']) . '">';
+                    echo '<img src="' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['name']) . '">
+                          <h3>' . htmlspecialchars($row['name']) . '</h3>
+                          <p>' . rupiah($row['price']) . '</p>';
+                    echo '</div>';
+                }
+            } else {
+                echo '<p>No products available.</p>';
+            }
+
+            $conn->close();
+        ?>
     </div>
+    <script>
+        const products_l = document.querySelectorAll('.product');
+
+        products_l.forEach(product => {
+            product.addEventListener('click', function () {
+                const productId = this.getAttribute('data-id');
+                window.location.href = `produk.php?product_id=${productId}`;
+            });
+        });
+    </script>
     <!-- List Produk Sesuai Kategori -->
 
     <!-- Footer start -->
