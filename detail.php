@@ -49,7 +49,8 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    html, body {
+    html,
+    body {
         width: 100%;
     }
 
@@ -70,7 +71,7 @@ if ($result->num_rows > 0) {
         font-size: 1.3rem;
     }
 
-    footer {;
+    footer {
         width: 100%;
     }
 
@@ -126,9 +127,11 @@ if ($result->num_rows > 0) {
         .container {
             font-size: 13px;
         }
+
         .img-user {
             padding: 0 20px;
         }
+
         .btn {
             font-size: 14px;
         }
@@ -142,9 +145,11 @@ if ($result->num_rows > 0) {
         .container {
             font-size: 13px;
         }
+
         .img-user {
             padding: 0 20px;
         }
+
         .btn {
             font-size: 14px;
         }
@@ -155,7 +160,9 @@ if ($result->num_rows > 0) {
     }
 
     @media (max-width: 768px) {
-        html, body {
+
+        html,
+        body {
             overflow-y: auto;
         }
 
@@ -211,7 +218,7 @@ if ($result->num_rows > 0) {
         </div>
     </nav>
     <!-- End Navbar, Search, Keranjang, User -->
-    
+
     <div class="container">
         <div class="row">
             <div class="col-md-3">
@@ -287,4 +294,5 @@ if ($result->num_rows > 0) {
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 </body>
+
 </html>
