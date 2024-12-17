@@ -49,9 +49,9 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    html,
-    body {
+    html, body {
         width: 100%;
+        height: 100%;
     }
 
     .navbar {
@@ -126,9 +126,15 @@ if ($result->num_rows > 0) {
         border-radius: 50%;
     }
 
-    @media (max-width: 320px) {
+    @media (min-width: 320px) {
         .container {
+            padding-top: 4rem;
             font-size: 13px;
+            height: auto;
+        }
+
+        #user {
+            display: inline;
         }
 
         .img-user {
@@ -144,9 +150,15 @@ if ($result->num_rows > 0) {
         }
     }
 
-    @media (max-width: 375px) {
+    @media (min-width: 375px) {
         .container {
+            padding-top: 4rem;
             font-size: 13px;
+            height: auto;
+        }
+
+        #user {
+            display: inline;
         }
 
         .img-user {
@@ -162,15 +174,37 @@ if ($result->num_rows > 0) {
         }
     }
 
-    @media (max-width: 768px) {
-
-        html,
-        body {
-            overflow-y: auto;
+    @media (min-width: 425px) {
+        .container {
+            padding-top: 4rem;
+            font-size: 13px;
+            height: auto;
         }
 
+        #user {
+            display: inline;
+        }
+
+        .img-user {
+            padding: 0 20px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+    }
+
+    @media (min-width: 768px) {
         .container {
-            margin-top: 7rem;
+            height: 100vh;
+        }
+
+        #user {
+            display: inline;
         }
 
         .img-user {
@@ -185,10 +219,6 @@ if ($result->num_rows > 0) {
             display: flex;
         }
 
-        #user {
-            display: inline;
-        }
-
         footer {
             background-color: white;
             bottom: 0;
@@ -200,6 +230,10 @@ if ($result->num_rows > 0) {
         .container {
             margin-top: 0rem;
             height: 91vh;
+        }
+
+        #user {
+            display: inline;
         }
 
         footer {
