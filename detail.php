@@ -49,9 +49,9 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    html,
-    body {
+    html, body {
         width: 100%;
+        height: 100%;
     }
 
     .navbar {
@@ -69,9 +69,11 @@ if ($result->num_rows > 0) {
 
     #user {
         font-size: 1.3rem;
+        display: inline;
     }
 
     footer {
+        background-color: white;
         width: 100%;
     }
 
@@ -126,13 +128,19 @@ if ($result->num_rows > 0) {
         border-radius: 50%;
     }
 
-    @media (max-width: 320px) {
+    @media (min-width: 320px) {
         .container {
+            padding-top: 4rem;
             font-size: 13px;
+            height: auto;
         }
 
         .img-user {
             padding: 0 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
         }
 
         .btn {
@@ -144,13 +152,19 @@ if ($result->num_rows > 0) {
         }
     }
 
-    @media (max-width: 375px) {
+    @media (min-width: 375px) {
         .container {
+            padding-top: 4rem;
             font-size: 13px;
+            height: auto;
         }
 
         .img-user {
             padding: 0 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
         }
 
         .btn {
@@ -162,19 +176,43 @@ if ($result->num_rows > 0) {
         }
     }
 
-    @media (max-width: 768px) {
-
-        html,
-        body {
-            overflow-y: auto;
+    @media (min-width: 425px) {
+        .container {
+            padding-top: 4rem;
+            font-size: 13px;
+            height: auto;
         }
 
+        #brand {
+            display: inline;
+        }
+
+        .img-user {
+            padding: 0 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+        h4 {
+            font-size: 16px;
+        }
+    }
+
+    @media (min-width: 768px) {
         .container {
-            margin-top: 7rem;
+            height: 90vh;
+            font-size: 16px;
         }
 
         .img-user {
             margin-bottom: 5rem;
+            padding: 0;
         }
 
         .navbar {
@@ -185,11 +223,12 @@ if ($result->num_rows > 0) {
             display: flex;
         }
 
-        #user {
-            display: inline;
+        h4 {
+            font-size: 20px;
         }
 
         footer {
+            margin-top: 3rem;
             background-color: white;
             bottom: 0;
             width: 100%;
@@ -198,8 +237,11 @@ if ($result->num_rows > 0) {
 
     @media (min-width: 1024px) {
         .container {
-            margin-top: 0rem;
-            height: 91vh;
+            height: 85vh;
+        }
+
+        .navbar-brand {
+            display: flex;
         }
     }
     </style>
@@ -249,7 +291,7 @@ if ($result->num_rows > 0) {
                                 <h4>Profile Saya</h4>
                             </th>
                             <td class="ubah">
-                                <a class="btn btn-warning mt-2" href="login/logout.php">Ubah Data</a>
+                                <a class="btn btn-warning mt-2" href="ubah_data.php">Ubah Data</a>
                             </td>
                         </tr>
                     </thead>
