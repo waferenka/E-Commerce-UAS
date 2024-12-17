@@ -76,7 +76,6 @@ if ($result->num_rows > 0) {
     }
 
     h4 {
-        text-align: center;
         font-weight: bold;
     }
 
@@ -95,6 +94,10 @@ if ($result->num_rows > 0) {
 
     table td {
         text-align: left;
+    }
+
+    table .ubah {
+        text-align: right;
     }
 
     form {
@@ -198,6 +201,7 @@ if ($result->num_rows > 0) {
             margin-top: 0rem;
             height: 91vh;
         }
+
         footer {
             height: 5vh;
         }
@@ -248,8 +252,8 @@ if ($result->num_rows > 0) {
                             <th colspan="2">
                                 <h4>Profile Saya</h4>
                             </th>
-                            <td>
-                                <a class="container-fluid btn btn-danger mt-2" href="login/logout.php">Ubah</a>
+                            <td class="ubah">
+                                <a class="btn btn-warning mt-2" href="login/logout.php">Ubah Data</a>
                             </td>
                         </tr>
                     </thead>
