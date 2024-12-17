@@ -191,6 +191,16 @@ if ($result->num_rows > 0) {
             width: 100%;
         }
     }
+
+    @media (min-width: 1024px) {
+        .container {
+            margin-top: 0rem;
+            height: 91vh;
+        }
+        footer {
+            height: 5vh;
+        }
+    }
     </style>
 </head>
 
