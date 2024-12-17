@@ -188,6 +188,7 @@ if ($result->num_rows > 0) {
 
         footer {
             background-color: white;
+            bottom: 0;
             width: 100%;
         }
     }
@@ -219,7 +220,7 @@ if ($result->num_rows > 0) {
     </nav>
     <!-- End Navbar, Search, Keranjang, User -->
 
-    <div class="container">
+    <div class="container mt-5">
         <div class="row">
             <div class="col-md-3">
                 <div class="img-user text-center">
@@ -234,9 +235,12 @@ if ($result->num_rows > 0) {
                 <table class="table">
                     <thead>
                         <tr>
-                            <th colspan="4">
+                            <th colspan="2">
                                 <h4>Profile Saya</h4>
                             </th>
+                            <td>
+                                <a class="container-fluid btn btn-danger mt-2" href="login/logout.php">Ubah</a>
+                            </td>
                         </tr>
                     </thead>
                     <tbody>
@@ -244,43 +248,36 @@ if ($result->num_rows > 0) {
                             <th>Nama</th>
                             <td>:</td>
                             <td><?php echo $nama; ?></td>
-                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Email</th>
                             <td>:</td>
                             <td><?php echo $email; ?></td>
-                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Level</th>
                             <td>:</td>
                             <td><?php echo $level; ?></td>
-                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Jenis Kelamin</th>
                             <td>:</td>
                             <td><?php echo $jenis_kelamin; ?></td>
-                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Tanggal Lahir</th>
                             <td>:</td>
                             <td><?php echo $tanggal_lahir; ?></td>
-                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>Alamat</th>
                             <td>:</td>
                             <td><?php echo $alamat; ?></td>
-                            <td><a href="#">Ubah</a></td>
                         </tr>
                         <tr>
                             <th>No. Telepon</th>
                             <td>:</td>
                             <td><?php echo $no_telepon; ?></td>
-                            <td><a href="#">Ubah</a></td>
                         </tr>
                     </tbody>
                 </table>
