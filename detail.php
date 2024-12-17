@@ -201,10 +201,6 @@ if ($result->num_rows > 0) {
             margin-top: 0rem;
             height: 91vh;
         }
-
-        footer {
-            height: 5vh;
-        }
     }
     </style>
 </head>
