@@ -69,9 +69,11 @@ if ($result->num_rows > 0) {
 
     #user {
         font-size: 1.3rem;
+        display: inline;
     }
 
     footer {
+        background-color: white;
         width: 100%;
     }
 
@@ -133,12 +135,12 @@ if ($result->num_rows > 0) {
             height: auto;
         }
 
-        #user {
-            display: inline;
-        }
-
         .img-user {
             padding: 0 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
         }
 
         .btn {
@@ -157,12 +159,12 @@ if ($result->num_rows > 0) {
             height: auto;
         }
 
-        #user {
-            display: inline;
-        }
-
         .img-user {
             padding: 0 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
         }
 
         .btn {
@@ -181,12 +183,16 @@ if ($result->num_rows > 0) {
             height: auto;
         }
 
-        #user {
+        #brand {
             display: inline;
         }
 
         .img-user {
             padding: 0 20px;
+        }
+
+        .navbar-brand {
+            display: flex;
         }
 
         .btn {
@@ -200,15 +206,13 @@ if ($result->num_rows > 0) {
 
     @media (min-width: 768px) {
         .container {
-            height: 100vh;
-        }
-
-        #user {
-            display: inline;
+            height: 90vh;
+            font-size: 16px;
         }
 
         .img-user {
             margin-bottom: 5rem;
+            padding: 0;
         }
 
         .navbar {
@@ -219,7 +223,12 @@ if ($result->num_rows > 0) {
             display: flex;
         }
 
+        h4 {
+            font-size: 20px;
+        }
+
         footer {
+            margin-top: 3rem;
             background-color: white;
             bottom: 0;
             width: 100%;
@@ -228,12 +237,11 @@ if ($result->num_rows > 0) {
 
     @media (min-width: 1024px) {
         .container {
-            margin-top: 0rem;
-            height: 91vh;
+            height: 85vh;
         }
 
-        #user {
-            display: inline;
+        .navbar-brand {
+            display: flex;
         }
 
         footer {
@@ -287,7 +295,7 @@ if ($result->num_rows > 0) {
                                 <h4>Profile Saya</h4>
                             </th>
                             <td class="ubah">
-                                <a class="btn btn-warning mt-2" href="login/logout.php">Ubah Data</a>
+                                <a class="btn btn-warning mt-2" href="ubah_data.php">Ubah Data</a>
                             </td>
                         </tr>
                     </thead>
