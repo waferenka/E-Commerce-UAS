@@ -5,17 +5,42 @@ if (isset($_POST['register'])) {
     $nama = $_POST['nama'];
     $email = $_POST['email'];
     $password = sha1($_POST['password']);
-    $level = "Pembeli";
+    $level = "pembeli";
+    $default_foto = 'imgs/user.png'; // Path foto default
 
-    $query = "INSERT INTO tbluser (nama, email, password, level) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('ssss', $nama, $email, $password, $level);
+    // Mulai transaksi
+    $conn->begin_transaction();
 
-    if ($stmt->execute()) {
+    try {
+        // Insert ke table tbluser
+        $query = "INSERT INTO tbluser (nama, email, password, level) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('ssss', $nama, $email, $password, $level);
+
+        if (!$stmt->execute()) {
+            throw new Exception("Pendaftaran gagal. Email mungkin sudah digunakan.");
+        }
+
+        // Dapatkan ID user yang baru dimasukkan
+        $user_id = $stmt->insert_id;
+
+        // Insert ke table user_detail dengan foto default
+        $query_detail = "INSERT INTO user_detail (id, foto) VALUES (?, ?)";
+        $stmt_detail = $conn->prepare($query_detail);
+        $stmt_detail->bind_param('is', $user_id, $default_foto);
+
+        if (!$stmt_detail->execute()) {
+            throw new Exception("Gagal menyimpan detail pengguna.");
+        }
+
+        // Jika semua berhasil, commit transaksi
+        $conn->commit();
         header('Location: login_form.php');
         exit;
-    } else {
-        $error = "Pendaftaran gagal. Email mungkin sudah digunakan.";
+    } catch (Exception $e) {
+        // Jika terjadi kesalahan, rollback transaksi
+        $conn->rollback();
+        $error = $e->getMessage();
     }
 }
 ?>
@@ -72,8 +97,8 @@ if (isset($_POST['register'])) {
             <div class="card-body">
                 <h2 class=" text-center font-weight-bold mt-2 mb-4">Register</h2>
                 <?php
-                    if (isset($_GET['error']) && $_GET['error'] != '') {
-                        echo '<div class="alert alert-danger text-center">' . htmlspecialchars($_GET['error']) . '</div>';
+                    if (isset($error) && $error != '') {
+                        echo '<div class="alert alert-danger text-center">' . htmlspecialchars($error) . '</div>';
                     }
                 ?>
                 <form action="#" method="post">
