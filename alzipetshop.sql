@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2024 at 05:32 PM
+-- Generation Time: Dec 18, 2024 at 06:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`, `category`) VALUES
-(1, 'Bolt - Makanan Kucing', 'makanan', 12000, 'imgs/a1.png', 'd2'),
+(1, 'Bolt - Makanan Kucing', 'Berikan nutrisi terbaik untuk kucing kesayangan Anda dengan WhiskerMeal Premium Cat Food! Diformulasikan khusus dengan bahan-bahan berkualitas tinggi, makanan ini memberikan asupan gizi seimbang yang mendukung kesehatan dan energi kucing sepanjang hari.\r\n\r\nKeunggulan Produk:\r\n🐾 Protein Berkualitas Tinggi: Mengandung salmon dan tuna asli untuk memenuhi kebutuhan protein harian dan menjaga otot kucing tetap kuat.\r\n🐾 Vitamin & Mineral Lengkap: Diperkaya dengan vitamin A, D, E, serta kalsium untuk mendukung tulang, mata, dan sistem kekebalan tubuh.\r\n🐾 Kaya Omega 3 & 6: Membantu menjaga kesehatan kulit dan bulu agar tetap lembut serta berkilau.\r\n🐾 Tanpa Pewarna & Pengawet Buatan: Aman dikonsumsi setiap hari, bahkan untuk kucing yang sensitif.\r\n🐾 Cocok untuk Semua Usia: Ideal untuk anak kucing hingga kucing dewasa.\r\n\r\nKelezatan dalam Setiap Gigitan:\r\nTekstur renyah yang disukai kucing dengan aroma menggoda membuat kucing Anda selalu bersemangat saat waktu makan tiba.\r\n\r\nKemasan: Tersedia dalam ukuran 1 kg, praktis disimpan dan mudah dibawa.', 12000, 'imgs/a1.png', 'd2'),
 (2, 'Lezato - Makanan Kucing', 'makanan', 12000, 'imgs/a2.png', 'd1'),
 (3, 'Ori Cat - Makanan Kucing', 'makanan', 12000, 'imgs/a3.png', 'd1'),
 (4, 'Cat Choise - Makanan Kucing', 'makanan', 12000, 'imgs/a4.png', 'd1'),
@@ -72,7 +72,8 @@ INSERT INTO `tbluser` (`id`, `nama`, `email`, `password`, `level`) VALUES
 (2, 'Aditiya Alif As Siddiq', 'adit@gmail.com', 'a368402126ad9e4704fbb1ceac9367ad4e2ccf5f', 'penjual'),
 (3, 'M. Andriano Alfarazi', 'aji@gmail.com', '7c33489720fccf682f22f2efb2cefc7aee7de177', 'pembeli'),
 (4, 'Tri Ambar Ningtias', 'ambar@gmail.com', '008599efdcb7822df1c91508d4ab3ee9622b6d5d', 'pembeli'),
-(7, 'Aditiya Alif As Siddiq', 'adit@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d', 'pembeli');
+(7, 'Aditiya Alif As Siddiq', 'adit@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d', 'pembeli'),
+(9, 'aaaa', 'adit2@gmail.com', '7c222fb2927d828af22f592134e8932480637c0d', 'pembeli');
 
 -- --------------------------------------------------------
 
@@ -98,7 +99,8 @@ INSERT INTO `user_detail` (`id`, `foto`, `jenis_kelamin`, `tanggal_lahir`, `alam
 (2, 'imgs/a2.png', 'Laki-laki', '1992-02-02', 'Jl. Contoh No. 2', '08123456780'),
 (3, 'path/to/foto3.jpg', 'Laki-laki', '1993-03-03', 'Jl. Contoh No. 3', '08123456781'),
 (4, 'path/to/foto4.jpg', 'Perempuan', '1994-04-04', 'Jl. Contoh No. 4', '08123456782'),
-(7, 'imgs/user.png', 'Laki-laki', '2005-12-08', NULL, NULL);
+(7, 'imgs/user.png', 'Laki-laki', '2005-12-08', 'Kalimantan', '083192655757'),
+(9, 'imgs/user.png', NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -136,7 +138,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
