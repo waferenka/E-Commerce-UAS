@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'koneksi.php';
+include 'php/php.php';
 
 // Periksa apakah user sudah login
 if (!isset($_SESSION['userid'])) {
@@ -11,7 +11,7 @@ if (!isset($_SESSION['userid'])) {
 $userid = $_SESSION['userid'];
 
 // Query untuk mengambil data user dari database
-$sql = "SELECT u.id, u.nama, u.email, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+$sql = "SELECT u.id, u.nama, u.email, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon, d.foto
         FROM tbluser u 
         LEFT JOIN user_detail d ON u.id = d.id 
         WHERE u.id = '$userid'";
@@ -26,6 +26,7 @@ if ($result->num_rows > 0) {
     $tanggal_lahir = $row['tanggal_lahir'];
     $alamat = $row['alamat'];
     $no_telepon = $row['no_telepon'];
+    $foto = $row['foto'];
 } else {
     echo "Data user tidak ditemukan.";
 }
@@ -132,7 +133,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
                 <div class="navbar-item">
-                    <a href="#"><img class="me-3" src="imgs/keranjang.png"></a>
                     <a href="detail.php">
                         <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
                         <?php echo $nama; ?>
@@ -153,16 +153,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="form-group mb-3">
                                 <label for="nama">Nama:</label>
                                 <input type="text" class="form-control" id="nama" name="nama"
-                                    value="<?php echo $nama; ?>" required>
+                                    value="<?php echo $nama; ?>" required autocomplete="off">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="email">Email:</label>
                                 <input type="email" class="form-control" id="email" name="email"
-                                    value="<?php echo $email; ?>" required>
+                                    value="<?php echo $email; ?>" required autocomplete="off">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="jenis_kelamin">Jenis Kelamin:</label>
-                                <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required>
+                                <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required autocomplete="off">
                                     <option value="Laki-laki"
                                         <?php if ($jenis_kelamin == 'Laki-laki') echo 'selected'; ?>>Laki-laki</option>
                                     <option value="Perempuan"
@@ -172,17 +172,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="form-group mb-3">
                                 <label for="tanggal_lahir">Tanggal Lahir:</label>
                                 <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir"
-                                    value="<?php echo $tanggal_lahir; ?>" required>
+                                    value="<?php echo $tanggal_lahir; ?>" required autocomplete="off">
                             </div>
                             <div class="form-group mb-3">
                                 <label for="alamat">Alamat:</label>
                                 <textarea class="form-control" id="alamat" name="alamat"
-                                    required><?php echo $alamat; ?></textarea>
+                                    required autocomplete="off"><?php echo $alamat; ?></textarea>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="no_telepon">No. Telepon:</label>
                                 <input type="text" class="form-control" id="no_telepon" name="no_telepon"
-                                    value="<?php echo $no_telepon; ?>" required>
+                                    value="<?php echo $no_telepon; ?>" required autocomplete="off">
                             </div>
                             <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
                             <a href="detail.php" class="btn btn-danger">Batal</a>

@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include 'koneksi.php';
+    include 'php/php.php';
 
     // Periksa apakah user sudah login
     if (!isset($_SESSION['userid'])) {
@@ -257,13 +257,13 @@
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="index.php">
+            <a class="navbar-brand ms-2 font-weight-bold">
                 Alzi Petshop
             </a>
             <div class="navbar-item">
                 <a href="detail.php">
                     <img src="<?php echo $foto; ?>"class="rounded-circle me-2">
-                    <span class="me-2"><?php echo getFirstName($nama); ?></span>
+                    <span class="me-2" style="font-weight: bold;"><?php echo getFirstName($nama); ?></span>
                 </a>
             </div>
         </div>
