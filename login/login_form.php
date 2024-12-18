@@ -72,7 +72,7 @@ if (isset($_SESSION['email'])) {
                 <form action="login_proses.php" method="post">
                     <div class="form-group mb-3">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="text" class="form-control" id="email" name="email" required>
+                        <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <div class="form-group mb-4">
                         <label for="password" class="form-label">Password:</label>

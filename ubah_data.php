@@ -8,7 +8,7 @@ if (!isset($_SESSION['userid'])) {
     exit;
 }
 
-$userid = $_SESSION['userid']; // Ambil user ID dari session
+$userid = $_SESSION['userid'];
 
 // Query untuk mengambil data user dari database
 $sql = "SELECT u.id, u.nama, u.email, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
@@ -63,8 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Metadata -->
-    <?php include('metadata.php'); ?>
     <title>Ubah Data</title>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -76,15 +74,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     html,
     body {
         width: 100%;
+        height: 100vh;
+    }
+
+    .card {
+        padding-top: 1rem;
+    }
+
+    .row {
+        padding-top: 2.5rem;
     }
 
     .navbar {
         position: fixed;
     }
 
+    @media (max-width: 435px) {
+        body {
+            overflow-y: hidden;
+        }
 
-    footer {
-        width: 100%;
+        footer {
+            position: fixed;
+            bottom: 0;
+            padding-top: 1rem;
+        }
+    }
+
+    @media (min-width: 768px) {
+        footer {
+            background-color: white;
+            margin-top: 2rem;
+            padding: 1rem 0 0.1rem 0;
+            width: 100%;
+        }
     }
 
     h4 {
@@ -110,14 +133,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </ul>
                 <div class="navbar-item">
                     <a href="#"><img class="me-3" src="imgs/keranjang.png"></a>
-                    <a href="detail.php"><img src="<?php echo $foto; ?>"
-                            class="rounded-circle me-2"><?php echo $nama; ?></a>
+                    <a href="detail.php">
+                        <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
+                        <?php echo $nama; ?>
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
     <!-- End Navbar -->
-
+    <!-- Form Ubah Data -->
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-6 offset-md-3">
@@ -160,7 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     value="<?php echo $no_telepon; ?>" required>
                             </div>
                             <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
-                            <a href="detail.php" class="btn btn-danger">Batal</a>
+                            <a href="detail.php" class="btn btn-secondary">Batal</a>
                         </form>
                     </div>
                 </div>
@@ -169,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <footer class="text-center">
-        <p class="p-3">Create by Alzi Petshop | &copy 2024</p>
+        <p>Create by Alzi Petshop | &copy 2024</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">

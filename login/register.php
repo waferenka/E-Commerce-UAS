@@ -37,10 +37,10 @@ if (isset($_POST['register'])) {
         $conn->commit();
         header('Location: login_form.php');
         exit;
-    } catch (Exception $e) {
+    } catch (Exception) {
         // Jika terjadi kesalahan, rollback transaksi
         $conn->rollback();
-        $error = $e->getMessage();
+        $error = "Email sudah digunakan, silahkan gunakan email lain!";
     }
 }
 ?>
