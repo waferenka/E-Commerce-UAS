@@ -28,7 +28,7 @@ if (isset($_POST["submit"])) {
             if (mysqli_query($conn, $update_sql)) {
                 echo "<script>
                         alert('Kata sandi berhasil diubah');
-                        document.location='../index.php';
+                        document.location='index.php';
                       </script>";
             } else {
                 echo "<script>
@@ -67,7 +67,7 @@ if (isset($_POST["submit"])) {
 <body>
     <div class="container mt-5">
         <h2 class="text-center">Ubah Kata Sandi</h2>
-        <form action="ubah_kata_sandi.php" method="POST">
+        <form action="#" method="POST">
             <div class="mb-3">
                 <label for="old_password" class="form-label">Kata Sandi Lama</label>
                 <input type="password" class="form-control" name="old_password" id="old_password" required>
