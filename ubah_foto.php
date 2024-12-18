@@ -163,7 +163,6 @@ function getFirstName($fullName) {
                 Alzi Petshop
             </a>
             <div class="navbar-item">
-                <a href="#"><img class="me-3" src="imgs/keranjang.png"></a>
                 <a href="detail.php">
                     <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
