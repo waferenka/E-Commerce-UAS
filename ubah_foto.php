@@ -15,6 +15,12 @@ $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
 $email = $user['email'];
 
+// Ambil path foto user dari database
+$query = "SELECT foto FROM user_detail WHERE id = '$userid'";
+$result = mysqli_query($conn, $query);
+$user_detail = mysqli_fetch_assoc($result);
+$old_photo_path = $user_detail['foto'];
+
 // Fungsi untuk membersihkan email menjadi nama file yang valid
 function sanitize_filename($filename) {
     // Ganti karakter yang tidak valid dengan _
@@ -46,9 +52,10 @@ if (isset($_POST["submit"])) {
 
     // Batasi format file
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        echo "Maaf, hanya file JPG, JPEG, PNG & GIF yang di izinkan.";
         $uploadOk = 0;
     }
+
 
     // Cek apakah $uploadOk bernilai 0 karena error
     if ($uploadOk == 0) {
@@ -58,6 +65,11 @@ if (isset($_POST["submit"])) {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
             echo "The file ". htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
             
+            // Hapus file foto lama jika ada
+            if ($old_photo_path && file_exists($old_photo_path)) {
+                unlink($old_photo_path);
+            }
+
             // Update path foto di database
             $sql = "UPDATE user_detail SET foto='$target_file' WHERE id='$userid'";
             if (mysqli_query($conn, $sql)) {
@@ -77,6 +89,11 @@ if (isset($_POST["submit"])) {
     }
     mysqli_close($conn);
 }
+//Nama Depan
+function getFirstName($fullName) {
+    $parts = explode(" ", $fullName);
+    return $parts[0];
+}
 ?>
 
 <!DOCTYPE html>
@@ -89,9 +106,28 @@ if (isset($_POST["submit"])) {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- My Style -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap_style.css">
 </head>
 
 <body>
+    <!-- Navbar, Search, Keranjang, User -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-2 font-weight-bold" href="index.php">
+                Alzi Petshop
+            </a>
+            <div class="navbar-item">
+                <a href="#"><img class="me-3" src="imgs/keranjang.png"></a>
+                <a href="detail.php">
+                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
+                    <span id="user"><?php echo getFirstName($nama); ?></span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar, Search, Keranjang, User -->
     <div class="container mt-5">
         <h2 class="text-center">Ubah Foto Profil</h2>
         <form action="ubah_foto.php" method="POST" enctype="multipart/form-data">
@@ -99,9 +135,13 @@ if (isset($_POST["submit"])) {
                 <label for="fileToUpload" class="form-label">Pilih file gambar untuk diupload:</label>
                 <input type="file" class="form-control" name="fileToUpload" id="fileToUpload" required>
             </div>
-            <button type="submit" name="submit" class="btn btn-primary">Upload Gambar</button>
+            <button type="submit" name="submit" class="btn btn-warning">Upload Gambar</button>
         </form>
     </div>
+
+    <footer class="text-center">
+        <p class="p-3">Create by Alzi Petshop | &copy 2024</p>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>

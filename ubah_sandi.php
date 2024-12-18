@@ -9,6 +9,34 @@ if (!isset($_SESSION['userid'])) {
 
 $userid = $_SESSION['userid']; // Ambil user ID dari session
 
+// Query untuk mengambil data dari kedua tabel
+$sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+FROM tbluser u 
+LEFT JOIN user_detail d ON u.id = d.id 
+WHERE u.id = '$userid'";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result->num_rows > 0) {
+$row = mysqli_fetch_assoc($result);
+$foto = $row['foto'];
+$nama = $row['nama'];
+$email = $row['email'];
+$level = $row['level'];
+$jenis_kelamin = $row['jenis_kelamin'];
+$tanggal_lahir = $row['tanggal_lahir'];
+$alamat = $row['alamat'];
+$no_telepon = $row['no_telepon'];
+} else {
+echo "Data user tidak ditemukan.";
+}
+
+//Nama Depan
+function getFirstName($fullName) {
+    $parts = explode(" ", $fullName);
+    return $parts[0];
+}
+
 // Menangkap data yang dikirim dari form
 if (isset($_POST["submit"])) {
     $old_password = mysqli_real_escape_string($conn, $_POST['old_password']);
@@ -63,18 +91,56 @@ if (isset($_POST["submit"])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- My Style -->
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <style>
+    html,
+    body {
+        height: 100vh;
+    }
+
+    .navbar {
+        position: sticky;
+    }
+
     .button {
         float: right;
+    }
+
+    footer {
+        background-color: white;
+        width: 100%;
+        bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .navbar-brand {
+            display: inline;
+        }
     }
     </style>
 </head>
 
 <body>
-    <div class="container mt-5">
+    <!-- Navbar, Search, Keranjang, User -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-2 font-weight-bold" href="index.php">
+                Alzi Petshop
+            </a>
+            <div class="navbar-item">
+                <a href="#"><img class="me-3" src="imgs/keranjang.png"></a>
+                <a href="detail.php">
+                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
+                    <span id="user"><?php echo getFirstName($nama); ?></span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar, Search, Keranjang, User -->
+    <div class="container d-flex vh-100 justify-content-center align-item-center mt-5">
         <form action="#" method="POST">
-            <table class="table">
+            <table class="table-sm mb-3">
                 <thead>
                     <tr>
                         <th colspan='3'>
@@ -84,25 +150,25 @@ if (isset($_POST["submit"])) {
                 </thead>
                 <tbody>
                     <tr>
-                        <th>
+                        <td>
                             <label for="old_password" class="form-label">Kata Sandi Lama</label>
-                        </th>
+                        </td>
                         <td>:</td>
                         <td><input type="password" class="form-control" name="old_password" id="old_password" required>
                         </td>
                     </tr>
                     <tr>
-                        <th>
+                        <td>
                             <label for="new_password" class="form-label">Kata Sandi Baru</label>
-                        </th>
+                        </td>
                         <td>:</td>
                         <td><input type="password" class="form-control" name="new_password" id="new_password" required>
                         </td>
                     </tr>
                     <tr>
-                        <th>
+                        <td>
                             <label for="confirm_password" class="form-label">Konfirmasi Kata Sandi Baru</label>
-                        </th>
+                        </td>
                         <td>:</td>
                         <td><input type="password" class="form-control" name="confirm_password" id="confirm_password"
                                 required>
@@ -116,6 +182,10 @@ if (isset($_POST["submit"])) {
             </div>
         </form>
     </div>
+
+    <footer class="text-center">
+        <p class="p-3">Create by Alzi Petshop | &copy 2024</p>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
