@@ -49,7 +49,8 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    html, body {
+    html,
+    body {
         width: 100%;
         height: 100%;
     }
@@ -278,8 +279,8 @@ if ($result->num_rows > 0) {
                 <div class="img-user text-center">
                     <img src="<?php echo $foto; ?>" class="profile-img mb-3" alt="Foto Profil">
                     <h3 class="" id="user"><?php echo $nama; ?></h3>
-                    <a href="#" class="container-fluid btn btn-warning mt-3">Ubah Foto Profil</a>
-                    <a href="#" class="container-fluid btn btn-warning mt-2">Ubah Kata Sandi</a>
+                    <a href="ubah_foto.php" class="container-fluid btn btn-warning mt-3">Ubah Foto Profil</a>
+                    <a href="ubah_sandi.php" class="container-fluid btn btn-warning mt-2">Ubah Kata Sandi</a>
                     <a class="container-fluid btn btn-danger mt-2" href="login/logout.php">Logout</a>
                 </div>
             </div>

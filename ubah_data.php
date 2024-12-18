@@ -185,7 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     value="<?php echo $no_telepon; ?>" required>
                             </div>
                             <button type="submit" class="btn btn-warning">Simpan Perubahan</button>
-                            <a href="detail.php" class="btn btn-secondary">Batal</a>
+                            <a href="detail.php" class="btn btn-danger">Batal</a>
                         </form>
                     </div>
                 </div>
