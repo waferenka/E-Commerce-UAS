@@ -6,13 +6,13 @@
 /* Sembunyikan Spinner */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 input[type=number] {
-    -moz-appearance: textfield;
-    text-align: center;
-    width: 50px;
+  -moz-appearance: textfield;
+  text-align: center;
+  width: 50px;
 }
 
 body {
@@ -22,7 +22,6 @@ body {
   animation-name: fade;
   animation-duration: 1s;
   user-select: none;
-  text-align: justify;
 }
 
 footer {
@@ -272,10 +271,10 @@ footer {
 
 /* Produk.php */
 .product-image {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 15px;
-    margin-top: 10px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 15px;
+  margin-top: 10px;
 }
 
 .deskripsi-p {
@@ -283,68 +282,68 @@ footer {
 }
 
 .quantity-box input {
-    width: 50px;
-    text-align: center;
+  width: 50px;
+  text-align: center;
 }
 
 .btn-keranjang {
-    color: rgb(255, 180, 0);
-    background-color: white;
+  color: rgb(255, 180, 0);
+  background-color: white;
 }
 
 .btn-beli {
-    color: white;
-    background-color: rgb(255, 180, 0);
-    transition: 0.3s all;
+  color: white;
+  background-color: rgb(255, 180, 0);
+  transition: 0.3s all;
 }
 
 .btn-keranjang, .btn-beli {
-    font-weight: bold;
-    padding: 0.4rem 0.8rem;
-    border: 1.5px solid rgb(255, 180, 0);
-    border-radius: 0.5rem;
-    text-align: center;
+  font-weight: bold;
+  padding: 0.4rem 0.8rem;
+  border: 1.5px solid rgb(255, 180, 0);
+  border-radius: 0.5rem;
+  text-align: center;
 }
 
 .btn-beli:hover {
-    background-color: rgb(240, 175, 0);
-    border: 1.5px solid rgb(240, 175, 0);
+  background-color: rgb(240, 175, 0);
+  border: 1.5px solid rgb(240, 175, 0);
 }
 
 @media (min-width: 320px) {
-    .nama-p {
-        font-size: 18px;
-        margin-top: 10px;
-        font-weight: bold;
-    }
-    .harga-p {
-        font-size: 20px;
-        font-weight: bold;
-    }
+  .nama-p {
+    font-size: 18px;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  .harga-p {
+    font-size: 20px;
+    font-weight: bold;
+  }
 }
 
 @media (max-width: 435px) {
-    .container {
-        padding-bottom: 4rem;
-    }
-    .item-konten-p {
-      padding: 1rem 2rem 0rem 2rem;
-    }
-    #item-button {
-        position: fixed;
-        width: 100%;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 0.4rem 0.8rem;
-        background-color: white;
-        justify-content: center;
-        z-index: 1000;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-    }
-    .btn-keranjang, .btn-beli {
-        flex: 1;
-    }
+  #container-p {
+    padding-bottom: 4rem;
+  }
+  .item-konten-p {
+    padding: 1rem 1.5rem 0rem 1.5rem;
+  }
+  #item-button {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.4rem 0.8rem;
+    background-color: white;
+    justify-content: center;
+    z-index: 1000;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  }
+  .btn-keranjang, .btn-beli {
+    flex: 1;
+  }
 }
 
 /*Custom Size Responsive*/
