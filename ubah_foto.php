@@ -2,13 +2,34 @@
 session_start();
 // Koneksi database
 require 'php/php.php';
-
 if (!isset($_SESSION['userid'])) {
     header("Location: login/login_form.php");
     exit;
 }
 
 $userid = $_SESSION['userid']; // Ambil user ID dari session
+
+// Query untuk mengambil data dari kedua tabel
+$sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+FROM tbluser u 
+LEFT JOIN user_detail d ON u.id = d.id 
+WHERE u.id = '$userid'";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result->num_rows > 0) {
+$row = mysqli_fetch_assoc($result);
+$foto = $row['foto'];
+$nama = $row['nama'];
+$email = $row['email'];
+$level = $row['level'];
+$jenis_kelamin = $row['jenis_kelamin'];
+$tanggal_lahir = $row['tanggal_lahir'];
+$alamat = $row['alamat'];
+$no_telepon = $row['no_telepon'];
+} else {
+echo "Data user tidak ditemukan.";
+}
 
 // Ambil email user dari database
 $query = "SELECT email FROM tbluser WHERE id = '$userid'";
@@ -38,10 +59,10 @@ if (isset($_POST["submit"])) {
     // Cek apakah file gambar adalah gambar asli atau bukan
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
     if ($check !== false) {
-        // echo "File is an image - " . $check["mime"] . ".";
+        echo "File is an image - " . $check["mime"] . ".";
         $uploadOk = 1;
     } else {
-        // echo "File is not an image.";
+        echo "File is not an image.";
         $uploadOk = 0;
     }
 
@@ -64,7 +85,7 @@ if (isset($_POST["submit"])) {
     // Jika semua cek lolos, coba upload file
     } else {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            // echo "The file ". htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
+            echo "The file ". htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
             
             // Hapus file foto lama jika ada
             if ($old_photo_path && file_exists($old_photo_path)) {
@@ -75,12 +96,12 @@ if (isset($_POST["submit"])) {
             $sql = "UPDATE user_detail SET foto='$target_file' WHERE id='$userid'";
             if (mysqli_query($conn, $sql)) {
                 echo "<script>
-                        // alert('Foto profil berhasil diubah');
+                        alert('Foto profil berhasil diubah');
                         document.location='index.php';
                       </script>";
             } else {
                 echo "<script>
-                        // alert('Terjadi kesalahan saat mengubah foto profil. Silakan coba lagi.');
+                        alert('Terjadi kesalahan saat mengubah foto profil. Silakan coba lagi.');
                         window.history.back();
                       </script>";
             }
@@ -90,27 +111,6 @@ if (isset($_POST["submit"])) {
     }
     mysqli_close($conn);
 }
-// Query untuk mengambil data dari kedua tabel
-    $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
-            FROM tbluser u 
-            LEFT JOIN user_detail d ON u.id = d.id 
-            WHERE u.id = '$userid'";
-
-    $result = mysqli_query($conn, $sql);
-
-    if ($result->num_rows > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $foto = $row['foto'];
-        $nama = $row['nama'];
-        $email = $row['email'];
-        $level = $row['level'];
-        $jenis_kelamin = $row['jenis_kelamin'];
-        $tanggal_lahir = $row['tanggal_lahir'];
-        $alamat = $row['alamat'];
-        $no_telepon = $row['no_telepon'];
-    } else {
-        echo "Data user tidak ditemukan.";
-    }
 //Nama Depan
 function getFirstName($fullName) {
     $parts = explode(" ", $fullName);
@@ -132,12 +132,25 @@ function getFirstName($fullName) {
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <style>
-    .navbar-brand {
-        display: inline;
+    html,
+    body {
+        height: 100vh;
     }
 
-    .container {
-        padding-top: 3rem;
+    .navbar {
+        position: sticky;
+    }
+
+    footer {
+        background-color: white;
+        width: 100%;
+        bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .navbar-brand {
+            display: inline;
+        }
     }
     </style>
 </head>
@@ -146,7 +159,7 @@ function getFirstName($fullName) {
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="">
+            <a class="navbar-brand ms-2 font-weight-bold" href="index.php">
                 Alzi Petshop
             </a>
             <div class="navbar-item">
@@ -158,14 +171,15 @@ function getFirstName($fullName) {
         </div>
     </nav>
     <!-- End Navbar, Search, Keranjang, User -->
-    <div class="container mt-5 px-4">
-        <h3 class="text-center" style="font-weight: bold;">Ubah Foto Profil</h3>
+    <div class="container vh-100 mt-5">
+        <h2 class="text-center">Ubah Foto Profil</h2>
         <form action="ubah_foto.php" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="fileToUpload" class="form-label">Pilih file gambar untuk diupload:</label>
                 <input type="file" class="form-control" name="fileToUpload" id="fileToUpload" required>
             </div>
             <button type="submit" name="submit" class="btn btn-warning">Upload Gambar</button>
+            <a href="detail.php" class="btn btn-danger">Cancel</a>
         </form>
     </div>
 

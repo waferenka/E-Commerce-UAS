@@ -2,7 +2,6 @@
 session_start();
 // Koneksi database
 require 'php/php.php';
-
 if (!isset($_SESSION['userid'])) {
     header("Location: login/login_form.php");
     exit;
@@ -126,7 +125,7 @@ if (isset($_POST["submit"])) {
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="">
+            <a class="navbar-brand ms-2 font-weight-bold" href="index.php">
                 Alzi Petshop
             </a>
             <div class="navbar-item">
@@ -138,13 +137,13 @@ if (isset($_POST["submit"])) {
         </div>
     </nav>
     <!-- End Navbar, Search, Keranjang, User -->
-    <div class="container d-flex vh-100 justify-content-center align-item-center mt-5 px-4">
+    <div class="container d-flex vh-100 justify-content-center align-item-center mt-5">
         <form action="#" method="POST">
             <table class="table-sm mb-3">
                 <thead>
                     <tr>
                         <th colspan='3'>
-                            <h3 class="text-center" style="font-weight: bold;">Ubah Kata Sandi</h3>
+                            <h2 class="text-center">Ubah Kata Sandi</h2>
                         </th>
                     </tr>
                 </thead>
@@ -154,7 +153,7 @@ if (isset($_POST["submit"])) {
                             <label for="old_password" class="form-label">Kata Sandi Lama</label>
                         </td>
                         <td>:</td>
-                        <td><input type="password" class="form-control" name="old_password" id="old_password" required autocomplete="off">
+                        <td><input type="password" class="form-control" name="old_password" id="old_password" required>
                         </td>
                     </tr>
                     <tr>
@@ -162,7 +161,7 @@ if (isset($_POST["submit"])) {
                             <label for="new_password" class="form-label">Kata Sandi Baru</label>
                         </td>
                         <td>:</td>
-                        <td><input type="password" class="form-control" name="new_password" id="new_password" required autocomplete="off">
+                        <td><input type="password" class="form-control" name="new_password" id="new_password" required>
                         </td>
                     </tr>
                     <tr>
@@ -171,7 +170,7 @@ if (isset($_POST["submit"])) {
                         </td>
                         <td>:</td>
                         <td><input type="password" class="form-control" name="confirm_password" id="confirm_password"
-                                required autocomplete="off">
+                                required>
                         </td>
                     </tr>
                 </tbody>
