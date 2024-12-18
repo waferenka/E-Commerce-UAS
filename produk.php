@@ -98,6 +98,50 @@
                 background: transparent;
             }
 
+            .dropdown-menu{
+                width: 100%;
+                border: none;
+                box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            @media (max-width: 436px) {
+              #container-p {
+                padding-bottom: 4rem;
+              }
+              .item-konten-p {
+                padding: 1rem 1.5rem 0rem 1.5rem;
+              }
+              #item-button-mobile {
+                display: flex;
+                position: fixed;
+                width: 100%;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 0.4rem 0.8rem;
+                background-color: white;
+                justify-content: center;
+                z-index: 1000;
+                box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+              }
+              #item-button-tabdesk {
+                display: none;
+              }
+              .btn-keranjang,
+              .btn-beli {
+                flex: 1;
+              }
+            }
+
+            @media (min-width: 436px) {
+              #item-button-tabdesk {
+                display: block;
+              }
+              #item-button-mobile {
+                display: none;
+              }
+            }
+
             footer {
                 background-color: white;
                 margin-top: 2rem;
@@ -126,7 +170,6 @@
                 </div>
             </div>
         </nav>
-
         <!-- Detail Produk -->
         <div id="container-p" class="container mt-5" style="padding-top: 1.5rem; color: black;">
             <?php if ($productd): ?>
@@ -141,8 +184,6 @@
                         <h4 class="nama-p"><?php echo htmlspecialchars($productd['name']); ?></h4>
                         <h2 class="harga-p">Rp<?php echo number_format($productd['price'], 0, ',', '.'); ?></h2>
                         <form method="POST">
-                            
-
                             <!-- Deskripsi -->
                             <div id="description" class="deskripsi-terbatas" onclick="toggleDescription()">
                                 <?php 
@@ -158,16 +199,15 @@
                                     <button id="toggle-desc" type="button" class="btn btn-link p-0" style="pointer-events: none; text-decoration: none; color: rgb(255, 180, 0); font-weight: bold;">Lihat Selengkapnya</button>
                                 <?php endif; ?>
                             </div>
-                            <!-- Tombol -->
-                            <div id="item-button" class="d-flex gap-3">
+                            <!-- Tombol Mobile -->
+                            <div id="item-button-mobile" class="gap-3">
                                 <!-- Tombol Beli Sekarang -->
-                                
-                                <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" data-popper-placement="top">
+                                <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     Beli Sekarang
                                 </button>
-                                <div class="dropdown-menu p-3" aria-labelledby="beliButton" id="beliDropdown">
-                                    <h6 class="dropdown-header">Konfirmasi Pembelian</h6>
-                                    <p class="dropdown-item-text">Anda yakin ingin membeli produk ini?</p>
+                                <!-- Div Dropdown -->
+                                <div class="dropdown-menu p-4" aria-labelledby="beliButton" id="beliDropdown">
+                                    <h6>Konfirmasi Pembelian</h6>
                                     <!-- Jumlah Barang -->
                                     <div class="d-flex align-items-center my-3">
                                         <label for="quantity" class="me-2">Jumlah:</label>
@@ -177,8 +217,24 @@
                                             <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(1)">+</button>
                                         </div>
                                     </div>
-                                    <button type="submit" name="action" value="buy_now" class="btn-beli">Ya, Beli</button>
+                                    <button type="submit" name="action" value="buy_now" class="btn-beli px-4">Beli</button>
                                 </div>
+                            </div>
+                            <!-- Tombol Tablet + Dekstop -->
+                            <div id="item-button-tabdesk" class="gap-3">
+                                <!-- Jumlah Barang -->
+                                <div class="d-flex align-items-center my-3">
+                                    <label for="quantity" class="me-2">Jumlah:</label>
+                                    <div class="quantity-box d-flex">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(-1)">-</button>
+                                        <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control mx-2">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(1)">+</button>
+                                    </div>
+                                </div>
+                                <!-- Tombol Beli Sekarang -->
+                                <button type="submit" name="action" value="buy_now" class="btn-beli">
+                                    Beli Sekarang
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -188,8 +244,9 @@
             <?php endif; ?>
         </div>
 
-        <!-- Js Search -->
+        <!-- Js -->
         <script>
+            // Search
             const products = <?php echo json_encode($products); ?>;
             const searchInput = document.getElementById('searchInput');
             const searchResults = document.getElementById('searchResults');
@@ -227,6 +284,8 @@
                     searchResults.style.display = 'none';
                 }
             });
+
+            // Kuantitas/Jumlah Barang
             function changeQuantity(amount) {
                 const quantityInput = document.getElementById('quantity');
                 let value = parseInt(quantityInput.value) || 1;
@@ -243,6 +302,8 @@
                     quantityInput.value = Math.max(1, value - 1);
                 }
             });
+
+            // Lihat Selengkapnya
             function toggleDescription() {
                 const shortDesc = document.getElementById('short-desc');
                 const fullDesc = document.getElementById('full-desc');
@@ -258,6 +319,31 @@
                     button.textContent = 'Lihat Selengkapnya';
                 }
             }
+
+            // Dropdown Beli
+            const beliButton = document.querySelector('#beliButton');
+            const beliDropdown = document.querySelector('#beliDropdown');
+
+            beliButton.addEventListener('click', function(event) {
+                const isOpen = beliDropdown.classList.contains('show');
+                if (!isOpen) {
+                    const dropdown = new bootstrap.Dropdown(beliButton);
+                    dropdown.show();
+                } else {
+                    event.stopPropagation();
+                }
+            });
+
+            beliDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!beliButton.contains(e.target) && !beliDropdown.contains(e.target)) {
+                    const dropdown = new bootstrap.Dropdown(beliButton);
+                    dropdown.hide();
+                }
+            });
         </script>
         <!-- End Js Search -->
         <!-- Sementara tanpa footer -->
@@ -265,21 +351,6 @@
             <p>Create by Alzi Petshop | &copy 2024</p>
         </footer> -->
         <script src="https://unpkg.com/@popperjs/core@2"></script>
-        <script>
-    // Inisialisasi dropdown keranjang
-    const keranjangButton = document.querySelector('#keranjangButton');
-    const keranjangDropdown = document.querySelector('#keranjangDropdown');
-    Popper.createPopper(keranjangButton, keranjangDropdown, {
-        placement: 'bottom',
-    });
-
-    // Inisialisasi dropdown Beli Sekarang
-    const beliButton = document.querySelector('#beliButton');
-    const beliDropdown = document.querySelector('#beliDropdown');
-    Popper.createPopper(beliButton, beliDropdown, {
-        placement: 'top',
-    });
-</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
