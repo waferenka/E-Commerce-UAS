@@ -91,11 +91,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     @media (max-width: 435px) {
         body {
-            overflow-y: hidden;
+            overflow-y: auto;
         }
 
         footer {
-            position: fixed;
+            position: static;
             bottom: 0;
             padding-top: 1rem;
         }
