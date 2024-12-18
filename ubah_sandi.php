@@ -62,15 +62,46 @@ if (isset($_POST["submit"])) {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- My Style -->
+    <link rel="stylesheet" href="css/bootstrap_style.css">
 </head>
 
 <body>
     <div class="container mt-5">
         <h2 class="text-center">Ubah Kata Sandi</h2>
         <form action="#" method="POST">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>
+                            <label for="old_password" class="form-label">Kata Sandi Lama</label>
+                        </th>
+                        <td>:</td>
+                        <td><input type="password" class="form-control" name="old_password" id="old_password" required>
+                        </td>
+                    </tr>
+                <tbody>
+                    <tr>
+                        <th>
+                            <label for="old_password" class="form-label">Kata Sandi Lama</label>
+                        </th>
+                        <td>:</td>
+                        <td><input type="password" class="form-control" name="old_password" id="old_password" required>
+                        </td>
+                    </tr>
+                <tbody>
+                    <tr>
+                        <th>
+                            <label for="old_password" class="form-label">Kata Sandi Lama</label>
+                        </th>
+                        <td>:</td>
+                        <td><input type="password" class="form-control" name="old_password" id="old_password" required>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="mb-3">
-                <label for="old_password" class="form-label">Kata Sandi Lama</label>
-                <input type="password" class="form-control" name="old_password" id="old_password" required>
+
             </div>
             <div class="mb-3">
                 <label for="new_password" class="form-label">Kata Sandi Baru</label>
@@ -80,7 +111,8 @@ if (isset($_POST["submit"])) {
                 <label for="confirm_password" class="form-label">Konfirmasi Kata Sandi Baru</label>
                 <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
             </div>
-            <button type="submit" name="submit" class="btn btn-primary">Ubah Kata Sandi</button>
+            <button type="submit" name="submit" class="btn btn-warning">Ubah Kata Sandi</button>
+            <a href="detail.php" class="btn btn-danger">Batal</a>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
