@@ -50,9 +50,7 @@
         $quantity = intval($_POST['quantity']);
         $action = $_POST['action'];
 
-        if ($action === 'add_cart') {
-            $query = "INSERT INTO cart (user_id, product_id, quantity) VALUES ('$userid', '$product_id', '$quantity')";
-        } elseif ($action === 'buy_now') {
+        if ($action === 'buy_now') {
             $query = "INSERT INTO orders (user_id, product_id, quantity) VALUES ('$userid', '$product_id', '$quantity')";
         }
 

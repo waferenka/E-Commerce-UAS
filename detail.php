@@ -1,36 +1,42 @@
 <?php
-session_start();
-include 'koneksi.php';
+    session_start();
+    include 'koneksi.php';
 
-// Periksa apakah user sudah login
-if (!isset($_SESSION['userid'])) {
-    header("Location: login/login_form.php");
-    exit;
-}
+    // Periksa apakah user sudah login
+    if (!isset($_SESSION['userid'])) {
+        header("Location: login/login_form.php");
+        exit;
+    }
 
-$userid = $_SESSION['userid']; // Ambil user ID dari session
+    $userid = $_SESSION['userid']; // Ambil user ID dari session
 
-// Query untuk mengambil data dari kedua tabel
-$sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
-        FROM tbluser u 
-        LEFT JOIN user_detail d ON u.id = d.id 
-        WHERE u.id = '$userid'";
+    // Query untuk mengambil data dari kedua tabel
+    $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+            FROM tbluser u 
+            LEFT JOIN user_detail d ON u.id = d.id 
+            WHERE u.id = '$userid'";
 
-$result = mysqli_query($conn, $sql);
+    $result = mysqli_query($conn, $sql);
 
-if ($result->num_rows > 0) {
-    $row = mysqli_fetch_assoc($result);
-    $foto = $row['foto'];
-    $nama = $row['nama'];
-    $email = $row['email'];
-    $level = $row['level'];
-    $jenis_kelamin = $row['jenis_kelamin'];
-    $tanggal_lahir = $row['tanggal_lahir'];
-    $alamat = $row['alamat'];
-    $no_telepon = $row['no_telepon'];
-} else {
-    echo "Data user tidak ditemukan.";
-}
+    if ($result->num_rows > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $foto = $row['foto'];
+        $nama = $row['nama'];
+        $email = $row['email'];
+        $level = $row['level'];
+        $jenis_kelamin = $row['jenis_kelamin'];
+        $tanggal_lahir = $row['tanggal_lahir'];
+        $alamat = $row['alamat'];
+        $no_telepon = $row['no_telepon'];
+    } else {
+        echo "Data user tidak ditemukan.";
+    }
+
+    //Nama Depan
+    function getFirstName($fullName) {
+        $parts = explode(" ", $fullName);
+        return $parts[0];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,8 +55,7 @@ if ($result->num_rows > 0) {
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    html,
-    body {
+    html, body {
         width: 100%;
         height: 100%;
     }
@@ -255,19 +260,11 @@ if ($result->num_rows > 0) {
             <a class="navbar-brand ms-2 font-weight-bold" href="index.php">
                 Alzi Petshop
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                </ul>
-                <div class="navbar-item">
-                    <a href="#"><img class="me-3" src="imgs/keranjang.png"></a>
-                    <a href="detail.php"><img src="<?php echo $foto; ?>"
-                            class="rounded-circle me-2"><?php echo $nama; ?></a>
-                </div>
+            <div class="navbar-item">
+                <a href="detail.php">
+                    <img src="<?php echo $foto; ?>"class="rounded-circle me-2">
+                    <span class="me-2"><?php echo getFirstName($nama); ?></span>
+                </a>
             </div>
         </div>
     </nav>
