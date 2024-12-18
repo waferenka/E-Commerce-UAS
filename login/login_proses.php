@@ -26,10 +26,10 @@ if ($cek > 0) {
     // Alihkan ke halaman sesuai level user
     if ($data['level'] == "admin") {
         header("Location: ../index.php");
-    } elseif ($data['level'] == "dosen") {
-        header("Location: ../index_dosen.php");
-    } elseif ($data['level'] == "mahasiswa") {
-        header("Location: ../index_mahasiswa.php");
+    } elseif ($data['level'] == "penjual") {
+        header("Location: ../index_p.php");
+    } elseif ($data['level'] == "pembeli") {
+        header("Location: ../index_pembeli.php");
     } else {
         header("Location: login_form.php?error=Invalid user level");
     }

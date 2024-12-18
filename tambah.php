@@ -68,26 +68,31 @@ function getFirstName($fullName) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Data</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <style>
+    .navbar-brand {
+        display: inline;
+    }
+
+    .container {
+        padding-top: 5rem;
+    }
+
+    @media (max-width: 321px) {
         .navbar-brand {
-            display: inline;
+            font-size: 17px;
         }
-        .container {
-            padding-top: 5rem;
-        }
-        @media (max-width: 321px) {
-            .navbar-brand {
-                font-size: 17px;
-            }
-        }
+    }
     </style>
 </head>
+
 <body>
     <script src="script/script.js"></script>
     <!-- Navbar, Search, Keranjang, User -->
@@ -105,7 +110,7 @@ function getFirstName($fullName) {
             </div>
         </div>
     </nav>
-    
+
     <div class="container px-3" style="color: black;">
         <h3 style="font-weight: bold;">Tambah Produk</h3>
         <form action="php/proses_tambah.php" method="post" enctype="multipart/form-data">
@@ -115,7 +120,8 @@ function getFirstName($fullName) {
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Deskripsi</label>
-                <textarea name="description" id="description" class="form-control" rows="4" required autocomplete="off"></textarea>
+                <textarea name="description" id="description" class="form-control" rows="4" required
+                    autocomplete="off"></textarea>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Harga</label>
@@ -137,11 +143,12 @@ function getFirstName($fullName) {
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Foto</label>
-                <input type="file" name="image" id="image" class="form-control" accept="image/*" required autocomplete="off">
+                <input type="file" name="image" id="image" class="form-control" accept="image/*" required
+                    autocomplete="off">
             </div>
             <button type="submit" class="btn btn-success">Tambah Data</button>
         </form>
-        <a href="index_p.php" class="btn btn-primary my-3">Kembali</a>
+        <a href="index_p.php" class="btn btn-warning my-3">Kembali</a>
     </div>
     <!-- Footer start -->
     <footer class="text-center">
@@ -149,4 +156,5 @@ function getFirstName($fullName) {
     </footer>
     <!-- Footer End -->
 </body>
+
 </html>
