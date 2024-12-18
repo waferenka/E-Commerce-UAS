@@ -272,7 +272,7 @@ footer {
 
 /* Produk.php */
 .product-image {
-  width: 100%;
+  width: 95%;
   max-width: 400px;
   border-radius: 15px;
   margin-top: 10px;
@@ -321,31 +321,6 @@ footer {
   .harga-p {
     font-size: 20px;
     font-weight: bold;
-  }
-}
-
-@media (max-width: 435px) {
-  #container-p {
-    padding-bottom: 4rem;
-  }
-  .item-konten-p {
-    padding: 1rem 1.5rem 0rem 1.5rem;
-  }
-  #item-button {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 0.4rem 0.8rem;
-    background-color: white;
-    justify-content: center;
-    z-index: 1000;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-  }
-  .btn-keranjang,
-  .btn-beli {
-    flex: 1;
   }
 }
 
@@ -521,6 +496,12 @@ footer {
   }
 }
 
+@media (max-width: 436px) {
+  .search-dropdown {
+    width: 150%;
+    margin-top: 0.5rem;
+  }
+}
 /* Tablet */
 @media (min-width: 768px) {
   .navbar {
