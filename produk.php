@@ -45,20 +45,18 @@
 
     $data = mysqli_query($conn, "SELECT * FROM products WHERE id = '$product_id'");
     $productd = mysqli_fetch_assoc($data);
+    if ($result && $result->num_rows > 0) {
+        $nama_p = $productd['name'];
+        $satuan_p = $productd['satuan'];
+    }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $quantity = intval($_POST['quantity']);
         $action = $_POST['action'];
 
         if ($action === 'buy_now') {
-            $query = "INSERT INTO orders (user_id, product_id, quantity) VALUES ('$userid', '$product_id', '$quantity')";
-        }
-
-        if (mysqli_query($conn, $query)) {
-            $message = ($action === 'add_cart') ? "Produk ditambahkan ke keranjang." : "Pesanan berhasil dibuat.";
-            echo "<script>alert('$message'); window.location.href='index.php';</script>";
-        } else {
-            echo "<script>alert('Terjadi kesalahan.');</script>";
+            $url = "https://api.whatsapp.com/send?phone=6283161076087&text=Halo saya $nama ingin memesan $nama_p sebanyak $quantity $satuan_p";
+            header("Location: $url");
         }
     }
 
@@ -160,7 +158,6 @@
                     <div class="search-dropdown" id="searchResults"></div>
                 </div>
                 <div class="navbar-item">
-                    <a href="#"><img class="me-2" src="imgs/keranjang.png"></a>
                     <a href="detail.php">
                         <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
                         <span id="user"><?php echo getFirstName($nama); ?></span>
