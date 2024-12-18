@@ -152,7 +152,6 @@
                             </div>
 
                             <!-- Deskripsi -->
-                            <!-- TODO: Perbaiki bentrok dengan pesan dan keranjang -->
                             <div id="description" class="deskripsi-terbatas" onclick="toggleDescription()">
                                 <?php 
                                     $maxLength = 200;
@@ -171,9 +170,21 @@
 
                             <!-- Tombol -->
                             <div id="item-button" class="d-flex gap-3">
-                                <button type="submit" name="action" value="add_cart" class="btn-keranjang">+ Keranjang</button>
-                                <button type="submit" name="action" value="buy_now" class="btn-beli">Beli Sekarang</button>
+                                <!-- Tambahkan Keranjang -->
+
+                                <!-- Tombol Beli Sekarang -->
+                                    <button type="button" class="btn-keranjang" id="beliButton" data-bs-toggle="dropdown" data-popper-placement="top">+ Keranjang</button>
+                                    <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" data-popper-placement="top">
+                                        Beli Sekarang
+                                    </button>
+                                    <div class="dropdown-menu p-3" aria-labelledby="beliButton" id="beliDropdown">
+                                        <h6 class="dropdown-header">Konfirmasi Pembelian</h6>
+                                        <p class="dropdown-item-text">Anda yakin ingin membeli produk ini?</p>
+                                        <button type="submit" name="action" value="buy_now" class="btn btn-success btn-sm">Ya, Beli</button>
+                                        <button type="submit" name="action" value="add_cart" class="btn-keranjang">+ Ya Keranjang</button>
+                                    </div>
                             </div>
+
 
                         </form>
                     </div>
@@ -259,6 +270,22 @@
         <!-- <footer class="text-center">
             <p>Create by Alzi Petshop | &copy 2024</p>
         </footer> -->
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script>
+    // Inisialisasi dropdown keranjang
+    const keranjangButton = document.querySelector('#keranjangButton');
+    const keranjangDropdown = document.querySelector('#keranjangDropdown');
+    Popper.createPopper(keranjangButton, keranjangDropdown, {
+        placement: 'bottom',
+    });
+
+    // Inisialisasi dropdown Beli Sekarang
+    const beliButton = document.querySelector('#beliButton');
+    const beliDropdown = document.querySelector('#beliDropdown');
+    Popper.createPopper(beliButton, beliDropdown, {
+        placement: 'top',
+    });
+</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>

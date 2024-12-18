@@ -109,7 +109,7 @@
                     const item = document.createElement('div');
                     item.classList.add('item');
                     item.innerHTML = `
-		                        <img src="${product.image}" alt="${product.name}" class="item-image">
+		                        <img src="${product.image}" loading:="lazy" alt="${product.name}" class="item-image">
 		                        <div class="item-details">
 		                            <h5>${product.name}</h5>
 		                            <span>Rp${product.price.toLocaleString()}</span>
@@ -139,13 +139,13 @@
         <div id="carouselExampleSlidesOnly" class="carousel slide my-1 position-relative" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="imgs/slide1.png" class="d-block w-100" alt="...">
+                    <img src="imgs/slide1.png" class="d-block w-100" loading:="lazy" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="imgs/slide2.png" class="d-block w-100" alt="...">
+                    <img src="imgs/slide2.png" class="d-block w-100" loading:="lazy" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="imgs/slide3.png" class="d-block w-100" alt="...">
+                    <img src="imgs/slide3.png" class="d-block w-100" loading:="lazy" alt="...">
                 </div>
                 <div class="carousel-caption-custom">
                     <h1>Alzi Petshop</h1>
@@ -186,7 +186,7 @@
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="product" data-id="' . htmlspecialchars($row['id']) . '" data-category="' . htmlspecialchars($row['category']) . '">';
-                    echo '<img src="' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['name']) . '">
+                    echo '<img src="' . htmlspecialchars($row['image']) . '" loading:="lazy" alt="' . htmlspecialchars($row['name']) . '">
                           <h3>' . htmlspecialchars($row['name']) . '</h3>
                           <p>' . rupiah($row['price']) . '</p>';
                     echo '</div>';
