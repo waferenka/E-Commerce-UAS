@@ -9,6 +9,11 @@
         exit;
     }
 
+    if ($_SESSION['level'] != "pembeli") {
+        header("Location: login/unauthorized.php");
+        exit;
+    }
+
     $userid = $_SESSION['userid']; // Ambil user ID dari session
 
     // Query untuk mengambil data user
@@ -47,16 +52,21 @@
     $productd = mysqli_fetch_assoc($data);
     if ($result && $result->num_rows > 0) {
         $nama_p = $productd['name'];
+        $harga_p = $productd['price'];
         $satuan_p = $productd['satuan'];
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $quantity = intval($_POST['quantity']);
-        $action = $_POST['action'];
-
-        if ($action === 'buy_now') {
-            $url = "https://api.whatsapp.com/send?phone=6283161076087&text=Halo saya $nama ingin memesan $nama_p sebanyak $quantity $satuan_p";
-            header("Location: $url");
+        if (isset($_POST['quantity'])) {
+            $quantity = intval($_POST['quantity']);  // Ambil nilai quantity
+            $action = $_POST['action'];
+            $total = $harga_p * $quantity;
+            if ($action === 'buy_now') {
+                $url = "https://api.whatsapp.com/send?phone=6283161076087&text=Halo saya $nama ingin memesan $nama_p sebanyak $quantity $satuan_p, dengan total harga $total";
+                header("Location: $url");
+            }
+        } else {
+            echo "Quantity is not set.";
         }
     }
 
@@ -107,7 +117,7 @@
               .item-konten-p {
                 padding: 1rem 1.5rem 0rem 1.5rem;
               }
-              #item-button-mobile {
+              .item-button-mobile {
                 display: flex;
                 position: fixed;
                 width: 100%;
@@ -120,7 +130,7 @@
                 z-index: 1000;
                 box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
               }
-              #item-button-tabdesk {
+              .item-button-tabdesk {
                 display: none;
               }
               .btn-keranjang,
@@ -130,10 +140,10 @@
             }
 
             @media (min-width: 436px) {
-              #item-button-tabdesk {
+              .item-button-tabdesk {
                 display: block;
               }
-              #item-button-mobile {
+              .item-button-mobile {
                 display: none;
               }
             }
@@ -178,7 +188,7 @@
                     <div class="col-md-6 item-konten-p">
                         <h4 class="nama-p"><?php echo htmlspecialchars($productd['name']); ?></h4>
                         <h2 class="harga-p">Rp<?php echo number_format($productd['price'], 0, ',', '.'); ?></h2>
-                        <form method="POST">
+                        <form action="#" method="POST">
                             <!-- Deskripsi -->
                             <div id="description" class="deskripsi-terbatas" onclick="toggleDescription()">
                                 <?php 
@@ -194,43 +204,44 @@
                                     <button id="toggle-desc" type="button" class="btn btn-link p-0" style="pointer-events: none; text-decoration: none; color: rgb(255, 180, 0); font-weight: bold;">Lihat Selengkapnya</button>
                                 <?php endif; ?>
                             </div>
-                            <!-- Tombol Mobile -->
-                            <div id="item-button-mobile" class="gap-3">
-                                <!-- Tombol Beli Sekarang -->
-                                <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Beli Sekarang
-                                </button>
-                                <!-- Div Dropdown -->
-                                <div class="dropdown-menu p-4" aria-labelledby="beliButton" id="beliDropdown">
-                                    <h6>Konfirmasi Pembelian</h6>
+
+                            <form action="produk.php" method="POST">
+                                <!-- Tombol Mobile -->
+                                <div id="A" class="gap-3 item-button-mobile">
+                                    <!-- Tombol Beli Sekarang -->
+                                    <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Beli Sekarang
+                                    </button>
+                                    <!-- Div Dropdown -->
+                                    <div class="dropdown-menu p-4" aria-labelledby="beliButton" id="beliDropdown">
+                                        <h6>Konfirmasi Pembelian</h6>
+                                        <!-- Jumlah Barang -->
+                                        <div class="d-flex align-items-center my-3">
+                                            <label for="quantity" class="me-2">Jumlah:</label>
+                                            <div class="quantity-box d-flex">
+                                                <button type="button" class="btn btn-outline-secondary decreaseBtn">-</button>
+                                                <input type="number" class="quantityInput form-control mx-2" name="quantity" min="1" value="1" />
+                                                <button type="button" class="btn btn-outline-secondary increaseBtn">+</button>
+                                            </div>
+                                        </div>
+                                        <button type="submit" name="action" value="buy_now" class="btn-beli">Beli</button>
+                                    </div>
+                                </div>
+                                <!-- Tombol Tablet + Dekstop -->
+                                <div id="B" class="gap-3 item-button-tabdesk">
                                     <!-- Jumlah Barang -->
                                     <div class="d-flex align-items-center my-3">
                                         <label for="quantity" class="me-2">Jumlah:</label>
                                         <div class="quantity-box d-flex">
-                                            <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(-1)">-</button>
-                                            <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control mx-2">
-                                            <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(1)">+</button>
+                                            <button type="button" class="btn btn-outline-secondary decreaseBtn">-</button>
+                                            <input type="number" class="quantityInput form-control mx-2" name="quantity" min="1" value="1" />
+                                            <button type="button" class="btn btn-outline-secondary increaseBtn">+</button>
                                         </div>
                                     </div>
-                                    <button type="submit" name="action" value="buy_now" class="btn-beli px-4">Beli</button>
+                                    <!-- Tombol Beli Sekarang -->
+                                    <button type="submit" name="action" value="buy_now" class="btn-beli">Beli Sekarang</button>
                                 </div>
-                            </div>
-                            <!-- Tombol Tablet + Dekstop -->
-                            <div id="item-button-tabdesk" class="gap-3">
-                                <!-- Jumlah Barang -->
-                                <div class="d-flex align-items-center my-3">
-                                    <label for="quantity" class="me-2">Jumlah:</label>
-                                    <div class="quantity-box d-flex">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(-1)">-</button>
-                                        <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control mx-2">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(1)">+</button>
-                                    </div>
-                                </div>
-                                <!-- Tombol Beli Sekarang -->
-                                <button type="submit" name="action" value="buy_now" class="btn-beli">
-                                    Beli Sekarang
-                                </button>
-                            </div>
+                            </form>
                         </form>
                     </div>
                 </div>
@@ -281,22 +292,50 @@
             });
 
             // Kuantitas/Jumlah Barang
-            function changeQuantity(amount) {
-                const quantityInput = document.getElementById('quantity');
-                let value = parseInt(quantityInput.value) || 1;
-                value = Math.max(1, value + amount);
-                quantityInput.value = value;
+            document.addEventListener("DOMContentLoaded", function() {
+                const decreaseBtns = document.querySelectorAll('.decreaseBtn');
+                const increaseBtns = document.querySelectorAll('.increaseBtn');
+                const quantityInputs = document.querySelectorAll('.quantityInput');
+                const form = document.querySelector('form');  // Ambil form
+
+                // Fungsi untuk mengurangi jumlah
+                decreaseBtns.forEach((btn, index) => {
+                    btn.addEventListener('click', function() {
+                        let quantity = parseInt(quantityInputs[index].value);
+                        if (quantity > 1) {
+                            quantityInputs[index].value = quantity - 1;
+                        }
+                    });
+                });
+
+                // Fungsi untuk menambah jumlah
+                increaseBtns.forEach((btn, index) => {
+                    btn.addEventListener('click', function() {
+                        let quantity = parseInt(quantityInputs[index].value);
+                        quantityInputs[index].value = quantity + 1;
+                    });
+                });
+
+                // Saat form disubmit, pastikan value quantity yang terbaru dikirimkan
+                form.addEventListener('submit', function() {
+                    const quantity = quantityInputs[0].value;  // Ambil nilai dari input pertama
+                    console.log("Form submitted with quantity: " + quantity);  // Debug log
+                });
+            });
+
+            // Hapus Div Width Tertentu
+            function checkWidthA() {
+                var divA = document.getElementById("A");
+                var divB = document.getElementById("B");
+                if (window.innerWidth > 436) {
+                    divA.innerHTML = '';
+                }else{
+                    divB.innerHTML = '';
+                }
             }
 
-            const quantityInput = document.getElementById('quantity');
-            quantityInput.addEventListener('keydown', function (e) {
-                let value = parseInt(quantityInput.value) || 1;
-                if (e.key === 'ArrowRight') {
-                    quantityInput.value = value + 1;
-                } else if (e.key === 'ArrowLeft') {
-                    quantityInput.value = Math.max(1, value - 1);
-                }
-            });
+            window.addEventListener("resize", checkWidthA);
+            window.addEventListener("load", checkWidthA);
 
             // Lihat Selengkapnya
             function toggleDescription() {

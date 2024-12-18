@@ -1,5 +1,5 @@
 <?php
-require '../koneksi.php';
+require '../php/php.php';
 
 if (isset($_POST['register'])) {
     $nama = $_POST['nama'];

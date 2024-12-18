@@ -9,7 +9,7 @@
 		exit;
 	}
 
-    if ($_SESSION['level'] != "pembeli") {
+    if ($_SESSION['level'] != "penjual") {
         header("Location: login/unauthorized.php");
         exit;
     }
@@ -66,21 +66,46 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .categories {
+            margin-top: 3.5rem;
+        }
+
+        .d-flex {
+            display: flex;
+            justify-content: flex-end;
+            margin-left: auto;
+        }
+
+        @media (max-width: 436px) {
+            .d-flex {
+                justify-content: flex-start;
+                margin: auto 0;
+            }
+
+            .d-flex a {
+                font-size: 14px;
+            }
+        }
+
+    </style>
     <title>Alzi Petshop</title>
 </head>
 
 <body>
-    <script src="script/script.js"></script>
     <!-- Navbar, Search, Keranjang, User -->
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="#">
-                Alzi Petshop
+                Alzi Petshop [Penjual]
             </a>
-            <div class="search-box me-3">
-                <input type="text" id="searchInput" placeholder="Cari produk..." autocomplete="off">
-                <div class="search-dropdown" id="searchResults"></div>
+
+            <!-- Tambahkan class 'ms-auto' ke div atau anchor untuk mendorong ke kanan -->
+            <div class="d-flex">
+                <a href="tambah.php" class="btn btn-primary me-3">Tambah</a>
             </div>
+
+            <!-- User Profile Link (jika perlu) -->
             <div class="navbar-item">
                 <a href="detail.php">
                     <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
@@ -89,79 +114,9 @@
             </div>
         </div>
     </nav>
-    <!-- End Navbar, Search, Keranjang, User -->
-    <!-- Js Search -->
-    <!-- TODO: Pisahke kode ini di file script yang berbeda(External) -->
-    <script>
-    const products = <?php echo json_encode($products); ?>;
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.getElementById('searchResults');
 
-    searchInput.addEventListener('input', function() {
-        const query = searchInput.value.toLowerCase().trim();
-
-        searchResults.innerHTML = '';
-
-        if (query.length > 0) {
-            const filteredProducts = products.filter(product =>
-                product.name.toLowerCase().includes(query)
-            );
-
-            if (filteredProducts.length > 0) {
-                searchResults.style.display = 'block';
-                filteredProducts.forEach(product => {
-                    const item = document.createElement('div');
-                    item.classList.add('item');
-                    item.innerHTML = `
-		                        <img src="${product.image}" loading:="lazy" alt="${product.name}" class="item-image">
-		                        <div class="item-details">
-		                            <h5>${product.name}</h5>
-		                            <span>Rp${product.price.toLocaleString()}</span>
-		                        </div>
-		                    `;
-                    item.addEventListener('click', () => {
-                        window.location.href = `produk.php?product_id=${product.id}`;
-                    });
-                    searchResults.appendChild(item);
-                });
-            } else {
-                searchResults.style.display = 'none';
-            }
-        } else {
-            searchResults.style.display = 'none';
-        }
-    });
-
-    // searchInput.addEventListener('blur', function() {
-    //     searchInput.value = '';
-    //     searchResults.style.display = 'none';
-    // });
-    </script>
-    <!-- End Js Search -->
-    <!-- Slider Otomatis Carousel Bootstrap v5.3 -->
-    <div class="container mt-5 pt-4">
-        <div id="carouselExampleSlidesOnly" class="carousel slide my-1 position-relative" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="imgs/slide1.png" class="d-block w-100" loading:="lazy" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="imgs/slide2.png" class="d-block w-100" loading:="lazy" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="imgs/slide3.png" class="d-block w-100" loading:="lazy" alt="...">
-                </div>
-                <div class="carousel-caption-custom">
-                    <h1>Alzi Petshop</h1>
-                    <p>Belanja Kebutuhan Kucingmu Disini!</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Slider Otomatis Carousel Bootstrap v5.3 -->
     <!-- Tombol Kategori -->
     <div class="categories">
-        <h2>Kategori Produk</h2>
         <div class="category-list">
             <div class="category" style="background-color: #ff6c59" data-category="Makanan">
                 Makanan
@@ -208,7 +163,7 @@
         products_l.forEach(product => {
             product.addEventListener('click', function () {
                 const productId = this.getAttribute('data-id');
-                window.location.href = `produk.php?product_id=${productId}`;
+                window.location.href = `edit.php?product_id=${productId}`;
             });
         });
 

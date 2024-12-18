@@ -5,7 +5,7 @@ if (isset($_SESSION['email'])) {
     if ($_SESSION['level'] == "admin") {
         header("Location: ../index.php");
     } elseif ($_SESSION['level'] == "penjual") {
-        header("Location: ../index.php");
+        header("Location: ../index_p.php");
     } elseif ($_SESSION['level'] == "pembeli") {
         header("Location: ../index.php");
     } else {

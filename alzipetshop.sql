@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2024 at 06:56 AM
+-- Generation Time: Dec 18, 2024 at 07:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,21 +33,22 @@ CREATE TABLE `products` (
   `description` text DEFAULT NULL,
   `price` int(6) DEFAULT NULL,
   `image` varchar(255) DEFAULT NULL,
-  `category` varchar(50) DEFAULT NULL
+  `category` enum('Makanan','Peralatan','Aksesoris','Kesehatan','Kebersihan') DEFAULT NULL,
+  `satuan` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`, `category`) VALUES
-(1, 'Bolt - Makanan Kucing', 'Berikan nutrisi terbaik untuk kucing kesayangan Anda dengan WhiskerMeal Premium Cat Food! Diformulasikan khusus dengan bahan-bahan berkualitas tinggi, makanan ini memberikan asupan gizi seimbang yang mendukung kesehatan dan energi kucing sepanjang hari.\r\n\r\nKeunggulan Produk:\r\n🐾 Protein Berkualitas Tinggi: Mengandung salmon dan tuna asli untuk memenuhi kebutuhan protein harian dan menjaga otot kucing tetap kuat.\r\n🐾 Vitamin & Mineral Lengkap: Diperkaya dengan vitamin A, D, E, serta kalsium untuk mendukung tulang, mata, dan sistem kekebalan tubuh.\r\n🐾 Kaya Omega 3 & 6: Membantu menjaga kesehatan kulit dan bulu agar tetap lembut serta berkilau.\r\n🐾 Tanpa Pewarna & Pengawet Buatan: Aman dikonsumsi setiap hari, bahkan untuk kucing yang sensitif.\r\n🐾 Cocok untuk Semua Usia: Ideal untuk anak kucing hingga kucing dewasa.\r\n\r\nKelezatan dalam Setiap Gigitan:\r\nTekstur renyah yang disukai kucing dengan aroma menggoda membuat kucing Anda selalu bersemangat saat waktu makan tiba.\r\n\r\nKemasan: Tersedia dalam ukuran 1 kg, praktis disimpan dan mudah dibawa.', 12000, 'imgs/a1.png', 'd2'),
-(2, 'Lezato - Makanan Kucing', 'makanan', 12000, 'imgs/a2.png', 'd1'),
-(3, 'Ori Cat - Makanan Kucing', 'makanan', 12000, 'imgs/a3.png', 'd1'),
-(4, 'Cat Choise - Makanan Kucing', 'makanan', 12000, 'imgs/a4.png', 'd1'),
-(5, 'Whiskas - Makanan Kucing', 'makanan', 12000, 'imgs/a5.png', 'd1'),
-(6, 'Royal Canin - Makanan Kucing', 'makanan', 12000, 'imgs/a6.png', 'd1'),
-(7, 'Kandang Kucing', 'Peralatan', 13000, 'imgs/b1.png', 'd3');
+INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`, `category`, `satuan`) VALUES
+(1, 'Bolt - Makanan Kucing', 'Berikan nutrisi terbaik untuk kucing kesayangan Anda dengan WhiskerMeal Premium Cat Food! Diformulasikan khusus dengan bahan-bahan berkualitas tinggi, makanan ini memberikan asupan gizi seimbang yang mendukung kesehatan dan energi kucing sepanjang hari.\r\n\r\nKeunggulan Produk:\r\n🐾 Protein Berkualitas Tinggi: Mengandung salmon dan tuna asli untuk memenuhi kebutuhan protein harian dan menjaga otot kucing tetap kuat.\r\n🐾 Vitamin & Mineral Lengkap: Diperkaya dengan vitamin A, D, E, serta kalsium untuk mendukung tulang, mata, dan sistem kekebalan tubuh.\r\n🐾 Kaya Omega 3 & 6: Membantu menjaga kesehatan kulit dan bulu agar tetap lembut serta berkilau.\r\n🐾 Tanpa Pewarna & Pengawet Buatan: Aman dikonsumsi setiap hari, bahkan untuk kucing yang sensitif.\r\n🐾 Cocok untuk Semua Usia: Ideal untuk anak kucing hingga kucing dewasa.\r\n\r\nKelezatan dalam Setiap Gigitan:\r\nTekstur renyah yang disukai kucing dengan aroma menggoda membuat kucing Anda selalu bersemangat saat waktu makan tiba.', 12000, 'imgs/a1.png', 'Makanan', 'bungkus'),
+(2, 'Lezato - Makanan Kucing', 'makanan', 12000, 'imgs/a2.png', 'Makanan', ''),
+(3, 'Ori Cat - Makanan Kucing', 'makanan', 12000, 'imgs/a3.png', 'Makanan', ''),
+(4, 'Cat Choise - Makanan Kucing', 'makanan', 12000, 'imgs/a4.png', 'Makanan', ''),
+(5, 'Whiskas - Makanan Kucing', 'makanan', 12000, 'imgs/a5.png', 'Makanan', ''),
+(6, 'Royal Canin - Makanan Kucing', 'makanan', 12000, 'imgs/a6.png', 'Makanan', ''),
+(7, 'Kandang Kucing', 'Peralatan', 13000, 'imgs/b1.png', 'Peralatan', '');
 
 -- --------------------------------------------------------
 
@@ -99,7 +100,7 @@ INSERT INTO `user_detail` (`id`, `foto`, `jenis_kelamin`, `tanggal_lahir`, `alam
 (2, 'imgs/a2.png', 'Laki-laki', '1992-02-02', 'Jl. Contoh No. 2', '08123456780'),
 (3, 'path/to/foto3.jpg', 'Laki-laki', '1993-03-03', 'Jl. Contoh No. 3', '08123456781'),
 (4, 'path/to/foto4.jpg', 'Perempuan', '1994-04-04', 'Jl. Contoh No. 4', '08123456782'),
-(7, 'imgs/user.png', 'Laki-laki', '2005-12-08', 'Kalimantan', '083192655757'),
+(7, 'imgs/user/adit_gmail_com.png', 'Laki-laki', '2005-12-08', 'Kalimantan', '083192655757'),
 (9, 'imgs/user.png', NULL, NULL, NULL, NULL);
 
 --
@@ -132,7 +133,7 @@ ALTER TABLE `user_detail`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tbluser`
