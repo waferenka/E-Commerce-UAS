@@ -141,15 +141,7 @@
                         <h4 class="nama-p"><?php echo htmlspecialchars($productd['name']); ?></h4>
                         <h2 class="harga-p">Rp<?php echo number_format($productd['price'], 0, ',', '.'); ?></h2>
                         <form method="POST">
-                            <!-- Jumlah Barang -->
-                            <div class="d-flex align-items-center my-3">
-                                <label for="quantity" class="me-2">Jumlah:</label>
-                                <div class="quantity-box d-flex">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(-1)">-</button>
-                                    <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control mx-2">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(1)">+</button>
-                                </div>
-                            </div>
+                            
 
                             <!-- Deskripsi -->
                             <div id="description" class="deskripsi-terbatas" onclick="toggleDescription()">
@@ -166,26 +158,28 @@
                                     <button id="toggle-desc" type="button" class="btn btn-link p-0" style="pointer-events: none; text-decoration: none; color: rgb(255, 180, 0); font-weight: bold;">Lihat Selengkapnya</button>
                                 <?php endif; ?>
                             </div>
-
-
                             <!-- Tombol -->
                             <div id="item-button" class="d-flex gap-3">
-                                <!-- Tambahkan Keranjang -->
-
                                 <!-- Tombol Beli Sekarang -->
-                                    <button type="button" class="btn-keranjang" id="beliButton" data-bs-toggle="dropdown" data-popper-placement="top">+ Keranjang</button>
-                                    <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" data-popper-placement="top">
-                                        Beli Sekarang
-                                    </button>
-                                    <div class="dropdown-menu p-3" aria-labelledby="beliButton" id="beliDropdown">
-                                        <h6 class="dropdown-header">Konfirmasi Pembelian</h6>
-                                        <p class="dropdown-item-text">Anda yakin ingin membeli produk ini?</p>
-                                        <button type="submit" name="action" value="buy_now" class="btn btn-success btn-sm">Ya, Beli</button>
-                                        <button type="submit" name="action" value="add_cart" class="btn-keranjang">+ Ya Keranjang</button>
+                                
+                                <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" data-popper-placement="top">
+                                    Beli Sekarang
+                                </button>
+                                <div class="dropdown-menu p-3" aria-labelledby="beliButton" id="beliDropdown">
+                                    <h6 class="dropdown-header">Konfirmasi Pembelian</h6>
+                                    <p class="dropdown-item-text">Anda yakin ingin membeli produk ini?</p>
+                                    <!-- Jumlah Barang -->
+                                    <div class="d-flex align-items-center my-3">
+                                        <label for="quantity" class="me-2">Jumlah:</label>
+                                        <div class="quantity-box d-flex">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(-1)">-</button>
+                                            <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control mx-2">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="changeQuantity(1)">+</button>
+                                        </div>
                                     </div>
+                                    <button type="submit" name="action" value="buy_now" class="btn-beli">Ya, Beli</button>
+                                </div>
                             </div>
-
-
                         </form>
                     </div>
                 </div>
