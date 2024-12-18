@@ -81,6 +81,23 @@
               integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="css/style.css">
         <style>
+            .deskripsi-terbatas {
+                cursor: pointer;
+                position: relative;
+                padding-bottom: 1rem;
+            }
+
+            .deskripsi-terbatas span {
+                display: block;
+            }
+
+            .deskripsi-terbatas button {
+                color: #007bff;
+                text-decoration: underline;
+                border: none;
+                background: transparent;
+            }
+
             footer {
                 background-color: white;
                 margin-top: 2rem;
@@ -92,7 +109,6 @@
     </head>
     <body>
         <script src="script/script.js"></script>
-
         <!-- Navbar, Search, Keranjang, User -->
         <nav class="navbar">
             <div class="container-fluid">
@@ -112,7 +128,7 @@
         </nav>
 
         <!-- Detail Produk -->
-        <div class="container mt-5" style="padding-top: 1.5rem; color: black;">
+        <div id="container-p" class="container mt-5" style="padding-top: 1.5rem; color: black;">
             <?php if ($productd): ?>
                 <div class="row">
                     <!-- Gambar Produk -->
@@ -137,14 +153,21 @@
 
                             <!-- Deskripsi -->
                             <!-- TODO: Perbaiki bentrok dengan pesan dan keranjang -->
-                            <div id="description" class="deskripsi-terbatas">
+                            <div id="description" class="deskripsi-terbatas" onclick="toggleDescription()">
                                 <?php 
+                                    $maxLength = 200;
                                     $description = nl2br(htmlspecialchars($productd['description']));
-                                    echo '<span id="short-desc">' . substr($description, 0, 200) . '...</span>';
+                                    $shortDesc = substr($description, 0, $maxLength);
+                                    $isTruncated = strlen($description) > $maxLength;
+
+                                    echo '<span id="short-desc">' . $shortDesc . ($isTruncated ? '...' : '') . '</span>';
                                     echo '<span id="full-desc" style="display:none;">' . $description . '</span>';
                                 ?>
-                                <button id="toggle-desc" class="btn btn-link p-0">Lihat Selengkapnya</button>
+                                <?php if ($isTruncated): ?>
+                                    <button id="toggle-desc" type="button" class="btn btn-link p-0" style="pointer-events: none; text-decoration: none; color: rgb(255, 180, 0); font-weight: bold;">Lihat Selengkapnya</button>
+                                <?php endif; ?>
                             </div>
+
 
                             <!-- Tombol -->
                             <div id="item-button" class="d-flex gap-3">
@@ -215,12 +238,12 @@
                     quantityInput.value = Math.max(1, value - 1);
                 }
             });
-            document.getElementById('toggle-desc').addEventListener('click', function () {
+            function toggleDescription() {
                 const shortDesc = document.getElementById('short-desc');
                 const fullDesc = document.getElementById('full-desc');
                 const button = document.getElementById('toggle-desc');
 
-                if (fullDesc.style.display === 'none') {
+                if (fullDesc.style.display === 'none' || fullDesc.style.display === '') {
                     fullDesc.style.display = 'inline';
                     shortDesc.style.display = 'none';
                     button.textContent = 'Sembunyikan';
@@ -229,7 +252,7 @@
                     shortDesc.style.display = 'inline';
                     button.textContent = 'Lihat Selengkapnya';
                 }
-            });
+            }
         </script>
         <!-- End Js Search -->
         <!-- Sementara tanpa footer -->

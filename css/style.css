@@ -22,7 +22,6 @@ body {
   animation-name: fade;
   animation-duration: 1s;
   user-select: none;
-  text-align: justify;
 }
 
 footer {
@@ -59,7 +58,6 @@ footer {
 
 .navbar-item img {
   height: 30px;
-  width: 30px;
 }
 
 .navbar-item a {
@@ -326,11 +324,11 @@ footer {
 }
 
 @media (max-width: 435px) {
-  .container {
+  #container-p {
     padding-bottom: 4rem;
   }
   .item-konten-p {
-    padding: 1rem 2rem 0rem 2rem;
+    padding: 1rem 1.5rem 0rem 1.5rem;
   }
   #item-button {
     position: fixed;
