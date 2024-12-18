@@ -64,13 +64,24 @@ if (isset($_POST["submit"])) {
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- My Style -->
     <link rel="stylesheet" href="css/bootstrap_style.css">
+    <style>
+    .button {
+        float: right;
+    }
+    </style>
 </head>
 
 <body>
     <div class="container mt-5">
-        <h2 class="text-center">Ubah Kata Sandi</h2>
         <form action="#" method="POST">
             <table class="table">
+                <thead>
+                    <tr>
+                        <th colspan='3'>
+                            <h2 class="text-center">Ubah Kata Sandi</h2>
+                        </th>
+                    </tr>
+                </thead>
                 <tbody>
                     <tr>
                         <th>
@@ -80,39 +91,29 @@ if (isset($_POST["submit"])) {
                         <td><input type="password" class="form-control" name="old_password" id="old_password" required>
                         </td>
                     </tr>
-                <tbody>
                     <tr>
                         <th>
-                            <label for="old_password" class="form-label">Kata Sandi Lama</label>
+                            <label for="new_password" class="form-label">Kata Sandi Baru</label>
                         </th>
                         <td>:</td>
-                        <td><input type="password" class="form-control" name="old_password" id="old_password" required>
+                        <td><input type="password" class="form-control" name="new_password" id="new_password" required>
                         </td>
                     </tr>
-                <tbody>
                     <tr>
                         <th>
-                            <label for="old_password" class="form-label">Kata Sandi Lama</label>
+                            <label for="confirm_password" class="form-label">Konfirmasi Kata Sandi Baru</label>
                         </th>
                         <td>:</td>
-                        <td><input type="password" class="form-control" name="old_password" id="old_password" required>
+                        <td><input type="password" class="form-control" name="confirm_password" id="confirm_password"
+                                required>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <div class="mb-3">
-
+            <div class="button">
+                <button type="submit" name="submit" class="btn btn-warning">Ubah Kata Sandi</button>
+                <a href="detail.php" class="btn btn-danger">Batal</a>
             </div>
-            <div class="mb-3">
-                <label for="new_password" class="form-label">Kata Sandi Baru</label>
-                <input type="password" class="form-control" name="new_password" id="new_password" required>
-            </div>
-            <div class="mb-3">
-                <label for="confirm_password" class="form-label">Konfirmasi Kata Sandi Baru</label>
-                <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
-            </div>
-            <button type="submit" name="submit" class="btn btn-warning">Ubah Kata Sandi</button>
-            <a href="detail.php" class="btn btn-danger">Batal</a>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
