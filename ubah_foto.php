@@ -63,7 +63,7 @@ if (isset($_POST["submit"])) {
             if (mysqli_query($conn, $sql)) {
                 echo "<script>
                         alert('Foto profil berhasil diubah');
-                        document.location='../index.php';
+                        document.location='index.php';
                       </script>";
             } else {
                 echo "<script>
