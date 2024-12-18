@@ -9,6 +9,28 @@ if (!isset($_SESSION['userid'])) {
 
 $userid = $_SESSION['userid']; // Ambil user ID dari session
 
+// Query untuk mengambil data dari kedua tabel
+$sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+FROM tbluser u 
+LEFT JOIN user_detail d ON u.id = d.id 
+WHERE u.id = '$userid'";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result->num_rows > 0) {
+$row = mysqli_fetch_assoc($result);
+$foto = $row['foto'];
+$nama = $row['nama'];
+$email = $row['email'];
+$level = $row['level'];
+$jenis_kelamin = $row['jenis_kelamin'];
+$tanggal_lahir = $row['tanggal_lahir'];
+$alamat = $row['alamat'];
+$no_telepon = $row['no_telepon'];
+} else {
+echo "Data user tidak ditemukan.";
+}
+
 // Ambil email user dari database
 $query = "SELECT email FROM tbluser WHERE id = '$userid'";
 $result = mysqli_query($conn, $query);
@@ -109,6 +131,28 @@ function getFirstName($fullName) {
     <!-- My Style -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap_style.css">
+    <style>
+    html,
+    body {
+        height: 100vh;
+    }
+
+    .navbar {
+        position: sticky;
+    }
+
+    footer {
+        background-color: white;
+        width: 100%;
+        bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .navbar-brand {
+            display: inline;
+        }
+    }
+    </style>
 </head>
 
 <body>
@@ -128,7 +172,7 @@ function getFirstName($fullName) {
         </div>
     </nav>
     <!-- End Navbar, Search, Keranjang, User -->
-    <div class="container mt-5">
+    <div class="container vh-100 mt-5">
         <h2 class="text-center">Ubah Foto Profil</h2>
         <form action="ubah_foto.php" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
@@ -136,6 +180,7 @@ function getFirstName($fullName) {
                 <input type="file" class="form-control" name="fileToUpload" id="fileToUpload" required>
             </div>
             <button type="submit" name="submit" class="btn btn-warning">Upload Gambar</button>
+            <a href="detail.php" class="btn btn-danger">Cancel</a>
         </form>
     </div>
 

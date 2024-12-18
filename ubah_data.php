@@ -89,6 +89,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         position: fixed;
     }
 
+    footer {
+        bottom: 0;
+    }
+
     @media (max-width: 435px) {
         body {
             overflow-y: auto;
@@ -143,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </nav>
     <!-- End Navbar -->
     <!-- Form Ubah Data -->
-    <div class="container mt-5">
+    <div class="container vh-100 mt-5">
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <div class="card">
