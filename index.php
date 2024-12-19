@@ -143,13 +143,13 @@
         <div id="carouselExampleSlidesOnly" class="carousel slide my-1 position-relative" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="imgs/slide1.png" class="d-block w-100" loading:="lazy" alt="...">
+                    <img src="imgs/slide1.jpg" class="d-block w-100" loading:="lazy" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="imgs/slide2.png" class="d-block w-100" loading:="lazy" alt="...">
+                    <img src="imgs/slide2.jpg" class="d-block w-100" loading:="lazy" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="imgs/slide3.png" class="d-block w-100" loading:="lazy" alt="...">
+                    <img src="imgs/slide3.jpg" class="d-block w-100" loading:="lazy" alt="...">
                 </div>
                 <div class="carousel-caption-custom">
                     <h1>Alzi Petshop</h1>

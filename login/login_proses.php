@@ -29,7 +29,7 @@ if ($cek > 0) {
     } elseif ($data['level'] == "penjual") {
         header("Location: ../index_p.php");
     } elseif ($data['level'] == "pembeli") {
-        header("Location: ../index_pembeli.php");
+        header("Location: ../index.php");
     } else {
         header("Location: login_form.php?error=Invalid user level");
     }

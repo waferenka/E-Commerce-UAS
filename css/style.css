@@ -153,7 +153,7 @@ footer {
   object-fit: cover;
   width: 100%;
   height: auto;
-  filter: brightness(75%);
+  filter: brightness(55%);
 }
 
 .carousel-caption-custom {
