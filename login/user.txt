@@ -1,4 +1,0 @@
-email: rangga@gmail.com
-password: rangga123
-email: adit@gmail.com
-password: admin123

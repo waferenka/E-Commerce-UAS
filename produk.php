@@ -10,7 +10,7 @@
     }
 
     if ($_SESSION['level'] != "pembeli") {
-        header("Location: login/unauthorized.php");
+        header("Location: login/login_form.php");
         exit;
     }
 
@@ -162,7 +162,7 @@
         <!-- Navbar, Search, Keranjang, User -->
         <nav class="navbar">
             <div class="container-fluid">
-                <a class="navbar-brand ms-2 font-weight-bold" href="index.php">Alzi Petshop</a>
+                <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">Alzi Petshop</a>
                 <div class="search-box me-3">
                     <input type="text" id="searchInput" placeholder="Cari produk...">
                     <div class="search-dropdown" id="searchResults"></div>

@@ -10,7 +10,7 @@
 	}
 
     if ($_SESSION['level'] != "penjual") {
-        header("Location: login/unauthorized.php");
+        header("Location: login/login_form.php");
         exit;
     }
 
@@ -95,7 +95,7 @@
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="#">
+            <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">
                 Alzi Petshop [Penjual]
             </a>
 

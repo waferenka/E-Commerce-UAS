@@ -257,7 +257,7 @@
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold">
+            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
                 Alzi Petshop
             </a>
             <div class="navbar-item">

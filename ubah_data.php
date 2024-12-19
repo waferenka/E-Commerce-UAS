@@ -125,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="index.php">
+            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
                 Alzi Petshop
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

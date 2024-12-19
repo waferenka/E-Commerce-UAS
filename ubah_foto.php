@@ -159,7 +159,7 @@ function getFirstName($fullName) {
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="index.php">
+            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
                 Alzi Petshop
             </a>
             <div class="navbar-item">

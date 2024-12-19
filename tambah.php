@@ -10,7 +10,7 @@ if (!isset($_SESSION['userid'])) {
 }
 
 if ($_SESSION['level'] != "penjual") {
-    header("Location: login/unauthorized.php");
+    header("Location: login/login_form.php");
     exit;
 }
 
@@ -98,7 +98,7 @@ function getFirstName($fullName) {
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="#">
+            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
                 Alzi Petshop [Penjual]
             </a>
             <!-- User Profile Link (jika perlu) -->
