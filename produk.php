@@ -62,7 +62,7 @@
             $action = $_POST['action'];
             $total = $harga_p * $quantity;
             if ($action === 'buy_now') {
-                $url = "https://api.whatsapp.com/send?phone=6283161076087&text=Halo saya $nama ingin memesan $nama_p sebanyak $quantity $satuan_p, dengan total harga $total";
+                $url = "https://api.whatsapp.com/send?phone=6283192655757&text=Halo saya $nama ingin memesan $nama_p sebanyak $quantity $satuan_p, dengan total harga $total";
                 header("Location: $url");
             }
         } else {
