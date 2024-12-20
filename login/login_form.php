@@ -3,7 +3,7 @@
 session_start();
 if (isset($_SESSION['email'])) {
     if ($_SESSION['level'] == "admin") {
-        header("Location: ../index.php");
+        header("Location: ../index_a.php");
     } elseif ($_SESSION['level'] == "penjual") {
         header("Location: ../index_p.php");
     } elseif ($_SESSION['level'] == "pembeli") {

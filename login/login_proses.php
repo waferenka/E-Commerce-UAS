@@ -25,7 +25,7 @@ if ($cek > 0) {
 
     // Alihkan ke halaman sesuai level user
     if ($data['level'] == "admin") {
-        header("Location: ../index.php");
+        header("Location: ../index_a.php");
     } elseif ($data['level'] == "penjual") {
         header("Location: ../index_p.php");
     } elseif ($data['level'] == "pembeli") {
