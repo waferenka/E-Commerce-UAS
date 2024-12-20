@@ -62,6 +62,12 @@ if (isset($_GET['delete'])) {
 
 // Fetch Users
 $users = $conn->query("SELECT * FROM tbluser");
+
+//Nama Depan
+function getFirstName($fullName) {
+    $parts = explode(" ", $fullName);
+    return $parts[0];
+}
 ?>
 
 
