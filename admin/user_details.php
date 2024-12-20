@@ -1,15 +1,15 @@
 <?php
 session_start();
-include 'php/php.php';
+include '../php/php.php';
 
 // Periksa apakah user sudah login
 if (!isset($_SESSION['userid'])) {
-    header("Location: login/login_form.php");
+    header("Location: ../login/login_form.php");
     exit;
 }
 
 if ($_SESSION['level'] != "admin") {
-    header("Location: login/login_form.php");
+    header("Location: ../login/login_form.php");
     exit;
 }
 
@@ -73,14 +73,14 @@ $user_details = $conn->query("SELECT * FROM user_detail");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Alzi Petshop</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">Alzi Petshop [Admin]</a>
+            <a class="navbar-brand ms-2 font-weight-bold" href="../index_a.php">Alzi Petshop [Admin]</a>
             <div class="d-flex ms-auto">
                 <a href="tambah.php" class="btn btn-warning me-3">Tambah</a>
             </div>

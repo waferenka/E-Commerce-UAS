@@ -1,19 +1,16 @@
 <?php
 session_start();
 // PHP Data Js Search
-include('php/php.php');
+include('../php/php.php');
 
 // Periksa apakah user sudah login
 if (!isset($_SESSION['userid'])) {
-    header("Location: login/login_form.php");
+    header("Location: ../login/login_form.php");
     exit;
 }
 
-$allowed_levels = ['admin', 'penjual'];
-
-  if (!in_array($_SESSION['level'], $allowed_levels)) {
-
-    header("Location: login/login_form.php");
+if ($_SESSION['level'] != "admin") {
+    header("Location: ../login/login_form.php");
     exit;
 }
 
@@ -110,16 +107,16 @@ function getFirstName($fullName) {
 </head>
 
 <body>
-    <script src="script/script.js"></script>
+    <script src="../script/script.js"></script>
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
-                Alzi Petshop [Penjual]
+            <a class="navbar-brand ms-2 font-weight-bold" href="../login/login_form.php">
+                Alzi Petshop [Admin]
             </a>
             <!-- User Profile Link (jika perlu) -->
             <div class="navbar-item">
-                <a href="detail.php">
+                <a href="../detail.php">
                     <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
                 </a>
@@ -129,7 +126,7 @@ function getFirstName($fullName) {
 
     <div class="container px-3" style="color: black;">
         <h3 style="font-weight: bold;">Edit Produk</h3>
-        <form action="php/proses_edit.php" method="post" enctype="multipart/form-data">
+        <form action="../php/proses_edit.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= $product_id ?>"> <!-- Menambahkan ID Produk -->
 
             <div class="mb-3">

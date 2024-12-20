@@ -9,7 +9,10 @@ if (!isset($_SESSION['userid'])) {
     exit;
 }
 
-if ($_SESSION['level'] != "penjual") {
+$allowed_levels = ['admin', 'penjual'];
+
+  if (!in_array($_SESSION['level'], $allowed_levels)) {
+
     header("Location: login/login_form.php");
     exit;
 }

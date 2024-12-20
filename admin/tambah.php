@@ -1,19 +1,16 @@
 <?php
 session_start();
-// PHP Data Js Search
-include('php/php.php');
+
+include('../php/php.php');
 
 // Periksa apakah user sudah login
 if (!isset($_SESSION['userid'])) {
-    header("Location: login/login_form.php");
+    header("Location: ../login/login_form.php");
     exit;
 }
 
-$allowed_levels = ['admin', 'penjual'];
-
-  if (!in_array($_SESSION['level'], $allowed_levels)) {
-
-    header("Location: login/login_form.php");
+if ($_SESSION['level'] != "admin") {
+    header("Location: ../login/login_form.php");
     exit;
 }
 
@@ -62,19 +59,6 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Ambil produk berdasarkan ID dari parameter URL
-$product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
-
-$data = mysqli_query($conn, "SELECT * FROM products WHERE id = '$product_id'");
-$productd = mysqli_fetch_assoc($data);
-if ($result && $result->num_rows > 0) {
-    $nama_p = $productd['name'];
-    $deskripsi_p = $productd['description'];
-    $harga_p = $productd['price'];
-    $category_p = $productd['category'];
-    $satuan_p = $productd['satuan'];
-}
-
 // Nama Depan
 function getFirstName($fullName) {
     $parts = explode(" ", $fullName);
@@ -110,16 +94,16 @@ function getFirstName($fullName) {
 </head>
 
 <body>
-    <script src="script/script.js"></script>
+    <script src="../script/script.js"></script>
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
-                Alzi Petshop [Penjual]
+                Alzi Petshop [Admin]
             </a>
             <!-- User Profile Link (jika perlu) -->
             <div class="navbar-item">
-                <a href="detail.php">
+                <a href="../detail.php">
                     <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
                 </a>
@@ -128,62 +112,49 @@ function getFirstName($fullName) {
     </nav>
 
     <div class="container px-3" style="color: black;">
-        <h3 style="font-weight: bold;">Edit Produk</h3>
-        <form action="php/proses_edit.php" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?= $product_id ?>"> <!-- Menambahkan ID Produk -->
-
+        <h3 style="font-weight: bold;">Tambah Produk</h3>
+        <form action="../php/proses_tambah.php" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <label for="name" class="form-label">Nama Produk</label>
-                <input type="text" name="name" id="name" value="<?= $nama_p ?>" class="form-control" required
-                    autocomplete="off">
+                <label for="name" class="form-label">Nama</label>
+                <input type="text" name="name" id="name" class="form-control" required autocomplete="off">
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Deskripsi</label>
                 <textarea name="description" id="description" class="form-control" rows="4" required
-                    autocomplete="off"><?= htmlspecialchars($deskripsi_p) ?></textarea>
+                    autocomplete="off"></textarea>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Harga</label>
-                <input type="text" name="price" id="price" value="<?= $harga_p ?>" class="form-control" required
-                    autocomplete="off">
+                <input type="text" name="price" id="price" class="form-control" requiredautocomplete="off">
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Kategori</label>
                 <select name="category" id="category" class="form-control" required autocomplete="off">
                     <?php
-                    // Menampilkan kategori dengan menandai kategori yang sudah dipilih
                     foreach ($enum_values_category as $value) {
-                        $selected = ($category_p == $value) ? 'selected' : '';
-                        echo "<option value='$value' $selected>$value</option>";
+                        echo "<option value='$value'>$value</option>";
                     }
                     ?>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="satuan" class="form-label">Satuan</label>
-                <input type="text" name="satuan" id="satuan" value="<?= $satuan_p ?>" class="form-control" required
-                    autocomplete="off">
+                <input type="text" name="satuan" id="satuan" class="form-control" required autocomplete="off">
             </div>
             <div class="mb-3">
-                <label for="image" class="form-label">Foto Produk</label>
+                <label for="image" class="form-label">Foto</label>
                 <input type="file" name="image" id="image" class="form-control" accept="image/*" required
                     autocomplete="off">
-                <!-- Menampilkan gambar lama jika ada -->
-                <?php if (!empty($productd['image'])): ?>
-                <img src="<?= $productd['image'] ?>" alt="Gambar Produk" width="100" class="mt-2">
-                <?php endif; ?>
             </div>
-            <button type="submit" class="btn btn-success">Simpan Perubahan</button>
+            <button type="submit" class="btn btn-success">Tambah Data</button>
         </form>
         <a href="index_p.php" class="btn btn-warning my-3">Kembali</a>
-        <a href="php/hapus.php?product_id=<?= $product_id ?>" class="btn btn-danger my-3">Hapus</a>
     </div>
     <!-- Footer start -->
     <footer class="text-center">
         <p>Create by Alzi Petshop | &copy 2024</p>
     </footer>
     <!-- Footer End -->
-
 </body>
 
 </html>
