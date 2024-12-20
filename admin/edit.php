@@ -88,7 +88,7 @@ function getFirstName($fullName) {
     <title>Tambah Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <style>
     .navbar-brand {
         display: inline;
@@ -117,7 +117,7 @@ function getFirstName($fullName) {
             <!-- User Profile Link (jika perlu) -->
             <div class="navbar-item">
                 <a href="../detail.php">
-                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
+                    <img src="../<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
                 </a>
             </div>
@@ -167,13 +167,13 @@ function getFirstName($fullName) {
                     autocomplete="off">
                 <!-- Menampilkan gambar lama jika ada -->
                 <?php if (!empty($productd['image'])): ?>
-                <img src="<?= $productd['image'] ?>" alt="Gambar Produk" width="100" class="mt-2">
+                <img src="../<?= $productd['image'] ?>" alt="Gambar Produk" width="100" class="mt-2">
                 <?php endif; ?>
             </div>
             <button type="submit" class="btn btn-success">Simpan Perubahan</button>
         </form>
-        <a href="index_p.php" class="btn btn-warning my-3">Kembali</a>
-        <a href="php/hapus.php?product_id=<?= $product_id ?>" class="btn btn-danger my-3">Hapus</a>
+        <a href="product_a.php" class="btn btn-warning my-3">Kembali</a>
+        <a href="../php/hapus.php?product_id=<?= $product_id ?>" class="btn btn-danger my-3">Hapus</a>
     </div>
     <!-- Footer start -->
     <footer class="text-center">

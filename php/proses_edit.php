@@ -33,7 +33,11 @@ if (isset($_POST["name"]) && isset($_POST["description"]) && isset($_POST["price
 
     mysqli_query($conn, $query);
 
-    header("Location: ../index_p.php");
+    // Redirect kembali ke halaman sebelumnya
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+    } else {
+        header("Location: ../index_p.php"); // Fallback URL
+    }
 }
 ?>
-

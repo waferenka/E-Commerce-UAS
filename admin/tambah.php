@@ -75,7 +75,7 @@ function getFirstName($fullName) {
     <title>Tambah Data</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <style>
     .navbar-brand {
         display: inline;
@@ -98,13 +98,13 @@ function getFirstName($fullName) {
     <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
+            <a class="navbar-brand ms-2 font-weight-bold" href="../login/login_form.php">
                 Alzi Petshop [Admin]
             </a>
             <!-- User Profile Link (jika perlu) -->
             <div class="navbar-item">
                 <a href="../detail.php">
-                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
+                    <img src="../<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
                 </a>
             </div>
