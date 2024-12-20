@@ -38,18 +38,30 @@ $no_telepon = $row['no_telepon'];
 echo "Data user tidak ditemukan.";
 }
 
-// Handle Create and Update
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = intval($_POST['id']);
     $nama = $_POST['nama'];
-    $email = $_POST['email'];
-    $password = sha1($_POST['password']); // Menggunakan SHA1 untuk enkripsi password
+    $email_baru = $_POST['email'];
+    $password = !empty($_POST['password']) ? sha1($_POST['password']) : null;
     $level = $_POST['level'];
 
-    if (isset($_POST['id'])) {
-        $id = $_POST['id'];
-        $sql = "UPDATE tbluser SET nama='$nama', email='$email', password='$password', level='$level' WHERE id=$id";
+    $query = $conn->query("SELECT email FROM tbluser WHERE id = $id");
+    $user = $query->fetch_assoc();
+    $email_lama = $user['email'];
+
+    if ($email_baru === $email_lama) {
+        $sql = "UPDATE tbluser SET 
+                    nama = '$nama',
+                    level = '$level'" .
+               ($password ? ", password = '$password'" : "") .
+               " WHERE id = $id";
     } else {
-        $sql = "INSERT INTO tbluser (nama, email, password, level) VALUES ('$nama', '$email', '$password', '$level')";
+        $sql = "UPDATE tbluser SET 
+                    nama = '$nama',
+                    email = '$email_baru',
+                    level = '$level'" .
+               ($password ? ", password = '$password'" : "") .
+               " WHERE id = $id";
     }
     $conn->query($sql);
 }
@@ -62,6 +74,11 @@ if (isset($_GET['delete'])) {
 
 // Fetch Users
 $users = $conn->query("SELECT * FROM tbluser");
+//Nama Depan
+    function getFirstName($fullName) {
+        $parts = explode(" ", $fullName);
+        return $parts[0];
+    }
 ?>
 
 
@@ -85,6 +102,88 @@ $users = $conn->query("SELECT * FROM tbluser");
     .navbar {
         position: sticky;
     }
+
+    .navbar-brand {
+        display: inline;
+    }
+
+    h3 {
+        font-weight: bold;
+    }
+
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    th, td {
+        word-wrap: break-word;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    @media (min-width: 0px) {
+        .navbar-brand {
+            font-size: 16px;
+        }
+        table {
+            font-size: 11px;
+        }
+        .btn {
+            font-size: 10px;
+            margin: 0.1rem 0;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+
+    @media (min-width: 375px) {
+        .navbar-brand {
+            font-size: 18px;
+        }
+        table {
+            font-size: 13px;
+        }
+        .btn {
+            font-size: 11px;
+            margin: 0.1rem 0;
+            padding: 0.3rem 0.5rem;
+        }
+    }
+
+    @media (min-width: 425px) {
+        .navbar-brand {
+            font-size: 22px;
+        }
+        table {
+            font-size: 14px;
+        }
+        .btn {
+            font-size: 12px;
+            margin: 0.1rem 0;
+            padding: 0.3rem 0.5rem;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .navbar-brand {
+            font-size: 22px;
+        }
+        table {
+            font-size: 16px;
+        }
+        .btn {
+            font-size: 14px;
+            margin: 0.1rem 0;
+            padding: 0.3rem 0.5rem;
+        }
+    }
     </style>
 </head>
 
@@ -103,17 +202,16 @@ $users = $conn->query("SELECT * FROM tbluser");
         </div>
     </nav>
     <div class="container mt-5">
-
-        <h2>Users</h2>
+        <h3>Users</h3>
         <a href="users.php" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#userModal">Add User</a>
 
-        <table class="table table-bordered">
+        <table class="table table-bordered table-sm">
             <thead>
                 <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Level</th>
-                    <th>Actions</th>
+                    <th style="width: 30%;">Nama</th>
+                    <th style="width: 30%;">Email</th>
+                    <th style="width: 20%;">Level</th>
+                    <th style="width: 20%;">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -123,8 +221,7 @@ $users = $conn->query("SELECT * FROM tbluser");
                     <td><?php echo $row['email']; ?></td>
                     <td><?php echo $row['level']; ?></td>
                     <td>
-                        <a href="users.php?edit=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm"
-                            data-bs-toggle="modal" data-bs-target="#userModal">Edit</a>
+                        <a href="users.php?edit=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm edit-btn" data-id="<?php echo $row['id']; ?>" data-bs-toggle="modal" data-bs-target="#userModal">Edit</a>
                         <a href="users.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
@@ -132,46 +229,45 @@ $users = $conn->query("SELECT * FROM tbluser");
             </tbody>
         </table>
 
-        <!-- User Modal -->
+        <!-- User Edit -->
         <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form method="POST" action="users.php">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="userModalLabel">Add/Edit User</h5>
+                            <h5 class="modal-title fw-bold" id="userModalLabel">
+                                <?php echo isset($_GET['edit']) ? 'Edit User' : 'Add User'; ?>
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <?php if (isset($_GET['edit'])):
-                        $id = $_GET['edit'];
-                        $user = $conn->query("SELECT * FROM tbluser WHERE id=$id")->fetch_assoc(); ?>
-                            <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
-                            <?php endif; ?>
+                            <div>
+                                <input type="hidden" name="id" value='<?php echo $user['id']; ?>'>
+                            </div>
                             <div class="mb-3">
                                 <label for="nama" class="form-label">Nama</label>
-                                <input type="text" class="form-control" id="nama" name="nama" value="1234" required>
+                                <input type="text" class="form-control" id="nama" name="nama" 
+                                       value="<?php echo $user['nama'] ?? ''; ?>" required>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" id="email" name="email"
-                                    value="<?php echo $user['email'] ?? ''; ?>" required>
+                                       value="<?php echo $user['email'] ?? ''; ?>" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password"
+                                       value="" placeholder="Kosongkan jika tidak ingin mengganti password">
                             </div>
                             <div class="mb-3">
                                 <label for="level" class="form-label">Level</label>
                                 <select class="form-select" id="level" name="level" required>
-                                    <option value="admin"
-                                        <?php if (($user['level'] ?? '') == 'admin') echo 'selected'; ?>>Admin
-                                    </option>
-                                    <option value="penjual"
-                                        <?php if (($user['level'] ?? '') == 'penjual') echo 'selected'; ?>>
-                                        Penjual</option>
-                                    <option value="pembeli"
-                                        <?php if (($user['level'] ?? '') == 'pembeli') echo 'selected'; ?>>
-                                        Pembeli</option>
+                                    <option value="admin" 
+                                        <?php echo (($user['level'] ?? '') == 'admin') ? 'selected' : ''; ?>>Admin</option>
+                                    <option value="penjual" 
+                                        <?php echo (($user['level'] ?? '') == 'penjual') ? 'selected' : ''; ?>>Penjual</option>
+                                    <option value="pembeli" 
+                                        <?php echo (($user['level'] ?? '') == 'pembeli') ? 'selected' : ''; ?>>Pembeli</option>
                                 </select>
                             </div>
                         </div>
@@ -183,7 +279,35 @@ $users = $conn->query("SELECT * FROM tbluser");
                 </div>
             </div>
         </div>
+
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        // Ambil semua tombol Edit
+        const editButtons = document.querySelectorAll(".edit-btn");
+
+        // Tambahkan event listener pada setiap tombol Edit
+        editButtons.forEach((btn) => {
+            btn.addEventListener("click", function () {
+                const userId = this.getAttribute("data-id");
+                
+                // Kirim AJAX request untuk mendapatkan data user
+                fetch(`get_user.php?id=${userId}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Isi modal dengan data user
+                        document.getElementById("nama").value = data.nama;
+                        document.getElementById("email").value = data.email;
+                        document.getElementById("password").value = ""; // Kosongkan untuk keamanan
+                        document.getElementById("level").value = data.level;
+                        document.querySelector("input[name='id']").value = data.id;
+                    })
+                    .catch((error) => console.error("Error:", error));
+            });
+        });
+    });
+    </script>
     <footer class="text-center">
         <p>Create by Alzi Petshop | &copy 2024</p>
     </footer>
