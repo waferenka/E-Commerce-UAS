@@ -1,6 +1,5 @@
 <?php
 require 'php.php';
-
 if (isset($_POST["name"]) && isset($_POST["description"]) && isset($_POST["price"]) && isset($_POST["category"])) {
     $id = $_POST["id"];
     $name = $_POST["name"];
