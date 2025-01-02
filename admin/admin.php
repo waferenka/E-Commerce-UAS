@@ -90,11 +90,10 @@ $users = $conn->query("SELECT * FROM tbluser");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Alzi Petshop</title>
     <style>
-    html,
-    body {
+    html, body {
         width: 100%;
         height: 100%;
     }
@@ -199,7 +198,7 @@ $users = $conn->query("SELECT * FROM tbluser");
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="../index_a.php">Alzi Petshop [Admin]</a>
+            <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">Alzi Petshop [Admin]</a>
             <div class="d-flex ms-auto">
             </div>
             <div class="navbar-item">
