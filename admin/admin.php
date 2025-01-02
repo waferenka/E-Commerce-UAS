@@ -243,7 +243,7 @@ $users = $conn->query("SELECT * FROM tbluser");
         <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form method="POST" action="users.php">
+                    <form method="POST" action="admin.php">
                         <div class="modal-header">
                             <h5 class="modal-title fw-bold" id="userModalLabel">
                                 <?php echo isset($_GET['edit']) ? 'Edit User' : 'Add User'; ?>
@@ -285,8 +285,8 @@ $users = $conn->query("SELECT * FROM tbluser");
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary mx-1" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary mx-1">Save changes</button>
                         </div>
                     </form>
                 </div>
