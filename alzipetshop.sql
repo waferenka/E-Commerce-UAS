@@ -2,9 +2,9 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 20, 2024 at 11:30 AM
--- Server version: 10.4.32-MariaDB
+-- Host: localhost
+-- Generation Time: Jan 04, 2025 at 03:47 PM
+-- Server version: 8.0.40
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -24,17 +24,37 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `cart_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `address` text,
+  `product_name` varchar(100) DEFAULT NULL,
+  `quantity` int NOT NULL,
+  `unit` varchar(20) DEFAULT NULL,
+  `total_price` decimal(10,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `price` int(6) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `category` enum('Makanan','Peralatan','Aksesoris','Kesehatan','Kebersihan') DEFAULT NULL,
-  `satuan` varchar(200) NOT NULL
+  `id` int NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
+  `price` int DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `category` enum('Makanan','Peralatan','Aksesoris','Kesehatan','Kebersihan') COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `satuan` varchar(200) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -55,7 +75,7 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`, `category
 (17, 'Obat Flu dan Pilek', 'Obat Flu Kucing adalah solusi khusus untuk membantu mengatasi flu pada kucing peliharaan Anda. Dirancang oleh ahli kesehatan hewan, obat ini diformulasikan untuk meredakan gejala flu seperti bersin, hidung tersumbat, dan lemas pada kucing, sekaligus meningkatkan daya tahan tubuh mereka.\r\n\r\nKeunggulan Produk:\r\nFormula Khusus:\r\n\r\nMengandung bahan aktif yang aman untuk kucing, seperti vitamin C, ekstrak herbal, dan imunostimulan.\r\nTidak mengandung bahan berbahaya atau menyebabkan ketergantungan.\r\nMeredakan Gejala Flu:\r\n\r\nMembantu mengurangi bersin, hidung berair, mata berair, dan demam.\r\nEfektif mempercepat pemulihan kucing yang terkena flu.\r\nMeningkatkan Imunitas:\r\n\r\nDiperkaya dengan nutrisi tambahan untuk memperkuat daya tahan tubuh.\r\nMembantu mencegah flu berulang.\r\nMudah Digunakan:\r\n\r\nTersedia dalam bentuk sirup cair yang mudah dicampur dengan makanan atau air minum.\r\nBeberapa varian juga tersedia dalam bentuk tablet kecil yang mudah ditelan.\r\nAman untuk Semua Usia:\r\n\r\nCocok digunakan untuk anak kucing hingga kucing dewasa.\r\nPetunjuk Penggunaan:\r\nDosis Umum:\r\nSesuai petunjuk dokter hewan atau instruksi pada kemasan (berdasarkan berat badan kucing).\r\nCara Pemberian:\r\nCampurkan ke makanan atau berikan langsung dengan spuit/dropper.\r\nPastikan kucing minum cukup air selama masa pengobatan.\r\nCatatan Penting:\r\nSebelum menggunakan, konsultasikan dengan dokter hewan jika kucing memiliki riwayat alergi atau sedang mengonsumsi obat lain.\r\nHanya untuk pengobatan flu ringan. Jika gejala berlanjut atau memburuk dalam 2–3 hari, segera bawa kucing ke dokter hewan.\r\n\"Bantu kucing kesayangan Anda kembali aktif dan sehat dengan perawatan terbaik!\" 🐾', 15000, './imgs/flu.jpeg', 'Kesehatan', 'botol'),
 (18, 'Obat Batuk', 'Obat Batuk Kucing adalah solusi aman dan efektif untuk membantu mengatasi batuk pada kucing kesayangan Anda. Dirancang dengan formula khusus, obat ini membantu meredakan batuk yang disebabkan oleh infeksi ringan, iritasi tenggorokan, atau alergi, sekaligus meningkatkan kesehatan pernapasan kucing.\r\n\r\nKeunggulan Produk:\r\nFormula Aman dan Efektif:\r\n\r\nMengandung bahan herbal alami seperti ekstrak madu, licorice, dan jahe.\r\nBebas dari bahan kimia keras yang berpotensi berbahaya bagi kucing.\r\nMeredakan Batuk dengan Cepat:\r\n\r\nMembantu mengurangi frekuensi batuk dan menenangkan iritasi tenggorokan.\r\nEfektif untuk batuk basah maupun batuk kering.\r\nMeningkatkan Kesehatan Pernapasan:\r\n\r\nMengandung vitamin dan antioksidan untuk menjaga kesehatan saluran pernapasan.\r\nMudah Digunakan:\r\n\r\nTersedia dalam bentuk sirup cair yang ramah kucing dengan rasa manis alami dari madu.\r\nBeberapa varian juga tersedia dalam bentuk tablet kunyah atau serbuk yang mudah dicampur dengan makanan.\r\nCocok untuk Semua Usia:\r\n\r\nAman digunakan untuk anak kucing, kucing dewasa, maupun kucing senior.\r\nPetunjuk Penggunaan:\r\nDosis Umum:\r\nBerikan sesuai petunjuk dokter hewan atau sesuai instruksi pada kemasan (biasanya berdasarkan berat badan kucing).\r\nCara Pemberian:\r\nBerikan langsung menggunakan spuit/dropper atau campurkan ke makanan basah.\r\nPastikan kucing cukup terhidrasi selama pengobatan.\r\nCatatan Penting:\r\nObat ini dirancang untuk batuk ringan atau sementara.\r\nJika batuk disertai gejala lain seperti demam, lemas, atau sulit bernapas, segera konsultasikan ke dokter hewan.\r\nSimpan di tempat sejuk dan jauh dari jangkauan anak-anak.\r\n\"Bantu kucing Anda bernapas lega dan nyaman dengan perawatan terbaik!\" 🐾', 15000, './imgs/batuk.png', 'Kesehatan', 'botol'),
 (19, 'Pasir Kucing', 'Pasir Kucing Berkualitas dirancang untuk memenuhi kebutuhan kucing dan pemiliknya dengan memberikan solusi praktis dan higienis untuk pengelolaan kotoran kucing. Tersedia dalam berbagai jenis dan ukuran, pasir kucing ini memberikan kenyamanan ekstra untuk kucing kesayangan Anda.\r\n\r\nKeunggulan Produk:\r\nDaya Serap Tinggi:\r\n\r\nEfektif menyerap cairan dan mengurangi bau tidak sedap.\r\nMenjaga area tetap kering dan nyaman untuk kucing.\r\nPengendalian Bau Optimal:\r\n\r\nMengandung teknologi deodorizer atau bahan alami untuk mengurangi bau.\r\nCocok untuk digunakan di ruang tertutup.\r\nPilihan Bahan:\r\n\r\nPasir Bentonit: Menggumpal dengan kuat sehingga mudah dibersihkan.\r\nPasir Kristal Silika: Super ringan, tahan lama, dan hemat pemakaian.\r\nPasir Organik (Tofu): Ramah lingkungan, terbuat dari bahan alami seperti kedelai.\r\nPasir Zeolit: Ekonomis dan efektif dalam mengurangi bau.\r\nAman untuk Kucing:\r\n\r\nTidak berdebu sehingga aman untuk pernapasan kucing.\r\nBebas dari bahan kimia berbahaya.\r\nMudah Digunakan:\r\n\r\nGumpalan kotoran mudah dibuang, tidak perlu mengganti semua pasir setiap hari.\r\nTersedia dalam berbagai kemasan sesuai kebutuhan Anda (5 kg, 10 kg, atau lebih).\r\nCara Penggunaan:\r\nIsi wadah pasir dengan pasir setinggi 5–7 cm.\r\nBuang gumpalan kotoran setiap hari menggunakan sekop pasir.\r\nTambahkan pasir baru secara berkala untuk menjaga kebersihan.\r\nGanti seluruh pasir setiap 1–2 minggu untuk hasil terbaik.\r\nTips Memilih Pasir Kucing yang Tepat:\r\nPilih jenis pasir sesuai preferensi kucing Anda.\r\nJika kucing sensitif atau memiliki alergi, pilih pasir organik atau rendah debu.\r\nPertimbangkan tingkat kepraktisan dan kebutuhan, misalnya pasir yang menggumpal untuk pembersihan lebih cepat.\r\n\"Berikan kenyamanan maksimal bagi kucing kesayangan Anda dengan pasir berkualitas tinggi yang praktis dan higienis!\" 🐾', 34000, './imgs/pasir.jpg', 'Kebersihan', 'pack'),
-(22, 'a', 'a', 1, './imgs/batuk.png', 'Makanan', 'a');
+(22, 'ab', 'as', 100, './imgs/CRiMgxd-abstract-wallpaper-hd.jpg', 'Makanan', 'a');
 
 -- --------------------------------------------------------
 
@@ -64,11 +84,11 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`, `category
 --
 
 CREATE TABLE `tbluser` (
-  `id` int(3) NOT NULL,
-  `nama` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `level` enum('admin','penjual','pembeli') NOT NULL
+  `id` int NOT NULL,
+  `nama` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `level` enum('admin','penjual','pembeli') COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -88,12 +108,12 @@ INSERT INTO `tbluser` (`id`, `nama`, `email`, `password`, `level`) VALUES
 --
 
 CREATE TABLE `user_detail` (
-  `id` int(3) NOT NULL,
-  `foto` varchar(255) DEFAULT NULL,
-  `jenis_kelamin` enum('Laki-laki','Perempuan') DEFAULT NULL,
+  `id` int NOT NULL,
+  `foto` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `jenis_kelamin` enum('Laki-laki','Perempuan') COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tanggal_lahir` date DEFAULT NULL,
-  `alamat` varchar(255) DEFAULT NULL,
-  `no_telepon` varchar(15) DEFAULT NULL
+  `alamat` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `no_telepon` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -101,7 +121,7 @@ CREATE TABLE `user_detail` (
 --
 
 INSERT INTO `user_detail` (`id`, `foto`, `jenis_kelamin`, `tanggal_lahir`, `alamat`, `no_telepon`) VALUES
-(1, 'imgs/a1.png', 'Laki-laki', '1990-01-01', 'Jl. Contoh No. 1', '08123456789'),
+(1, 'imgs/user/rangga_gmail_com.jpg', 'Laki-laki', '1990-01-01', 'Jl. Contoh No. 1', '08123456789'),
 (2, 'imgs/a2.png', 'Laki-laki', '1992-02-02', 'Jl. Contoh No. 2', '08123456780'),
 (3, 'imgs/user.png', 'Laki-laki', '1993-03-03', 'Jl. Contoh No. 3', '08123456781'),
 (4, 'imgs/user.png', 'Perempuan', '1994-04-04', 'Jl. Contoh No. 4', '08123456782');
@@ -109,6 +129,14 @@ INSERT INTO `user_detail` (`id`, `foto`, `jenis_kelamin`, `tanggal_lahir`, `alam
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`cart_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `products`
@@ -134,20 +162,33 @@ ALTER TABLE `user_detail`
 --
 
 --
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `cart_id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbluser` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user_detail`
