@@ -1,4 +1,5 @@
 <?php 
+session_start();
     include '../php/php.php'; 
     // Periksa apakah user sudah login
 if (!isset($_SESSION['userid'])) {
@@ -6,10 +7,7 @@ if (!isset($_SESSION['userid'])) {
     exit;
 }
 
-if ($_SESSION['level'] = "admin") {
-    header("Location: products.php");
-    exit;
-}else if ($_SESSION['level'] != "admin") {
+if ($_SESSION['level'] != "admin") {
     header("Location: ../login/login_form.php");
     exit;
 }
@@ -50,29 +48,29 @@ if ($_SESSION['level'] = "admin") {
     <meta charset="UTF-8">
     <title>Product List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style.css">
     <style>
-        .deskripsi-terbatas {
-            cursor: pointer;
-            position: relative;
-            padding-bottom: 1rem;
-        }
+    .deskripsi-terbatas {
+        cursor: pointer;
+        position: relative;
+        padding-bottom: 1rem;
+    }
 
-        .deskripsi-terbatas span {
-            display: block;
-        }
+    .deskripsi-terbatas span {
+        display: block;
+    }
 
-        .deskripsi-terbatas button {
-            color: #007bff;
-            text-decoration: underline;
-            border: none;
-            background: transparent;
-        }
-
+    .deskripsi-terbatas button {
+        color: #007bff;
+        text-decoration: underline;
+        border: none;
+        background: transparent;
+    }
     </style>
 </head>
 
-<body> 
+<body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">Alzi Petshop [Admin]</a>
@@ -80,7 +78,7 @@ if ($_SESSION['level'] = "admin") {
             </div>
             <div class="navbar-item">
                 <a href="detail.php">
-                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
+                    <img src="../<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
                 </a>
             </div>
@@ -115,8 +113,9 @@ if ($_SESSION['level'] = "admin") {
                                     <td>{$row['id']}</td>
                                     <td>{$row['name']}</td>";
                                 ?>
-                                    <td id="description-<?php echo $row['id']; ?>" class="deskripsi-terbatas" onclick="toggleDescription(<?php echo $row['id']; ?>)">
-                                        <?php 
+                        <td id="description-<?php echo $row['id']; ?>" class="deskripsi-terbatas"
+                            onclick="toggleDescription(<?php echo $row['id']; ?>)">
+                            <?php 
                                             $maxLength = 150;
                                             $description = nl2br(htmlspecialchars($row['description']));
                                             $shortDesc = substr($description, 0, $maxLength);
@@ -124,11 +123,13 @@ if ($_SESSION['level'] = "admin") {
                                             echo '<span id="short-desc-' . $row['id'] . '">' . $shortDesc . ($isTruncated ? '...' : '') . '</span>';
                                             echo '<span id="full-desc-' . $row['id'] . '" style="display:none;">' . $description . '</span>';
                                         ?>
-                                        <?php if ($isTruncated): ?>
-                                            <button id="toggle-desc-<?php echo $row['id']; ?>" type="button" class="btn btn-link p-0" style="pointer-events: none; text-decoration: none; color: rgb(255, 180, 0); font-weight: bold;">Lihat Selengkapnya</button>
-                                        <?php endif; ?>
-                                    </td>
-                                    <?php
+                            <?php if ($isTruncated): ?>
+                            <button id="toggle-desc-<?php echo $row['id']; ?>" type="button" class="btn btn-link p-0"
+                                style="pointer-events: none; text-decoration: none; color: rgb(255, 180, 0); font-weight: bold;">Lihat
+                                Selengkapnya</button>
+                            <?php endif; ?>
+                        </td>
+                        <?php
                                     echo "
                                     <td>{$row['price']}</td>
                                     <td><img src='../{$row['image']}' alt='{$row['name']}' width='100'></td>
@@ -150,21 +151,21 @@ if ($_SESSION['level'] = "admin") {
         </div>
     </div>
     <script>
-        function toggleDescription(id) {
-            const shortDesc = document.getElementById(`short-desc-${id}`);
-            const fullDesc = document.getElementById(`full-desc-${id}`);
-            const button = document.getElementById(`toggle-desc-${id}`);
+    function toggleDescription(id) {
+        const shortDesc = document.getElementById(`short-desc-${id}`);
+        const fullDesc = document.getElementById(`full-desc-${id}`);
+        const button = document.getElementById(`toggle-desc-${id}`);
 
-            if (fullDesc.style.display === 'none' || fullDesc.style.display === '') {
-                fullDesc.style.display = 'inline';
-                shortDesc.style.display = 'none';
-                button.textContent = 'Sembunyikan';
-            } else {
-                fullDesc.style.display = 'none';
-                shortDesc.style.display = 'inline';
-                button.textContent = 'Lihat Selengkapnya';
-            }
+        if (fullDesc.style.display === 'none' || fullDesc.style.display === '') {
+            fullDesc.style.display = 'inline';
+            shortDesc.style.display = 'none';
+            button.textContent = 'Sembunyikan';
+        } else {
+            fullDesc.style.display = 'none';
+            shortDesc.style.display = 'inline';
+            button.textContent = 'Lihat Selengkapnya';
         }
+    }
     </script>
 </body>
 
