@@ -198,12 +198,13 @@ $users = $conn->query("SELECT * FROM tbluser");
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">Alzi Petshop [Admin]</a>
+            <a class="navbar-brand ms-2 font-weight-bold" href="admin.php">Alzi Petshop [Admin]</a>
+            <a class="navbar-brand">Product</a>
             <div class="d-flex ms-auto">
             </div>
             <div class="navbar-item">
-                <a href="detail.php">
-                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
+                <a href="../detail.php">
+                    <img src="../<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
                 </a>
             </div>
