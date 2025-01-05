@@ -1,9 +1,7 @@
 <?php 
-<<<<<<< HEAD
+
 session_start();
-=======
-    session_start();
->>>>>>> f882c38 (login, index, admin)
+
     include '../php/php.php'; 
     // Periksa apakah user sudah login
 if (!isset($_SESSION['userid'])) {
@@ -51,12 +49,7 @@ if ($_SESSION['level'] != "admin") {
 <head>
     <meta charset="UTF-8">
     <title>Product List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-<<<<<<< HEAD
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-=======
-              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
->>>>>>> f882c38 (login, index, admin)
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style.css">
     <style>
     .deskripsi-terbatas {
@@ -85,7 +78,7 @@ if ($_SESSION['level'] != "admin") {
             <div class="d-flex ms-auto">
             </div>
             <div class="navbar-item">
-                <a href="detail.php">
+                <a href="../detail.php">
                     <img src="../<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
                 </a>
@@ -144,7 +137,7 @@ if ($_SESSION['level'] != "admin") {
                                     <td class='hide-on-mobile'>{$row['category']}</td>
                                     <td class='hide-on-mobile'>{$row['satuan']}</td>
                                     <td>
-                                        <a href='update.php?id={$row['id']}' class='btn btn-warning my-1'>Edit</a>
+                                        <a href='edit.php?product_id={$row['id']}' class='btn btn-warning my-1'>Edit</a>
                                         <a href='delete.php?id={$row['id']}' class='btn btn-danger my-1'>Delete</a>
                                     </td>
                                   </tr>";
