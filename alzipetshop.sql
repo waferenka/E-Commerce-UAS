@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 04, 2025 at 03:47 PM
+-- Generation Time: Jan 05, 2025 at 06:06 AM
 -- Server version: 8.0.40
 -- PHP Version: 8.2.12
 
@@ -31,7 +31,7 @@ CREATE TABLE `cart` (
   `cart_id` int NOT NULL,
   `user_id` int NOT NULL,
   `product_id` int NOT NULL,
-  `first_name` varchar(50) DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `address` text,
   `product_name` varchar(100) DEFAULT NULL,
@@ -104,6 +104,23 @@ INSERT INTO `tbluser` (`id`, `nama`, `email`, `password`, `level`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `transaction_id` int NOT NULL,
+  `cart_id` int NOT NULL,
+  `order_id` varchar(100) NOT NULL,
+  `payment_type` varchar(50) DEFAULT NULL,
+  `transaction_status` enum('pending','settlement','expire','cancel') DEFAULT 'pending',
+  `gross_amount` decimal(10,2) NOT NULL,
+  `payment_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user_detail`
 --
 
@@ -152,6 +169,13 @@ ALTER TABLE `tbluser`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`transaction_id`),
+  ADD KEY `cart_id` (`cart_id`);
+
+--
 -- Indexes for table `user_detail`
 --
 ALTER TABLE `user_detail`
@@ -180,6 +204,12 @@ ALTER TABLE `tbluser`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `transaction_id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -189,6 +219,12 @@ ALTER TABLE `tbluser`
 ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbluser` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`cart_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user_detail`
