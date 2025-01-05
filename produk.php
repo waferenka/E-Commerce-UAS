@@ -1,80 +1,111 @@
 <?php
-    session_start();
-    // PHP Data Js Search
-    include('php/php.php');
+session_start();
+// PHP Data Js Search
+include('php/php.php');
+// Cek koneksi
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
 
-    // Periksa apakah user sudah login
-    if (!isset($_SESSION['userid'])) {
-        header("Location: login/login_form.php");
-        exit;
-    }
+// Periksa apakah user sudah login
+if (!isset($_SESSION['userid'])) {
+    header("Location: login/login_form.php");
+    exit;
+}
 
-    if ($_SESSION['level'] != "pembeli") {
-        header("Location: login/login_form.php");
-        exit;
-    }
+if ($_SESSION['level'] != "pembeli") {
+    header("Location: login/login_form.php");
+    exit;
+}
+$userid = $_SESSION['userid'];
 
-    $userid = $_SESSION['userid']; // Ambil user ID dari session
+// Query untuk mengambil data user
+$sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+FROM tbluser u 
+LEFT JOIN user_detail d ON u.id = d.id 
+WHERE u.id = '$userid'";
 
-    // Query untuk mengambil data user
-    $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
-            FROM tbluser u 
-            LEFT JOIN user_detail d ON u.id = d.id 
-            WHERE u.id = '$userid'";
+$result = mysqli_query($conn, $sql);
 
-    $result = mysqli_query($conn, $sql);
+if ($result && $result->num_rows > 0) {
+$row = mysqli_fetch_assoc($result);
+$foto = $row['foto'];
+$nama = $row['nama'];
+$email = $row['email'];
+$level = $row['level'];
+} else {
+echo "Data user tidak ditemukan.";
+}
 
-    if ($result && $result->num_rows > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $foto = $row['foto'];
-        $nama = $row['nama'];
-        $email = $row['email'];
-        $level = $row['level'];
-    } else {
-        echo "Data user tidak ditemukan.";
-    }
+// Ambil semua produk untuk pencarian
+$query = "SELECT id, name, price, image FROM products";
+$result = $conn->query($query);
 
-    // Ambil semua produk untuk pencarian
-    $query = "SELECT id, name, price, image FROM products";
-    $result = $conn->query($query);
+$products = [];
+if ($result && $result->num_rows > 0) {
+while ($row = $result->fetch_assoc()) {
+$products[] = $row;
+}
+}
 
-    $products = [];
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $products[] = $row;
-        }
-    }
+// Ambil produk berdasarkan ID dari parameter URL
+$product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
 
-    // Ambil produk berdasarkan ID dari parameter URL
+$data = mysqli_query($conn, "SELECT * FROM products WHERE id = '$product_id'");
+$productd = mysqli_fetch_assoc($data);
+if ($result && $result->num_rows > 0) {
+$nama_p = $productd['name'];
+$harga_p = $productd['price'];
+$satuan_p = $productd['satuan'];
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Ambil data dari form
+    $user_id = $_SESSION['userid'];
     $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
+    $quantity = (int) $_POST['quantity'];
 
-    $data = mysqli_query($conn, "SELECT * FROM products WHERE id = '$product_id'");
-    $productd = mysqli_fetch_assoc($data);
-    if ($result && $result->num_rows > 0) {
-        $nama_p = $productd['name'];
-        $harga_p = $productd['price'];
-        $satuan_p = $productd['satuan'];
+    // Ambil nama user berdasarkan user_id
+    $user_query = "SELECT nama FROM tbluser WHERE id = ?";
+    $user_stmt = $conn->prepare($user_query);
+    $user_stmt->bind_param("i", $user_id);
+    $user_stmt->execute();
+    $user_result = $user_stmt->get_result();
+    $user_name = $user_result->fetch_assoc()['nama'];
+
+    // Ambil nama produk dan harga berdasarkan product_id
+    $product_query = "SELECT name, price FROM products WHERE id = ?";
+    $product_stmt = $conn->prepare($product_query);
+    $product_stmt->bind_param("i", $product_id);
+    $product_stmt->execute();
+    $product_result = $product_stmt->get_result();
+    $product = $product_result->fetch_assoc();
+    $product_name = $product['name'];
+    $price = $product['price'] * $quantity;
+
+    // Masukkan data ke tabel cart
+    $insert_query = "INSERT INTO cart (user_id, user_name, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
+    $insert_stmt = $conn->prepare($insert_query);
+    $insert_stmt->bind_param("isissi", $user_id, $user_name, $product_id, $product_name, $quantity, $price);
+
+    if ($insert_stmt->execute()) {
+        echo "<p>Produk berhasil ditambahkan ke keranjang!</p>";
+    } else {
+        echo "<p>Gagal menambahkan produk: " . $conn->error . "</p>";
     }
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['quantity'])) {
-            $quantity = intval($_POST['quantity']);  // Ambil nilai quantity
-            $action = $_POST['action'];
-            $total = $harga_p * $quantity;
-            if ($action === 'buy_now') {
-                $url = "https://api.whatsapp.com/send?phone=6283192655757&text=Halo saya $nama ingin memesan $nama_p sebanyak $quantity $satuan_p, dengan total harga $total";
-                header("Location: $url");
-            }
-        } else {
-            echo "Quantity is not set.";
-        }
-    }
+    $user_stmt->close();
+    $product_stmt->close();
+    $insert_stmt->close();
+}
 
-    //Nama Depan
-    function getFirstName($fullName) {
-        $parts = explode(" ", $fullName);
-        return $parts[0];
-    }
+//Nama Depan
+function getFirstName($fullName) {
+    $parts = explode(" ", $fullName);
+    return $parts[0];
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -196,7 +227,7 @@
             <div class="col-md-6 item-konten-p">
                 <h4 class="nama-p"><?php echo htmlspecialchars($productd['name']); ?></h4>
                 <h2 class="harga-p">Rp<?php echo number_format($productd['price'], 0, ',', '.'); ?></h2>
-                <form action="#" method="POST">
+                <form method="POST" action="">
                     <!-- Deskripsi -->
                     <div id="description" class="deskripsi-terbatas" onclick="toggleDescription()">
                         <?php 
@@ -252,7 +283,8 @@
                                 </div>
                             </div>
                             <!-- Tombol Beli Sekarang -->
-                            <button type="submit" name="action" value="buy_now" class="btn-beli">Beli Sekarang</button>
+                            <button type="submit" name="action" value="buy_now" class="btn-beli">Masukkan
+                                Keranjang</button>
                         </div>
                     </form>
                 </form>
@@ -394,9 +426,9 @@
     </script>
     <!-- End Js Search -->
     <!-- Sementara tanpa footer -->
-    <!-- <footer class="text-center">
-            <p>Create by Alzi Petshop | &copy 2024</p>
-        </footer> -->
+    <footer class="text-center">
+        <p>Create by Alzi Petshop | &copy 2024</p>
+    </footer>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
