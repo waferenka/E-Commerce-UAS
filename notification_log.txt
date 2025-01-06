@@ -1,0 +1,15 @@
+
+RAW PAYLOAD: 
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+RAW PAYLOAD: {"transaction_time":"2025-01-05 20:39:01","transaction_status":"pending","transaction_id":"a7ca970c-65df-4e90-9724-dbb8714a1dce","status_message":"midtrans payment notification","status_code":"201","signature_key":"6d365e9d23d7f43b4c01ac7b925e64ec2412a3e1a3460236a31341c151ca3334c6bf68d50d493eac1acc4fa986e273d89035e9eb75c2f113cfb4bba86801b783","payment_type":"echannel","order_id":"951460574","merchant_id":"G911148444","gross_amount":"810000.00","fraud_status":"accept","expiry_time":"2025-01-06 20:39:00","currency":"IDR","biller_code":"70012","bill_key":"563858865948"}
+RAW PAYLOAD: {"transaction_time":"2025-01-05 20:39:01","transaction_status":"settlement","transaction_id":"a7ca970c-65df-4e90-9724-dbb8714a1dce","status_message":"midtrans payment notification","status_code":"200","signature_key":"69bacde417bdb0a1c65884e8e880cc0fe960d8a19f5f00b24a2515c474449ba8a4c3620dc4f20d9cca82d4e4dcfd63d5ccbcb00bb3da23f6f19683a7be1c253f","settlement_time":"2025-01-05 20:39:52","payment_type":"echannel","order_id":"951460574","merchant_id":"G911148444","gross_amount":"810000.00","fraud_status":"accept","expiry_time":"2025-01-06 20:39:00","currency":"IDR","biller_code":"70012","bill_key":"563858865948"}
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+ERROR: Empty notification payload received
