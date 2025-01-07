@@ -74,7 +74,6 @@
     }
 
     #user {
-        font-size: 1.3rem;
         display: inline;
     }
 
@@ -255,19 +254,7 @@
 
 <body>
     <!-- Navbar, Search, Keranjang, User -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
-                Alzi Petshop
-            </a>
-            <div class="navbar-item">
-                <a href="detail.php">
-                    <img src="<?php echo $foto; ?>"class="rounded-circle me-2">
-                    <span class="me-2" style="font-weight: bold;"><?php echo getFirstName($nama); ?></span>
-                </a>
-            </div>
-        </div>
-    </nav>
+    <?php require('php/navbar.php'); ?>
     <!-- End Navbar, Search, Keranjang, User -->
 
     <div class="container mt-5">
@@ -275,7 +262,7 @@
             <div class="col-md-3">
                 <div class="img-user text-center">
                     <img src="<?php echo $foto; ?>" class="profile-img mb-3" alt="Foto Profil">
-                    <h3 class="" id="user"><?php echo $nama; ?></h3>
+                    <h3 style="font-size: 1.3rem;" class="fw-bold"><?php echo $nama; ?></h3>
                     <a href="ubah_foto.php" class="container-fluid btn btn-warning mt-3">Ubah Foto Profil</a>
                     <a href="ubah_sandi.php" class="container-fluid btn btn-warning mt-2">Ubah Kata Sandi</a>
                     <a class="container-fluid btn btn-danger mt-2" href="login/logout.php">Logout</a>

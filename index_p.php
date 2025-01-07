@@ -93,26 +93,7 @@
 
 <body>
     <!-- Navbar, Search, Keranjang, User -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">
-                Alzi Petshop [Penjual]
-            </a>
-
-            <!-- Tambahkan class 'ms-auto' ke div atau anchor untuk mendorong ke kanan -->
-            <div class="d-flex">
-                <a href="tambah.php" class="btn btn-warning me-3">Tambah</a>
-            </div>
-
-            <!-- User Profile Link (jika perlu) -->
-            <div class="navbar-item">
-                <a href="detail.php">
-                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
-                    <span id="user"><?php echo getFirstName($nama); ?></span>
-                </a>
-            </div>
-        </div>
-    </nav>
+    <?php require('php/navbar.php'); ?>
 
     <!-- Tombol Kategori -->
     <div class="categories">

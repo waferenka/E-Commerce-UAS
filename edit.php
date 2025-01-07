@@ -112,20 +112,8 @@ function getFirstName($fullName) {
 <body>
     <script src="script/script.js"></script>
     <!-- Navbar, Search, Keranjang, User -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">
-                Alzi Petshop [Penjual]
-            </a>
-            <!-- User Profile Link (jika perlu) -->
-            <div class="navbar-item">
-                <a href="detail.php">
-                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
-                    <span id="user"><?php echo getFirstName($nama); ?></span>
-                </a>
-            </div>
-        </div>
-    </nav>
+    <?php require('php/navbar.php'); ?>
+    <!-- End Navbar, Search, Keranjang, User -->
 
     <div class="container px-3" style="color: black;">
         <h3 style="font-weight: bold;">Edit Produk</h3>
