@@ -92,7 +92,8 @@ $users = $conn->query("SELECT * FROM tbluser");
     <link rel="stylesheet" href="../css/style.css">
     <title>Alzi Petshop</title>
     <style>
-    html, body {
+    html,
+    body {
         width: 100%;
         height: 100%;
     }
@@ -199,7 +200,8 @@ $users = $conn->query("SELECT * FROM tbluser");
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="admin.php">Alzi Petshop [Admin]</a>
             <div class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle fw-bold" style="color: black;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle fw-bold" style="color: black;" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     Others
                 </a>
                 <ul class="dropdown-menu">
@@ -210,7 +212,8 @@ $users = $conn->query("SELECT * FROM tbluser");
             <div class="d-flex ms-auto">
             </div>
             <div class="d-flex">
-                <a href="users.php" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add User</a>
+                <a href="users.php" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add
+                    User</a>
             </div>
             <div class="navbar-item">
                 <a href="../detail.php">
@@ -220,7 +223,7 @@ $users = $conn->query("SELECT * FROM tbluser");
             </div>
         </div>
     </nav>
-    <div class="container mt-5">
+    <div class="container mt-5 h-100">
         <h3 style="color: black;">Users</h3>
         <table class="table table-bordered table-sm">
             <thead>
