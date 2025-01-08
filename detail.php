@@ -67,6 +67,10 @@
         position: fixed;
     }
 
+    #tambah {
+        display: none;
+    }
+    
     .container {
         width: 100%;
         height: 100%;
