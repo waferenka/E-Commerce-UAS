@@ -1,61 +1,61 @@
 <?php
-session_start();
-include 'php/php.php';
+    session_start();
+    include 'php/php.php';
 
-// Periksa apakah user sudah login
-if (!isset($_SESSION['userid'])) {
-    header("Location: login/login_form.php");
-    exit;
-}
+    // Periksa apakah user sudah login
+    if (!isset($_SESSION['userid'])) {
+        header("Location: login/login_form.php");
+        exit;
+    }
 
-$userid = $_SESSION['userid'];
+    $userid = $_SESSION['userid'];
 
-// Query untuk mengambil data user dari database
-$sql = "SELECT u.id, u.nama, u.email, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon, d.foto
-        FROM tbluser u 
-        LEFT JOIN user_detail d ON u.id = d.id 
-        WHERE u.id = '$userid'";
+    // Query untuk mengambil data user dari database
+    $sql = "SELECT u.id, u.nama, u.email, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon, d.foto
+            FROM tbluser u 
+            LEFT JOIN user_detail d ON u.id = d.id 
+            WHERE u.id = '$userid'";
 
-$result = mysqli_query($conn, $sql);
+    $result = mysqli_query($conn, $sql);
 
-if ($result->num_rows > 0) {
-    $row = mysqli_fetch_assoc($result);
-    $nama = $row['nama'];
-    $email = $row['email'];
-    $jenis_kelamin = $row['jenis_kelamin'];
-    $tanggal_lahir = $row['tanggal_lahir'];
-    $alamat = $row['alamat'];
-    $no_telepon = $row['no_telepon'];
-    $foto = $row['foto'];
-} else {
-    echo "Data user tidak ditemukan.";
-}
+    if ($result->num_rows > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $nama = $row['nama'];
+        $email = $row['email'];
+        $jenis_kelamin = $row['jenis_kelamin'];
+        $tanggal_lahir = $row['tanggal_lahir'];
+        $alamat = $row['alamat'];
+        $no_telepon = $row['no_telepon'];
+        $foto = $row['foto'];
+    } else {
+        echo "Data user tidak ditemukan.";
+    }
 
-// Proses update data user
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama_baru = $_POST['nama'];
-    $email_baru = $_POST['email'];
-    $jenis_kelamin_baru = $_POST['jenis_kelamin'];
-    $tanggal_lahir_baru = $_POST['tanggal_lahir'];
-    $alamat_baru = $_POST['alamat'];
-    $no_telepon_baru = $_POST['no_telepon'];
+    // Proses update data user
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nama_baru = $_POST['nama'];
+        $email_baru = $_POST['email'];
+        $jenis_kelamin_baru = $_POST['jenis_kelamin'];
+        $tanggal_lahir_baru = $_POST['tanggal_lahir'];
+        $alamat_baru = $_POST['alamat'];
+        $no_telepon_baru = $_POST['no_telepon'];
 
-    // Update tbluser
-    $sql_update_user = "UPDATE tbluser SET nama = ?, email = ? WHERE id = ?";
-    $stmt_user = $conn->prepare($sql_update_user);
-    $stmt_user->bind_param('ssi', $nama_baru, $email_baru, $userid);
-    $stmt_user->execute();
+        // Update tbluser
+        $sql_update_user = "UPDATE tbluser SET nama = ?, email = ? WHERE id = ?";
+        $stmt_user = $conn->prepare($sql_update_user);
+        $stmt_user->bind_param('ssi', $nama_baru, $email_baru, $userid);
+        $stmt_user->execute();
 
-    // Update user_detail
-    $sql_update_detail = "UPDATE user_detail SET jenis_kelamin = ?, tanggal_lahir = ?, alamat = ?, no_telepon = ? WHERE id = ?";
-    $stmt_detail = $conn->prepare($sql_update_detail);
-    $stmt_detail->bind_param('ssssi', $jenis_kelamin_baru, $tanggal_lahir_baru, $alamat_baru, $no_telepon_baru, $userid);
-    $stmt_detail->execute();
+        // Update user_detail
+        $sql_update_detail = "UPDATE user_detail SET jenis_kelamin = ?, tanggal_lahir = ?, alamat = ?, no_telepon = ? WHERE id = ?";
+        $stmt_detail = $conn->prepare($sql_update_detail);
+        $stmt_detail->bind_param('ssssi', $jenis_kelamin_baru, $tanggal_lahir_baru, $alamat_baru, $no_telepon_baru, $userid);
+        $stmt_detail->execute();
 
-    // Redirect setelah update
-    header("Location: detail.php");
-    exit;
-}
+        // Redirect setelah update
+        header("Location: detail.php");
+        exit;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -72,52 +72,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    html,
-    body {
-        width: 100%;
-        height: 100vh;
-    }
-
-    .card {
-        padding-top: 1rem;
-    }
-
-    .row {
-        padding-top: 2.5rem;
-    }
-
-    .navbar {
-        position: fixed;
-    }
-
-    footer {
-        bottom: 0;
-    }
-
-    @media (max-width: 435px) {
-        body {
-            overflow-y: auto;
+        html, body {
+            width: 100%;
+            height: 100vh;
         }
 
-        footer {
-            position: static;
-            bottom: 0;
+        .card {
             padding-top: 1rem;
         }
-    }
 
-    @media (min-width: 768px) {
-        footer {
-            background-color: white;
-            margin-top: 2rem;
-            padding: 1rem 0 0.1rem 0;
-            width: 100%;
+        .row {
+            padding-top: 2.5rem;
         }
-    }
 
-    h4 {
-        font-weight: bold;
-    }
+        .navbar {
+            position: fixed;
+        }
+
+        footer {
+            bottom: 0;
+        }
+
+        @media (max-width: 435px) {
+            body {
+                overflow-y: auto;
+            }
+
+            footer {
+                position: static;
+                bottom: 0;
+                padding-top: 1rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            footer {
+                background-color: white;
+                margin-top: 2rem;
+                padding: 1rem 0 0.1rem 0;
+                width: 100%;
+            }
+        }
+
+        h4 {
+            font-weight: bold;
+        }
     </style>
 </head>
 

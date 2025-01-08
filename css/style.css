@@ -9,6 +9,7 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 input[type="number"] {
   -moz-appearance: textfield;
   text-align: center;
@@ -25,7 +26,6 @@ body {
 }
 
 footer {
-  position: static;
   bottom: 0;
   width: 100%;
 }
@@ -141,10 +141,6 @@ footer {
 }
 /* End Navbar + Search */
 
-
-
-
-
 /*Slider Otomatis*/
 #carouselExampleSlidesOnly {
   box-shadow: 0 0px 8px rgba(0, 0, 0, 0.2);
@@ -253,6 +249,7 @@ footer {
   cursor: pointer;
   text-decoration: none;
   color: #4c5262;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .product:hover {
@@ -267,6 +264,7 @@ footer {
   max-width: 100%;
   border-radius: 10px 10px 0px 0px;
   display: block;
+  mix-blend-mode: multiply;
 }
 
 .product.active {

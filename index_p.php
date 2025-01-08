@@ -67,30 +67,33 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    .categories {
-        margin-top: 3.5rem;
-    }
+        .navbar-brand {
+            display: inline !important;
+        }
 
-    .d-flex {
-        display: flex;
-        justify-content: flex-end;
-        margin-left: auto;
-    }
-
-    @media (max-width: 436px) {
+        .categories {
+            margin-top: 3.5rem;
+        }
+        
         .d-flex {
-            justify-content: flex-start;
-            margin: auto 0;
+            display: flex;
+            justify-content: flex-end;
+            margin-left: auto;
         }
 
-        .d-flex a {
-            font-size: 14px;
+        @media (max-width: 436px) {
+            .d-flex {
+                justify-content: flex-start;
+                margin: auto 0;
+            }
+
+            .d-flex a {
+                font-size: 14px;
+            }
         }
-    }
     </style>
     <title>Alzi Petshop</title>
 </head>
-
 <body>
     <!-- Navbar, Search, Keranjang, User -->
     <?php require('php/navbar.php'); ?>
@@ -116,6 +119,7 @@
         </div>
     </div>
     <!-- End Tombol Kategori -->
+
     <!-- List Produk Sesuai Kategori -->
     <div class="products" id="product-list">
         <?php
@@ -137,51 +141,51 @@
             $conn->close();
         ?>
     </div>
+    
     <script>
-    const products_l = document.querySelectorAll('.product');
-
-    products_l.forEach(product => {
-        product.addEventListener('click', function() {
-            const productId = this.getAttribute('data-id');
-            window.location.href = `edit.php?product_id=${productId}`;
+        const products_l = document.querySelectorAll('.product');
+        products_l.forEach(product => {
+            product.addEventListener('click', function() {
+                const productId = this.getAttribute('data-id');
+                window.location.href = `edit.php?product_id=${productId}`;
+            });
         });
-    });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const defaultCategory = 'Makanan';
-        showCategory(defaultCategory);
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultCategory = 'Makanan';
+            showCategory(defaultCategory);
 
-        document.querySelectorAll('.category').forEach(category => {
-            category.addEventListener('click', function() {
-                const selectedCategory = this.getAttribute('data-category');
-                showCategory(selectedCategory);
+            document.querySelectorAll('.category').forEach(category => {
+                category.addEventListener('click', function() {
+                    const selectedCategory = this.getAttribute('data-category');
+                    showCategory(selectedCategory);
 
-                document.querySelectorAll('.category').forEach(cat => {
-                    cat.classList.remove('active');
+                    document.querySelectorAll('.category').forEach(cat => {
+                        cat.classList.remove('active');
+                    });
+
+                    this.classList.add('active');
+                });
+            });
+
+            function showCategory(category) {
+                document.querySelectorAll('.product').forEach(product => {
+                    product.classList.remove('active');
                 });
 
-                this.classList.add('active');
-            });
+                document.querySelectorAll(`.product[data-category="${category}"]`).forEach(product => {
+                    product.classList.add('active');
+                });
+
+                document.querySelectorAll('.category').forEach(cat => {
+                    if (cat.getAttribute('data-category') === category) {
+                        cat.classList.add('active');
+                    } else {
+                        cat.classList.remove('active');
+                    }
+                });
+            }
         });
-
-        function showCategory(category) {
-            document.querySelectorAll('.product').forEach(product => {
-                product.classList.remove('active');
-            });
-
-            document.querySelectorAll(`.product[data-category="${category}"]`).forEach(product => {
-                product.classList.add('active');
-            });
-
-            document.querySelectorAll('.category').forEach(cat => {
-                if (cat.getAttribute('data-category') === category) {
-                    cat.classList.add('active');
-                } else {
-                    cat.classList.remove('active');
-                }
-            });
-        }
-    });
     </script>
     <!-- List Produk Sesuai Kategori -->
 
@@ -190,6 +194,7 @@
         <p>Create by Alzi Petshop | &copy 2024</p>
     </footer>
     <!-- Footer End -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>

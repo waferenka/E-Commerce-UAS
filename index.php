@@ -54,6 +54,7 @@
         $parts = explode(" ", $fullName);
         return $parts[0];
     }
+    
 ?>
 <!-- End PHP Data Js Search -->
 <!DOCTYPE html>

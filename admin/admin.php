@@ -74,13 +74,12 @@ if (isset($_GET['delete'])) {
 
 // Fetch Users
 $users = $conn->query("SELECT * FROM tbluser");
-//Nama Depan
+    //Nama Depan
     function getFirstName($fullName) {
         $parts = explode(" ", $fullName);
         return $parts[0];
     }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -199,8 +198,19 @@ $users = $conn->query("SELECT * FROM tbluser");
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="admin.php">Alzi Petshop [Admin]</a>
-            <a class="navbar-brand" href="products.php">Product</a>
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle fw-bold" style="color: black;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Others
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="products.php">Product</a></li>
+                    <li><a class="dropdown-item" href="#">Cart</a></li>
+                </ul>
+            </div>
             <div class="d-flex ms-auto">
+            </div>
+            <div class="d-flex">
+                <a href="users.php" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">Add User</a>
             </div>
             <div class="navbar-item">
                 <a href="../detail.php">
@@ -211,9 +221,7 @@ $users = $conn->query("SELECT * FROM tbluser");
         </div>
     </nav>
     <div class="container mt-5">
-        <h3>Users</h3>
-        <a href="users.php" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#userModal">Add User</a>
-
+        <h3 style="color: black;">Users</h3>
         <table class="table table-bordered table-sm">
             <thead>
                 <tr>

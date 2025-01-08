@@ -1,48 +1,48 @@
 <?php
-require '../php/php.php';
+    require '../php/php.php';
 
-if (isset($_POST['register'])) {
-    $nama = $_POST['nama'];
-    $email = $_POST['email'];
-    $password = sha1($_POST['password']);
-    $level = "pembeli";
-    $default_foto = 'imgs/user.png'; // Path foto default
+    if (isset($_POST['register'])) {
+        $nama = $_POST['nama'];
+        $email = $_POST['email'];
+        $password = sha1($_POST['password']);
+        $level = "pembeli";
+        $default_foto = 'imgs/user.png'; // Path foto default
 
-    // Mulai transaksi
-    $conn->begin_transaction();
+        // Mulai transaksi
+        $conn->begin_transaction();
 
-    try {
-        // Insert ke table tbluser
-        $query = "INSERT INTO tbluser (nama, email, password, level) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param('ssss', $nama, $email, $password, $level);
+        try {
+            // Insert ke table tbluser
+            $query = "INSERT INTO tbluser (nama, email, password, level) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('ssss', $nama, $email, $password, $level);
 
-        if (!$stmt->execute()) {
-            throw new Exception("Pendaftaran gagal. Email mungkin sudah digunakan.");
+            if (!$stmt->execute()) {
+                throw new Exception("Pendaftaran gagal. Email mungkin sudah digunakan.");
+            }
+
+            // Dapatkan ID user yang baru dimasukkan
+            $user_id = $stmt->insert_id;
+
+            // Insert ke table user_detail dengan foto default
+            $query_detail = "INSERT INTO user_detail (id, foto) VALUES (?, ?)";
+            $stmt_detail = $conn->prepare($query_detail);
+            $stmt_detail->bind_param('is', $user_id, $default_foto);
+
+            if (!$stmt_detail->execute()) {
+                throw new Exception("Gagal menyimpan detail pengguna.");
+            }
+
+            // Jika semua berhasil, commit transaksi
+            $conn->commit();
+            header('Location: login_form.php');
+            exit;
+        } catch (Exception) {
+            // Jika terjadi kesalahan, rollback transaksi
+            $conn->rollback();
+            $error = "Email sudah digunakan, silahkan gunakan email lain!";
         }
-
-        // Dapatkan ID user yang baru dimasukkan
-        $user_id = $stmt->insert_id;
-
-        // Insert ke table user_detail dengan foto default
-        $query_detail = "INSERT INTO user_detail (id, foto) VALUES (?, ?)";
-        $stmt_detail = $conn->prepare($query_detail);
-        $stmt_detail->bind_param('is', $user_id, $default_foto);
-
-        if (!$stmt_detail->execute()) {
-            throw new Exception("Gagal menyimpan detail pengguna.");
-        }
-
-        // Jika semua berhasil, commit transaksi
-        $conn->commit();
-        header('Location: login_form.php');
-        exit;
-    } catch (Exception) {
-        // Jika terjadi kesalahan, rollback transaksi
-        $conn->rollback();
-        $error = "Email sudah digunakan, silahkan gunakan email lain!";
     }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
