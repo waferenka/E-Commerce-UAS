@@ -70,6 +70,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $conn->query("DELETE FROM tbluser WHERE id=$id");
+    // Hapus file foto lama jika ada
+        if ($foto =! "/imgs/user/default.png") {
+            unlink($foto);
+        }
 }
 
 // Fetch Users

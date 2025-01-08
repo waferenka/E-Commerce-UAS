@@ -122,7 +122,7 @@ if (!empty($items) && $total_price_midtrans > 0) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-X7zfk0k3aWOJvdhF">
+    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="KLIENT KEY">
     </script>
     <style>
     .modal-body {
@@ -224,9 +224,9 @@ if (!empty($items) && $total_price_midtrans > 0) {
             </div>
             <?php endif; ?>
             <?php if ($user_level == 'penjual'): ?>
-                <div class="d-flex">
-                    <a href="tambah.php" class="btn btn-warning me-1" id="tambah">Tambah</a>
-                </div>
+            <div class="d-flex">
+                <a href="tambah.php" class="btn btn-warning me-1" id="tambah">Tambah</a>
+            </div>
             <?php endif; ?>
             <div class="navbar-item">
                 <?php if (!in_array($user_level, $restricted_levels)): ?>
