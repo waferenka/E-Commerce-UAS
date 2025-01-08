@@ -1,6 +1,5 @@
 <?php 
-
-require 'midtrans_config.php'; // Konfigurasi Midtrans
+    require 'midtrans_config.php'; // Konfigurasi Midtrans
 	$user_id = $_SESSION['userid'];
 	$user_level = $_SESSION['level'];
 	$restricted_levels = ['admin', 'penjual'];
@@ -15,16 +14,19 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
 	    JOIN products p ON c.product_id = p.id
 	    WHERE c.user_id = '$user_id'
 	";
+
 	$resultcart = mysqli_query($conn, $querycart);
 	while ($rowc = mysqli_fetch_assoc($resultcart)) {
-	    $total_price_midtrans += $rowc['total_price'];  // Hitung total price untuk Midtrans
-	    $items[] = [
-	        'id' => $rowc['product_id'],
-	        'price' => $rowc['price'],
-	        'quantity' => $rowc['quantity'],
-	        'name' => $rowc['product_name']
-	    ];
-	}
+    if ($rowc['price'] > 0 && $rowc['quantity'] > 0) {
+        $total_price_midtrans += $rowc['total_price'];
+        $items[] = [
+            'id' => $rowc['product_id'],
+            'price' => $rowc['price'],
+            'quantity' => $rowc['quantity'],
+            'name' => $rowc['product_name']
+        ];
+    }
+}
 
 	// Ambil data keranjang untuk tampilan modal (tanpa menghitung total price lagi)
 	$querycart_display = "
@@ -46,24 +48,43 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
 	$result_user = mysqli_query($conn, $query_user);
 	$user = mysqli_fetch_assoc($result_user);
 	// Buat parameter transaksi
-	$transaction_details = [
-	    'order_id' => rand(),
-	    'gross_amount' => $total_price_midtrans
-	];
+    // Periksa apakah keranjang kosong
 
-	$customer_details = [
-	    'first_name' => $user['nama'],
-	    'email' => $user['email'],
-	    'phone' => $user['no_telepon'],
-	    'shipping_address' => $user['alamat']
-	];
 
-	$transaction_data = [
-	    'transaction_details' => $transaction_details,
-	    'customer_details' => $customer_details,
-	    'item_details' => $items
-	];
 
+    // Periksa apakah keranjang kosong
+$snap_token = null; // Default nilai token
+if (!empty($items) && $total_price_midtrans > 0) {
+    // Data transaksi jika keranjang tidak kosong
+    $transaction_details = [
+        'order_id' => rand(),
+        'gross_amount' => $total_price_midtrans
+    ];
+
+    $customer_details = [
+        'first_name' => $user['nama'],
+        'email' => $user['email'],
+        'phone' => $user['no_telepon'],
+        'shipping_address' => $user['alamat']
+    ];
+
+    $transaction_data = [
+        'transaction_details' => $transaction_details,
+        'customer_details' => $customer_details,
+        'item_details' => $items
+    ];
+
+    // Dapatkan token Snap dari Midtrans
+    try {
+        $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+    } catch (Exception $e) {
+        error_log("Midtrans Error: " . $e->getMessage());
+        $snap_token = null;
+    }
+} else {
+    // Keranjang kosong, tidak ada transaksi
+    $transaction_data = null; // Tidak ada data transaksi
+}
 	// Update Cart
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Pastikan data 'quantity' diterima sebagai array
@@ -89,9 +110,6 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
 			echo "Data tidak valid.";
 		}
 	}
-
-	// Dapatkan token transaksi dari Midtrans
-	$snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
 ?>
 
 <!DOCTYPE html>
@@ -204,6 +222,11 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
                 <input type="text" id="searchInput" placeholder="Cari produk..." autocomplete="off">
                 <div class="search-dropdown" id="searchResults"></div>
             </div>
+            <?php endif; ?>
+            <?php if ($user_level == 'penjual'): ?>
+                <div class="d-flex">
+                    <a href="tambah.php" class="btn btn-warning me-1" id="tambah">Tambah</a>
+                </div>
             <?php endif; ?>
             <div class="navbar-item">
                 <?php if (!in_array($user_level, $restricted_levels)): ?>

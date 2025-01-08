@@ -93,19 +93,23 @@ function getFirstName($fullName) {
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    .navbar-brand {
-        display: inline;
-    }
-
-    .container {
-        padding-top: 5rem;
-    }
-
-    @media (max-width: 321px) {
         .navbar-brand {
-            font-size: 17px;
+            display: inline !important;
         }
-    }
+
+        #tambah {
+            display: none;
+        }
+
+        .container {
+            padding-top: 5rem;
+        }
+
+        @media (max-width: 321px) {
+            .navbar-brand {
+                font-size: 17px;
+            }
+        }
     </style>
 </head>
 
@@ -139,11 +143,11 @@ function getFirstName($fullName) {
                 <label for="category" class="form-label">Kategori</label>
                 <select name="category" id="category" class="form-control" required autocomplete="off">
                     <?php
-                    // Menampilkan kategori dengan menandai kategori yang sudah dipilih
-                    foreach ($enum_values_category as $value) {
-                        $selected = ($category_p == $value) ? 'selected' : '';
-                        echo "<option value='$value' $selected>$value</option>";
-                    }
+                        // Menampilkan kategori dengan menandai kategori yang sudah dipilih
+                        foreach ($enum_values_category as $value) {
+                            $selected = ($category_p == $value) ? 'selected' : '';
+                            echo "<option value='$value' $selected>$value</option>";
+                        }
                     ?>
                 </select>
             </div>
@@ -163,8 +167,8 @@ function getFirstName($fullName) {
             </div>
             <button type="submit" class="btn btn-success">Simpan Perubahan</button>
         </form>
-        <a href="index_p.php" class="btn btn-warning my-3">Kembali</a>
-        <a href="php/hapus.php?product_id=<?= $product_id ?>" class="btn btn-danger my-3">Hapus</a>
+        <a href="index_p.php" class="btn btn-warning my-2 me-1">Kembali</a>
+        <a href="php/hapus.php?product_id=<?= $product_id ?>" class="btn btn-danger my-2">Hapus</a>
     </div>
     <!-- Footer start -->
     <footer class="text-center">

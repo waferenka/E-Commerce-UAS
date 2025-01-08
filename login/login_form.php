@@ -1,18 +1,18 @@
 <!-- Seesion Start -->
 <?php
-session_start();
-if (isset($_SESSION['email'])) {
-    if ($_SESSION['level'] == "admin") {
-        header("Location: ../admin/admin.php");
-    } elseif ($_SESSION['level'] == "penjual") {
-        header("Location: ../index_p.php");
-    } elseif ($_SESSION['level'] == "pembeli") {
-        header("Location: ../index.php");
-    } else {
-        header("Location: login_form.php");
+    session_start();
+    if (isset($_SESSION['email'])) {
+        if ($_SESSION['level'] == "admin") {
+            header("Location: ../admin/admin.php");
+        } elseif ($_SESSION['level'] == "penjual") {
+            header("Location: ../index_p.php");
+        } elseif ($_SESSION['level'] == "pembeli") {
+            header("Location: ../index.php");
+        } else {
+            header("Location: login_form.php");
+        }
+        exit;
     }
-    exit;
-}
 ?>
 <!-- Session End -->
 

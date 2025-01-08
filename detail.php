@@ -9,6 +9,7 @@
     }
 
     $userid = $_SESSION['userid']; // Ambil user ID dari session
+    $user_id = $_SESSION['userid'];
 
     // Query untuk mengambil data dari kedua tabel
     $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
@@ -37,6 +38,7 @@
         $parts = explode(" ", $fullName);
         return $parts[0];
     }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">

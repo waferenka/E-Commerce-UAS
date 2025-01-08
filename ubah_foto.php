@@ -1,121 +1,121 @@
 <?php
-session_start();
-// Koneksi database
-require 'php/php.php';
-if (!isset($_SESSION['userid'])) {
-    header("Location: login/login_form.php");
-    exit;
-}
+    session_start();
+    // Koneksi database
+    require 'php/php.php';
+    if (!isset($_SESSION['userid'])) {
+        header("Location: login/login_form.php");
+        exit;
+    }
 
-$userid = $_SESSION['userid']; // Ambil user ID dari session
+    $userid = $_SESSION['userid']; // Ambil user ID dari session
 
-// Query untuk mengambil data dari kedua tabel
-$sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
-FROM tbluser u 
-LEFT JOIN user_detail d ON u.id = d.id 
-WHERE u.id = '$userid'";
+    // Query untuk mengambil data dari kedua tabel
+    $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+    FROM tbluser u 
+    LEFT JOIN user_detail d ON u.id = d.id 
+    WHERE u.id = '$userid'";
 
-$result = mysqli_query($conn, $sql);
+    $result = mysqli_query($conn, $sql);
 
-if ($result->num_rows > 0) {
-$row = mysqli_fetch_assoc($result);
-$foto = $row['foto'];
-$nama = $row['nama'];
-$email = $row['email'];
-$level = $row['level'];
-$jenis_kelamin = $row['jenis_kelamin'];
-$tanggal_lahir = $row['tanggal_lahir'];
-$alamat = $row['alamat'];
-$no_telepon = $row['no_telepon'];
-} else {
-echo "Data user tidak ditemukan.";
-}
+    if ($result->num_rows > 0) {
+    $row = mysqli_fetch_assoc($result);
+    $foto = $row['foto'];
+    $nama = $row['nama'];
+    $email = $row['email'];
+    $level = $row['level'];
+    $jenis_kelamin = $row['jenis_kelamin'];
+    $tanggal_lahir = $row['tanggal_lahir'];
+    $alamat = $row['alamat'];
+    $no_telepon = $row['no_telepon'];
+    } else {
+    echo "Data user tidak ditemukan.";
+    }
 
-// Ambil email user dari database
-$query = "SELECT email FROM tbluser WHERE id = '$userid'";
-$result = mysqli_query($conn, $query);
-$user = mysqli_fetch_assoc($result);
-$email = $user['email'];
+    // Ambil email user dari database
+    $query = "SELECT email FROM tbluser WHERE id = '$userid'";
+    $result = mysqli_query($conn, $query);
+    $user = mysqli_fetch_assoc($result);
+    $email = $user['email'];
 
-// Ambil path foto user dari database
-$query = "SELECT foto FROM user_detail WHERE id = '$userid'";
-$result = mysqli_query($conn, $query);
-$user_detail = mysqli_fetch_assoc($result);
-$old_photo_path = $user_detail['foto'];
+    // Ambil path foto user dari database
+    $query = "SELECT foto FROM user_detail WHERE id = '$userid'";
+    $result = mysqli_query($conn, $query);
+    $user_detail = mysqli_fetch_assoc($result);
+    $old_photo_path = $user_detail['foto'];
 
-// Fungsi untuk membersihkan email menjadi nama file yang valid
-function sanitize_filename($filename) {
-    // Ganti karakter yang tidak valid dengan _
-    return preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename);
-}
+    // Fungsi untuk membersihkan email menjadi nama file yang valid
+    function sanitize_filename($filename) {
+        // Ganti karakter yang tidak valid dengan _
+        return preg_replace('/[^A-Za-z0-9_\-]/', '_', $filename);
+    }
 
-if (isset($_POST["submit"])) {
-    $target_dir = "imgs/user/";
-    $sanitized_email = sanitize_filename($email); // Sanitize email untuk digunakan sebagai nama file
-    $imageFileType = strtolower(pathinfo($_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION));
-    $target_file = $target_dir . $sanitized_email . "." . $imageFileType;
-    $uploadOk = 1;
-
-    // Cek apakah file gambar adalah gambar asli atau bukan
-    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-    if ($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
+    if (isset($_POST["submit"])) {
+        $target_dir = "imgs/user/";
+        $sanitized_email = sanitize_filename($email); // Sanitize email untuk digunakan sebagai nama file
+        $imageFileType = strtolower(pathinfo($_FILES["fileToUpload"]["name"], PATHINFO_EXTENSION));
+        $target_file = $target_dir . $sanitized_email . "." . $imageFileType;
         $uploadOk = 1;
-    } else {
-        echo "File is not an image.";
-        $uploadOk = 0;
-    }
 
-    // Cek ukuran file
-    if ($_FILES["fileToUpload"]["size"] > 500000) {
-        echo "Sorry, your file is too large.";
-        $uploadOk = 0;
-    }
-
-    // Batasi format file
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-        echo "Maaf, hanya file JPG, JPEG, PNG & GIF yang di izinkan.";
-        $uploadOk = 0;
-    }
-
-
-    // Cek apakah $uploadOk bernilai 0 karena error
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
-    // Jika semua cek lolos, coba upload file
-    } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            echo "The file ". htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
-            
-            // Hapus file foto lama jika ada
-            if ($old_photo_path && file_exists($old_photo_path)) {
-                unlink($old_photo_path);
-            }
-
-            // Update path foto di database
-            $sql = "UPDATE user_detail SET foto='$target_file' WHERE id='$userid'";
-            if (mysqli_query($conn, $sql)) {
-                echo "<script>
-                        alert('Foto profil berhasil diubah');
-                        document.location='index.php';
-                      </script>";
-            } else {
-                echo "<script>
-                        alert('Terjadi kesalahan saat mengubah foto profil. Silakan coba lagi.');
-                        window.history.back();
-                      </script>";
-            }
+        // Cek apakah file gambar adalah gambar asli atau bukan
+        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        if ($check !== false) {
+            echo "File is an image - " . $check["mime"] . ".";
+            $uploadOk = 1;
         } else {
-            echo "Sorry, there was an error uploading your file.";
+            echo "File is not an image.";
+            $uploadOk = 0;
         }
+
+        // Cek ukuran file
+        if ($_FILES["fileToUpload"]["size"] > 500000) {
+            echo "Sorry, your file is too large.";
+            $uploadOk = 0;
+        }
+
+        // Batasi format file
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+            echo "Maaf, hanya file JPG, JPEG, PNG & GIF yang di izinkan.";
+            $uploadOk = 0;
+        }
+
+
+        // Cek apakah $uploadOk bernilai 0 karena error
+        if ($uploadOk == 0) {
+            echo "Sorry, your file was not uploaded.";
+        // Jika semua cek lolos, coba upload file
+        } else {
+            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                echo "The file ". htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
+                
+                // Hapus file foto lama jika ada
+                if ($old_photo_path && file_exists($old_photo_path)) {
+                    unlink($old_photo_path);
+                }
+
+                // Update path foto di database
+                $sql = "UPDATE user_detail SET foto='$target_file' WHERE id='$userid'";
+                if (mysqli_query($conn, $sql)) {
+                    echo "<script>
+                            alert('Foto profil berhasil diubah');
+                            document.location='index.php';
+                          </script>";
+                } else {
+                    echo "<script>
+                            alert('Terjadi kesalahan saat mengubah foto profil. Silakan coba lagi.');
+                            window.history.back();
+                          </script>";
+                }
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
+        }
+        mysqli_close($conn);
     }
-    mysqli_close($conn);
-}
-//Nama Depan
-function getFirstName($fullName) {
-    $parts = explode(" ", $fullName);
-    return $parts[0];
-}
+    //Nama Depan
+    function getFirstName($fullName) {
+        $parts = explode(" ", $fullName);
+        return $parts[0];
+    }
 ?>
 
 <!DOCTYPE html>
@@ -132,26 +132,25 @@ function getFirstName($fullName) {
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <style>
-    html,
-    body {
-        height: 100vh;
-    }
-
-    .navbar {
-        position: sticky;
-    }
-
-    footer {
-        background-color: white;
-        width: 100%;
-        bottom: 0;
-    }
-
-    @media (max-width: 768px) {
-        .navbar-brand {
-            display: inline;
+        html, body {
+            height: 100vh;
         }
-    }
+
+        .navbar {
+            position: sticky;
+        }
+
+        footer {
+            background-color: white;
+            width: 100%;
+            bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                display: inline;
+            }
+        }
     </style>
 </head>
 

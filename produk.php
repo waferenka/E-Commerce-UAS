@@ -1,111 +1,112 @@
 <?php
-session_start();
-// PHP Data Js Search
-include('php/php.php');
-// Cek koneksi
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
-// Periksa apakah user sudah login
-if (!isset($_SESSION['userid'])) {
-    header("Location: login/login_form.php");
-    exit;
-}
-
-if ($_SESSION['level'] != "pembeli") {
-    header("Location: login/login_form.php");
-    exit;
-}
-$userid = $_SESSION['userid'];
-
-// Query untuk mengambil data user
-$sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
-FROM tbluser u 
-LEFT JOIN user_detail d ON u.id = d.id 
-WHERE u.id = '$userid'";
-
-$result = mysqli_query($conn, $sql);
-
-if ($result && $result->num_rows > 0) {
-$row = mysqli_fetch_assoc($result);
-$foto = $row['foto'];
-$nama = $row['nama'];
-$email = $row['email'];
-$level = $row['level'];
-} else {
-echo "Data user tidak ditemukan.";
-}
-
-// Ambil semua produk untuk pencarian
-$query = "SELECT id, name, price, image FROM products";
-$result = $conn->query($query);
-
-$products = [];
-if ($result && $result->num_rows > 0) {
-while ($row = $result->fetch_assoc()) {
-$products[] = $row;
-}
-}
-
-// Ambil produk berdasarkan ID dari parameter URL
-$product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
-
-$data = mysqli_query($conn, "SELECT * FROM products WHERE id = '$product_id'");
-$productd = mysqli_fetch_assoc($data);
-if ($result && $result->num_rows > 0) {
-$nama_p = $productd['name'];
-$harga_p = $productd['price'];
-$satuan_p = $productd['satuan'];
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ambil data dari form
-    $user_id = $_SESSION['userid'];
-    $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
-    $quantity = (int) $_POST['quantity'];
-
-    // Ambil nama user berdasarkan user_id
-    $user_query = "SELECT nama FROM tbluser WHERE id = ?";
-    $user_stmt = $conn->prepare($user_query);
-    $user_stmt->bind_param("i", $user_id);
-    $user_stmt->execute();
-    $user_result = $user_stmt->get_result();
-    $user_name = $user_result->fetch_assoc()['nama'];
-
-    // Ambil nama produk dan harga berdasarkan product_id
-    $product_query = "SELECT name, price FROM products WHERE id = ?";
-    $product_stmt = $conn->prepare($product_query);
-    $product_stmt->bind_param("i", $product_id);
-    $product_stmt->execute();
-    $product_result = $product_stmt->get_result();
-    $product = $product_result->fetch_assoc();
-    $product_name = $product['name'];
-    $price = $product['price'] * $quantity;
-
-    // Masukkan data ke tabel cart
-    $insert_query = "INSERT INTO cart (user_id, user_name, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
-    $insert_stmt = $conn->prepare($insert_query);
-    $insert_stmt->bind_param("isissi", $user_id, $user_name, $product_id, $product_name, $quantity, $price);
-
-    if ($insert_stmt->execute()) {
-        echo "<p>Produk berhasil ditambahkan ke keranjang!</p>";
-    } else {
-        echo "<p>Gagal menambahkan produk: " . $conn->error . "</p>";
+    session_start();
+    // PHP Data Js Search
+    include('php/php.php');
+    // Cek koneksi
+    if ($conn->connect_error) {
+        die("Koneksi gagal: " . $conn->connect_error);
     }
 
-    $user_stmt->close();
-    $product_stmt->close();
-    $insert_stmt->close();
-}
+    // Periksa apakah user sudah login
+    if (!isset($_SESSION['userid'])) {
+        header("Location: login/login_form.php");
+        exit;
+    }
 
-//Nama Depan
-function getFirstName($fullName) {
-    $parts = explode(" ", $fullName);
-    return $parts[0];
-}
+    if ($_SESSION['level'] != "pembeli") {
+        header("Location: login/login_form.php");
+        exit;
+    }
+    $userid = $_SESSION['userid'];
 
-$conn->close();
+    // Query untuk mengambil data user
+    $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+    FROM tbluser u 
+    LEFT JOIN user_detail d ON u.id = d.id 
+    WHERE u.id = '$userid'";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && $result->num_rows > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $foto = $row['foto'];
+        $nama = $row['nama'];
+        $email = $row['email'];
+        $level = $row['level'];
+    } else {
+        echo "Data user tidak ditemukan.";
+    }
+
+    // Ambil semua produk untuk pencarian
+    $query = "SELECT id, name, price, image FROM products";
+    $result = $conn->query($query);
+
+    $products = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $products[] = $row;
+        }
+    }
+
+    // Ambil produk berdasarkan ID dari parameter URL
+    $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
+
+    $data = mysqli_query($conn, "SELECT * FROM products WHERE id = '$product_id'");
+    $productd = mysqli_fetch_assoc($data);
+    if ($result && $result->num_rows > 0) {
+        $nama_p = $productd['name'];
+        $harga_p = $productd['price'];
+        $satuan_p = $productd['satuan'];
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Ambil data dari form
+        $user_id = $_SESSION['userid'];
+        $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
+        $quantity = (int) $_POST['quantity'];
+
+        // Ambil nama user berdasarkan user_id
+        $user_query = "SELECT nama FROM tbluser WHERE id = ?";
+        $user_stmt = $conn->prepare($user_query);
+        $user_stmt->bind_param("i", $user_id);
+        $user_stmt->execute();
+        $user_result = $user_stmt->get_result();
+        $user_name = $user_result->fetch_assoc()['nama'];
+
+        // Ambil nama produk dan harga berdasarkan product_id
+        $product_query = "SELECT name, price FROM products WHERE id = ?";
+        $product_stmt = $conn->prepare($product_query);
+        $product_stmt->bind_param("i", $product_id);
+        $product_stmt->execute();
+        $product_result = $product_stmt->get_result();
+        $product = $product_result->fetch_assoc();
+        $product_name = $product['name'];
+        $price = $product['price'] * $quantity;
+
+        // Masukkan data ke tabel cart
+        $insert_query = "INSERT INTO cart (user_id, user_name, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
+        $insert_stmt = $conn->prepare($insert_query);
+        $insert_stmt->bind_param("isissi", $user_id, $user_name, $product_id, $product_name, $quantity, $price);
+
+        if ($insert_stmt->execute()) {
+            echo "<p>Produk berhasil ditambahkan ke keranjang!</p>";
+        } else {
+            echo "<p>Gagal menambahkan produk: " . $conn->error . "</p>";
+        }
+
+        $user_stmt->close();
+        $product_stmt->close();
+        $insert_stmt->close();
+    }
+
+    //Nama Depan
+    function getFirstName($fullName) {
+        $parts = explode(" ", $fullName);
+        return $parts[0];
+    }
+
+    require("php/navbar.php");
+    $conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -119,100 +120,84 @@ $conn->close();
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    .deskripsi-terbatas {
-        cursor: pointer;
-        position: relative;
-        padding-bottom: 1rem;
-    }
-
-    .deskripsi-terbatas span {
-        display: block;
-    }
-
-    .deskripsi-terbatas button {
-        color: #007bff;
-        text-decoration: underline;
-        border: none;
-        background: transparent;
-    }
-
-    .dropdown-menu {
-        width: 100%;
-        border: none;
-        box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    @media (max-width: 436px) {
-        #container-p {
-            padding-bottom: 4rem;
+        .deskripsi-terbatas {
+            cursor: pointer;
+            position: relative;
+            padding-bottom: 1rem;
         }
 
-        .item-konten-p {
-            padding: 1rem 1.5rem 0rem 1.5rem;
-        }
-
-        .item-button-mobile {
-            display: flex;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0.4rem 0.8rem;
-            background-color: white;
-            justify-content: center;
-            z-index: 1000;
-            box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .item-button-tabdesk {
-            display: none;
-        }
-
-        .btn-keranjang,
-        .btn-beli {
-            flex: 1;
-        }
-    }
-
-    @media (min-width: 436px) {
-        .item-button-tabdesk {
+        .deskripsi-terbatas span {
             display: block;
         }
 
-        .item-button-mobile {
-            display: none;
+        .deskripsi-terbatas button {
+            color: #007bff;
+            text-decoration: underline;
+            border: none;
+            background: transparent;
         }
-    }
 
-    footer {
-        background-color: white;
-        margin-top: 2rem;
-        padding: 1rem 0 3rem 0;
-        width: 100%;
-    }
+        .dropdown-menu {
+            width: 100%;
+            border: none;
+            box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 436px) {
+            #container-p {
+                padding-bottom: 4rem;
+            }
+
+            .item-konten-p {
+                padding: 1rem 1.5rem 0rem 1.5rem;
+            }
+
+            .item-button-mobile {
+                display: flex;
+                position: fixed;
+                width: 100%;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 0.4rem 0.8rem;
+                background-color: white;
+                justify-content: center;
+                z-index: 1000;
+                box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .item-button-tabdesk {
+                display: none;
+            }
+
+            .btn-keranjang,
+            .btn-beli {
+                flex: 1;
+            }
+        }
+
+        @media (min-width: 436px) {
+            .item-button-tabdesk {
+                display: block;
+            }
+
+            .item-button-mobile {
+                display: none;
+            }
+        }
+
+        footer {
+            background-color: white;
+            margin-top: 2rem;
+            padding: 1rem 0 3rem 0;
+            width: 100%;
+        }
     </style>
     <title>Alzi Petshop</title>
 </head>
 
 <body>
     <script src="script/script.js"></script>
-    <!-- Navbar, Search, Keranjang, User -->
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="login/login_form.php">Alzi Petshop</a>
-            <div class="search-box me-3">
-                <input type="text" id="searchInput" placeholder="Cari produk...">
-                <div class="search-dropdown" id="searchResults"></div>
-            </div>
-            <div class="navbar-item">
-                <a href="detail.php">
-                    <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
-                    <span id="user"><?php echo getFirstName($nama); ?></span>
-                </a>
-            </div>
-        </div>
-    </nav>
     <!-- Detail Produk -->
     <div id="container-p" class="container mt-5" style="padding-top: 1.5rem; color: black;">
         <?php if ($productd): ?>
@@ -231,14 +216,14 @@ $conn->close();
                     <!-- Deskripsi -->
                     <div id="description" class="deskripsi-terbatas" onclick="toggleDescription()">
                         <?php 
-                                    $maxLength = 200;
-                                    $description = nl2br(htmlspecialchars($productd['description']));
-                                    $shortDesc = substr($description, 0, $maxLength);
-                                    $isTruncated = strlen($description) > $maxLength;
+                            $maxLength = 200;
+                            $description = nl2br(htmlspecialchars($productd['description']));
+                            $shortDesc = substr($description, 0, $maxLength);
+                            $isTruncated = strlen($description) > $maxLength;
 
-                                    echo '<span id="short-desc">' . $shortDesc . ($isTruncated ? '...' : '') . '</span>';
-                                    echo '<span id="full-desc" style="display:none;">' . $description . '</span>';
-                                ?>
+                            echo '<span id="short-desc">' . $shortDesc . ($isTruncated ? '...' : '') . '</span>';
+                            echo '<span id="full-desc" style="display:none;">' . $description . '</span>';
+                        ?>
                         <?php if ($isTruncated): ?>
                         <button id="toggle-desc" type="button" class="btn btn-link p-0"
                             style="pointer-events: none; text-decoration: none; color: rgb(255, 180, 0); font-weight: bold;">Lihat
@@ -297,132 +282,93 @@ $conn->close();
 
     <!-- Js -->
     <script>
-    // Search
-    const products = <?php echo json_encode($products); ?>;
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.getElementById('searchResults');
+        // Kuantitas/Jumlah Barang
+        document.addEventListener("DOMContentLoaded", function() {
+            const decreaseBtns = document.querySelectorAll('.decreaseBtn');
+            const increaseBtns = document.querySelectorAll('.increaseBtn');
+            const quantityInputs = document.querySelectorAll('.quantityInput');
+            const form = document.querySelector('form'); // Ambil form
 
-    searchInput.addEventListener('input', function() {
-        const query = searchInput.value.toLowerCase().trim();
-        searchResults.innerHTML = '';
-
-        if (query.length > 0) {
-            const filteredProducts = products.filter(product =>
-                product.name.toLowerCase().includes(query)
-            );
-
-            if (filteredProducts.length > 0) {
-                searchResults.style.display = 'block';
-                filteredProducts.forEach(product => {
-                    const item = document.createElement('div');
-                    item.classList.add('item');
-                    item.innerHTML = `
-                                <img src="${product.image}" alt="${product.name}" class="item-image">
-                                <div class="item-details">
-                                    <h5>${product.name}</h5>
-                                    <span>Rp${product.price.toLocaleString()}</span>
-                                </div>
-                            `;
-                    item.addEventListener('click', () => {
-                        window.location.href = `produk.php?product_id=${product.id}`;
-                    });
-                    searchResults.appendChild(item);
+            // Fungsi untuk mengurangi jumlah
+            decreaseBtns.forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    let quantity = parseInt(quantityInputs[index].value);
+                    if (quantity > 1) {
+                        quantityInputs[index].value = quantity - 1;
+                    }
                 });
+            });
+
+            // Fungsi untuk menambah jumlah
+            increaseBtns.forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    let quantity = parseInt(quantityInputs[index].value);
+                    quantityInputs[index].value = quantity + 1;
+                });
+            });
+
+            // Saat form disubmit, pastikan value quantity yang terbaru dikirimkan
+            form.addEventListener('submit', function() {
+                const quantity = quantityInputs[0].value; // Ambil nilai dari input pertama
+                console.log("Form submitted with quantity: " + quantity); // Debug log
+            });
+        });
+
+        // Hapus Div Width Tertentu
+        function checkWidthA() {
+            var divA = document.getElementById("A");
+            var divB = document.getElementById("B");
+            if (window.innerWidth > 436) {
+                divA.innerHTML = '';
             } else {
-                searchResults.style.display = 'none';
+                divB.innerHTML = '';
             }
-        } else {
-            searchResults.style.display = 'none';
         }
-    });
 
-    // Kuantitas/Jumlah Barang
-    document.addEventListener("DOMContentLoaded", function() {
-        const decreaseBtns = document.querySelectorAll('.decreaseBtn');
-        const increaseBtns = document.querySelectorAll('.increaseBtn');
-        const quantityInputs = document.querySelectorAll('.quantityInput');
-        const form = document.querySelector('form'); // Ambil form
+        window.addEventListener("resize", checkWidthA);
+        window.addEventListener("load", checkWidthA);
 
-        // Fungsi untuk mengurangi jumlah
-        decreaseBtns.forEach((btn, index) => {
-            btn.addEventListener('click', function() {
-                let quantity = parseInt(quantityInputs[index].value);
-                if (quantity > 1) {
-                    quantityInputs[index].value = quantity - 1;
-                }
-            });
+        // Lihat Selengkapnya
+        function toggleDescription() {
+            const shortDesc = document.getElementById('short-desc');
+            const fullDesc = document.getElementById('full-desc');
+            const button = document.getElementById('toggle-desc');
+
+            if (fullDesc.style.display === 'none' || fullDesc.style.display === '') {
+                fullDesc.style.display = 'inline';
+                shortDesc.style.display = 'none';
+                button.textContent = 'Sembunyikan';
+            } else {
+                fullDesc.style.display = 'none';
+                shortDesc.style.display = 'inline';
+                button.textContent = 'Lihat Selengkapnya';
+            }
+        }
+
+        // Dropdown Beli
+        const beliButton = document.querySelector('#beliButton');
+        const beliDropdown = document.querySelector('#beliDropdown');
+
+        beliButton.addEventListener('click', function(event) {
+            const isOpen = beliDropdown.classList.contains('show');
+            if (!isOpen) {
+                const dropdown = new bootstrap.Dropdown(beliButton);
+                dropdown.show();
+            } else {
+                event.stopPropagation();
+            }
         });
 
-        // Fungsi untuk menambah jumlah
-        increaseBtns.forEach((btn, index) => {
-            btn.addEventListener('click', function() {
-                let quantity = parseInt(quantityInputs[index].value);
-                quantityInputs[index].value = quantity + 1;
-            });
+        beliDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
         });
 
-        // Saat form disubmit, pastikan value quantity yang terbaru dikirimkan
-        form.addEventListener('submit', function() {
-            const quantity = quantityInputs[0].value; // Ambil nilai dari input pertama
-            console.log("Form submitted with quantity: " + quantity); // Debug log
+        document.addEventListener('click', function(e) {
+            if (!beliButton.contains(e.target) && !beliDropdown.contains(e.target)) {
+                const dropdown = new bootstrap.Dropdown(beliButton);
+                dropdown.hide();
+            }
         });
-    });
-
-    // Hapus Div Width Tertentu
-    function checkWidthA() {
-        var divA = document.getElementById("A");
-        var divB = document.getElementById("B");
-        if (window.innerWidth > 436) {
-            divA.innerHTML = '';
-        } else {
-            divB.innerHTML = '';
-        }
-    }
-
-    window.addEventListener("resize", checkWidthA);
-    window.addEventListener("load", checkWidthA);
-
-    // Lihat Selengkapnya
-    function toggleDescription() {
-        const shortDesc = document.getElementById('short-desc');
-        const fullDesc = document.getElementById('full-desc');
-        const button = document.getElementById('toggle-desc');
-
-        if (fullDesc.style.display === 'none' || fullDesc.style.display === '') {
-            fullDesc.style.display = 'inline';
-            shortDesc.style.display = 'none';
-            button.textContent = 'Sembunyikan';
-        } else {
-            fullDesc.style.display = 'none';
-            shortDesc.style.display = 'inline';
-            button.textContent = 'Lihat Selengkapnya';
-        }
-    }
-
-    // Dropdown Beli
-    const beliButton = document.querySelector('#beliButton');
-    const beliDropdown = document.querySelector('#beliDropdown');
-
-    beliButton.addEventListener('click', function(event) {
-        const isOpen = beliDropdown.classList.contains('show');
-        if (!isOpen) {
-            const dropdown = new bootstrap.Dropdown(beliButton);
-            dropdown.show();
-        } else {
-            event.stopPropagation();
-        }
-    });
-
-    beliDropdown.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-
-    document.addEventListener('click', function(e) {
-        if (!beliButton.contains(e.target) && !beliDropdown.contains(e.target)) {
-            const dropdown = new bootstrap.Dropdown(beliButton);
-            dropdown.hide();
-        }
-    });
     </script>
     <!-- End Js Search -->
     <!-- Sementara tanpa footer -->

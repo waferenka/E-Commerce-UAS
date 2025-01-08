@@ -1,83 +1,83 @@
 <?php
-session_start();
-// Koneksi database
-require 'php/php.php';
-if (!isset($_SESSION['userid'])) {
-    header("Location: login/login_form.php");
-    exit;
-}
+    session_start();
+    // Koneksi database
+    require 'php/php.php';
+    if (!isset($_SESSION['userid'])) {
+        header("Location: login/login_form.php");
+        exit;
+    }
 
-$userid = $_SESSION['userid']; // Ambil user ID dari session
+    $userid = $_SESSION['userid']; // Ambil user ID dari session
 
-// Query untuk mengambil data dari kedua tabel
-$sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
-FROM tbluser u 
-LEFT JOIN user_detail d ON u.id = d.id 
-WHERE u.id = '$userid'";
+    // Query untuk mengambil data dari kedua tabel
+    $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+    FROM tbluser u 
+    LEFT JOIN user_detail d ON u.id = d.id 
+    WHERE u.id = '$userid'";
 
-$result = mysqli_query($conn, $sql);
-
-if ($result->num_rows > 0) {
-$row = mysqli_fetch_assoc($result);
-$foto = $row['foto'];
-$nama = $row['nama'];
-$email = $row['email'];
-$level = $row['level'];
-$jenis_kelamin = $row['jenis_kelamin'];
-$tanggal_lahir = $row['tanggal_lahir'];
-$alamat = $row['alamat'];
-$no_telepon = $row['no_telepon'];
-} else {
-echo "Data user tidak ditemukan.";
-}
-
-//Nama Depan
-function getFirstName($fullName) {
-    $parts = explode(" ", $fullName);
-    return $parts[0];
-}
-
-// Menangkap data yang dikirim dari form
-if (isset($_POST["submit"])) {
-    $old_password = mysqli_real_escape_string($conn, $_POST['old_password']);
-    $new_password = mysqli_real_escape_string($conn, $_POST['new_password']);
-    $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
-
-    // Validasi password lama
-    $sql = "SELECT password FROM tbluser WHERE id = '$userid'";
     $result = mysqli_query($conn, $sql);
+
+    if ($result->num_rows > 0) {
     $row = mysqli_fetch_assoc($result);
+    $foto = $row['foto'];
+    $nama = $row['nama'];
+    $email = $row['email'];
+    $level = $row['level'];
+    $jenis_kelamin = $row['jenis_kelamin'];
+    $tanggal_lahir = $row['tanggal_lahir'];
+    $alamat = $row['alamat'];
+    $no_telepon = $row['no_telepon'];
+    } else {
+    echo "Data user tidak ditemukan.";
+    }
 
-    if (sha1($old_password) === $row['password']) {
-        if ($new_password === $confirm_password) {
-            $new_password_encrypted = sha1($new_password);
-            $update_sql = "UPDATE tbluser SET password='$new_password_encrypted' WHERE id='$userid'";
+    //Nama Depan
+    function getFirstName($fullName) {
+        $parts = explode(" ", $fullName);
+        return $parts[0];
+    }
 
-            if (mysqli_query($conn, $update_sql)) {
-                echo "<script>
-                        alert('Kata sandi berhasil diubah');
-                        document.location='index.php';
-                      </script>";
+    // Menangkap data yang dikirim dari form
+    if (isset($_POST["submit"])) {
+        $old_password = mysqli_real_escape_string($conn, $_POST['old_password']);
+        $new_password = mysqli_real_escape_string($conn, $_POST['new_password']);
+        $confirm_password = mysqli_real_escape_string($conn, $_POST['confirm_password']);
+
+        // Validasi password lama
+        $sql = "SELECT password FROM tbluser WHERE id = '$userid'";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+
+        if (sha1($old_password) === $row['password']) {
+            if ($new_password === $confirm_password) {
+                $new_password_encrypted = sha1($new_password);
+                $update_sql = "UPDATE tbluser SET password='$new_password_encrypted' WHERE id='$userid'";
+
+                if (mysqli_query($conn, $update_sql)) {
+                    echo "<script>
+                            alert('Kata sandi berhasil diubah');
+                            document.location='index.php';
+                          </script>";
+                } else {
+                    echo "<script>
+                            alert('Terjadi kesalahan saat mengubah kata sandi. Silakan coba lagi.');
+                            window.history.back();
+                          </script>";
+                }
             } else {
                 echo "<script>
-                        alert('Terjadi kesalahan saat mengubah kata sandi. Silakan coba lagi.');
+                        alert('Konfirmasi kata sandi tidak cocok.');
                         window.history.back();
                       </script>";
             }
         } else {
             echo "<script>
-                    alert('Konfirmasi kata sandi tidak cocok.');
+                    alert('Kata sandi lama tidak cocok.');
                     window.history.back();
                   </script>";
         }
-    } else {
-        echo "<script>
-                alert('Kata sandi lama tidak cocok.');
-                window.history.back();
-              </script>";
+        mysqli_close($conn);
     }
-    mysqli_close($conn);
-}
 ?>
 
 <!DOCTYPE html>
@@ -94,30 +94,29 @@ if (isset($_POST["submit"])) {
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <style>
-    html,
-    body {
-        height: 100vh;
-    }
-
-    .navbar {
-        position: sticky;
-    }
-
-    .button {
-        float: right;
-    }
-
-    footer {
-        background-color: white;
-        width: 100%;
-        bottom: 0;
-    }
-
-    @media (max-width: 768px) {
-        .navbar-brand {
-            display: inline;
+        html, body {
+            height: 100vh;
         }
-    }
+
+        .navbar {
+            position: sticky;
+        }
+
+        .button {
+            float: right;
+        }
+
+        footer {
+            background-color: white;
+            width: 100%;
+            bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                display: inline;
+            }
+        }
     </style>
 </head>
 
