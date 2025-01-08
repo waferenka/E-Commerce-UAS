@@ -13,3 +13,38 @@ ERROR: Empty notification payload received
 RAW PAYLOAD: 
 ERROR: Empty notification payload received
 ERROR: Empty notification payload received
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+ERROR: Empty notification payload received
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+ERROR: Empty notification payload received
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+ERROR: Empty notification payload received
+RAW PAYLOAD: {"transaction_type":"off-us","transaction_time":"2025-01-08 12:26:58","transaction_status":"expire","transaction_id":"4b1fb4e1-f7ba-40a1-86bd-8f5dccdb7c72","status_message":"midtrans payment notification","status_code":"202","signature_key":"b4dd5b9a06e47588246d628adc5b1afd73308e7e13284c252b20486d6eaa223de782f6d947830b1b2ef0eb955efda85dbaf193197a01cd796f4cce349dc0cc5b","payment_type":"qris","order_id":"569637505","merchant_id":"G911148444","gross_amount":"326000.00","fraud_status":"accept","expiry_time":"2025-01-08 12:41:58","currency":"IDR"}
+Order ID: 569637505, Status: expire, Payment Type: qris, Gross Amount: 326000.00
+RAW PAYLOAD: {"transaction_time":"2023-11-15 18:45:13","transaction_status":"settlement","transaction_id":"513f1f01-c9da-474c-9fc9-d5c64364b709","status_message":"midtrans payment notification","status_code":"200","signature_key":"20d83c76e7d33533e99e03cd362a1c472e5236eddb15faa3ffd8b32a220583b50387ccc13905d707ec9ccdc3f547e0a4a6866588df63fd8bae47c3666cb83d94","settlement_time":"2023-11-15 22:45:13","payment_type":"gopay","order_id":"payment_notif_test_G911148444_57473b09-c688-4b4d-a67b-9ae5b28eb4ed","merchant_id":"G911148444","gross_amount":"105000.00","fraud_status":"accept","currency":"IDR"}
+API ERROR: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"27752118-8778-4e82-81b3-456f24ea01d7"}
+ERROR: Failed to fetch transaction status: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"27752118-8778-4e82-81b3-456f24ea01d7"}
+RAW PAYLOAD: {"transaction_time":"2023-11-15 18:45:13","transaction_status":"settlement","transaction_id":"513f1f01-c9da-474c-9fc9-d5c64364b709","status_message":"midtrans payment notification","status_code":"200","signature_key":"55d6f6f0aab1651d0d3350cbc376c4405b9b461a2e1c5f7b8786344367b40a5dab2b89dc586b3b0efb83a85790e412a92c52d3691ccf68cc1b0f7b52af1c3787","settlement_time":"2023-11-15 22:45:13","payment_type":"gopay","order_id":"payment_notif_test_G911148444_15a46a79-d885-4045-a564-cee431e0c81f","merchant_id":"G911148444","gross_amount":"105000.00","fraud_status":"accept","currency":"IDR"}
+API ERROR: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"eba3c73e-2c1d-44fa-a566-0bde10e0a968"}
+ERROR: Failed to fetch transaction status: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"eba3c73e-2c1d-44fa-a566-0bde10e0a968"}
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+ERROR: Empty notification payload received
+RAW PAYLOAD: {"transaction_time":"2023-11-15 18:45:13","transaction_status":"settlement","transaction_id":"513f1f01-c9da-474c-9fc9-d5c64364b709","status_message":"midtrans payment notification","status_code":"200","signature_key":"3324f7618dfd8836e661673fd55b0b87b7014e434af46c6feaf6f2874feabb2a9fe3cdbd9923e68b7dd533ccb337cdfb9e35b681981f11cf06cb58fb20a10404","settlement_time":"2023-11-15 22:45:13","payment_type":"gopay","order_id":"payment_notif_test_G911148444_0cf05776-5a11-4268-be35-80e2a625dd7f","merchant_id":"G911148444","gross_amount":"105000.00","fraud_status":"accept","currency":"IDR"}
+API ERROR: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"365f2cfe-8840-44e1-b1af-9c93e9b360c1"}
+ERROR: Failed to fetch transaction status: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"365f2cfe-8840-44e1-b1af-9c93e9b360c1"}
+RAW PAYLOAD: 
+ERROR: Empty notification payload received
+ERROR: Empty notification payload received
+RAW PAYLOAD: {"transaction_time":"2023-11-15 18:45:13","transaction_status":"settlement","transaction_id":"513f1f01-c9da-474c-9fc9-d5c64364b709","status_message":"midtrans payment notification","status_code":"200","signature_key":"20d83c76e7d33533e99e03cd362a1c472e5236eddb15faa3ffd8b32a220583b50387ccc13905d707ec9ccdc3f547e0a4a6866588df63fd8bae47c3666cb83d94","settlement_time":"2023-11-15 22:45:13","payment_type":"gopay","order_id":"payment_notif_test_G911148444_57473b09-c688-4b4d-a67b-9ae5b28eb4ed","merchant_id":"G911148444","gross_amount":"105000.00","fraud_status":"accept","currency":"IDR"}
+API ERROR: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"d1aa9c13-78ff-404b-914e-70a1d1bb1ae8"}
+ERROR: Failed to fetch transaction status: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"d1aa9c13-78ff-404b-914e-70a1d1bb1ae8"}
+RAW PAYLOAD: {"transaction_time":"2023-11-15 18:45:13","transaction_status":"settlement","transaction_id":"513f1f01-c9da-474c-9fc9-d5c64364b709","status_message":"midtrans payment notification","status_code":"200","signature_key":"3324f7618dfd8836e661673fd55b0b87b7014e434af46c6feaf6f2874feabb2a9fe3cdbd9923e68b7dd533ccb337cdfb9e35b681981f11cf06cb58fb20a10404","settlement_time":"2023-11-15 22:45:13","payment_type":"gopay","order_id":"payment_notif_test_G911148444_0cf05776-5a11-4268-be35-80e2a625dd7f","merchant_id":"G911148444","gross_amount":"105000.00","fraud_status":"accept","currency":"IDR"}
+API ERROR: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"9e136332-a2f3-4c7f-8433-06fd0c42a72d"}
+ERROR: Failed to fetch transaction status: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"9e136332-a2f3-4c7f-8433-06fd0c42a72d"}
+RAW PAYLOAD: {"transaction_time":"2023-11-15 18:45:13","transaction_status":"settlement","transaction_id":"513f1f01-c9da-474c-9fc9-d5c64364b709","status_message":"midtrans payment notification","status_code":"200","signature_key":"55d6f6f0aab1651d0d3350cbc376c4405b9b461a2e1c5f7b8786344367b40a5dab2b89dc586b3b0efb83a85790e412a92c52d3691ccf68cc1b0f7b52af1c3787","settlement_time":"2023-11-15 22:45:13","payment_type":"gopay","order_id":"payment_notif_test_G911148444_15a46a79-d885-4045-a564-cee431e0c81f","merchant_id":"G911148444","gross_amount":"105000.00","fraud_status":"accept","currency":"IDR"}
+API ERROR: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"ab0b649c-671d-426a-94d8-a86a51b0f281"}
+ERROR: Failed to fetch transaction status: Midtrans API is returning API error. HTTP status code: 404 API response: {"status_code":"404","status_message":"Transaction doesn't exist.","id":"ab0b649c-671d-426a-94d8-a86a51b0f281"}

@@ -1,4 +1,5 @@
 <?php 
+
 require 'midtrans_config.php'; // Konfigurasi Midtrans
 	$user_id = $_SESSION['userid'];
 	$user_level = $_SESSION['level'];
@@ -27,7 +28,7 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
 
 	// Ambil data keranjang untuk tampilan modal (tanpa menghitung total price lagi)
 	$querycart_display = "
-	    SELECT c.product_id, p.name AS product_name, p.image, c.quantity, p.price 
+	    SELECT c.id AS cart_id, c.product_id, p.name AS product_name, p.image, c.quantity, p.price 
 	    FROM cart c
 	    JOIN products p ON c.product_id = p.id
 	    WHERE c.user_id = '$user_id'
@@ -47,7 +48,7 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
 	// Buat parameter transaksi
 	$transaction_details = [
 	    'order_id' => rand(),
-	    'gross_amount' => $total_price
+	    'gross_amount' => $total_price_midtrans
 	];
 
 	$customer_details = [
@@ -62,6 +63,32 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
 	    'customer_details' => $customer_details,
 	    'item_details' => $items
 	];
+
+	// Update Cart
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+		// Pastikan data 'quantity' diterima sebagai array
+		if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
+			foreach ($_POST['quantity'] as $product_id => $quantity) {
+				$product_id = intval($product_id); // Pastikan product_id adalah integer
+				$quantity = max(1, intval($quantity)); // Pastikan quantity minimal 1
+	
+				// Update jumlah barang dalam tabel cart
+				$updateQuery = "UPDATE cart SET quantity = ?, price = (SELECT price FROM products WHERE id = ?) * ? WHERE product_id = ? AND user_id = ?";
+				$stmt = $conn->prepare($updateQuery);
+				if ($stmt) {
+					$stmt->bind_param("iiiii", $quantity, $product_id, $quantity, $product_id, $user_id);
+					$stmt->execute();
+					$stmt->close();
+				} else {
+					echo "Kesalahan saat mempersiapkan query: " . $conn->error;
+				}
+			}
+			header("Location: index.php"); // Redirect ke halaman keranjang
+			exit;
+		} else {
+			echo "Data tidak valid.";
+		}
+	}
 
 	// Dapatkan token transaksi dari Midtrans
 	$snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
@@ -201,7 +228,7 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="update_cart.php">
+                    <form method="post" action="">
                         <?php while ($row = mysqli_fetch_assoc($resultcart_display)): ?>
                         <div class="cart-item">
                             <div class="cart-image">
@@ -225,9 +252,9 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
                         <p class="total-price">Total Belanja: Rp<?= number_format($total_price_display, 0, ',', '.'); ?>
                         </p>
                         <div class="cart-actions container-fluid d-flex justify-content-between">
-                            <button class="btn btn-warning" type="update" formaction="update_cart.php">Update
+                            <button class="btn btn-warning" type="submit">Update
                                 Keranjang</button>
-                            <button class="btn btn-success" type="submit" formaction="checkout.php">Checkout</button>
+                            <a class="btn btn-success" type="checkout" id="pay-button">Checkout</a>
                         </div>
                     </form>
                 </div>
@@ -235,6 +262,27 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
         </div>
     </div>
     <!-- End keranjang -->
+
+    <script>
+    var payButton = document.getElementById('pay-button');
+    payButton.addEventListener('click', function() {
+        window.snap.pay('<?= $snap_token; ?>', {
+            onSuccess: function(result) {
+                alert("Pembayaran berhasil!");
+                console.log(result);
+                window.location.href = "success.php";
+            },
+            onPending: function(result) {
+                alert("Menunggu pembayaran.");
+                console.log(result);
+            },
+            onError: function(result) {
+                alert("Pembayaran gagal!");
+                console.log(result);
+            }
+        });
+    });
+    </script>
 
     <!-- Js Search -->
     <!-- TODO: Pisahke kode ini di file script yang berbeda(External) -->
