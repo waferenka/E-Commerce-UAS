@@ -1,5 +1,7 @@
 <?php 
+
 session_start();
+
     include '../php/php.php'; 
     // Periksa apakah user sudah login
 if (!isset($_SESSION['userid'])) {
@@ -47,8 +49,7 @@ if ($_SESSION['level'] != "admin") {
 <head>
     <meta charset="UTF-8">
     <title>Product List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style.css">
     <style>
     .deskripsi-terbatas {
@@ -73,18 +74,18 @@ if ($_SESSION['level'] != "admin") {
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">Alzi Petshop [Admin]</a>
+            <a class="navbar-brand ms-2 font-weight-bold" href="admin.php">Alzi Petshop [Admin]</a>
             <div class="d-flex ms-auto">
             </div>
             <div class="navbar-item">
-                <a href="detail.php">
+                <a href="../detail.php">
                     <img src="../<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
                 </a>
             </div>
         </div>
     </nav>
-    <div class="container-fluid px-5">
+    <div class="container-fluid px-5 mt-5">
         <div class="row">
             <div class="col-lg-16">
                 <h2 class="mt-5">Product List</h2>
@@ -94,12 +95,12 @@ if ($_SESSION['level'] != "admin") {
                         <tr>
                             <th>ID</th>
                             <th class="col-2">Name</th>
-                            <th class="col-2">Description</th>
+                            <th class="col-4">Description</th>
                             <th>Price</th>
                             <th>Image</th>
                             <th class="hide-on-mobile">Category</th>
                             <th class="hide-on-mobile">Satuan</th>
-                            <th class="col-2">Action</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -136,7 +137,7 @@ if ($_SESSION['level'] != "admin") {
                                     <td class='hide-on-mobile'>{$row['category']}</td>
                                     <td class='hide-on-mobile'>{$row['satuan']}</td>
                                     <td>
-                                        <a href='update.php?id={$row['id']}' class='btn btn-warning my-1'>Edit</a>
+                                        <a href='edit.php?product_id={$row['id']}' class='btn btn-warning my-1'>Edit</a>
                                         <a href='delete.php?id={$row['id']}' class='btn btn-danger my-1'>Delete</a>
                                     </td>
                                   </tr>";
