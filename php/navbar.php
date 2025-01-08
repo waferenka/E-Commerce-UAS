@@ -69,118 +69,121 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-X7zfk0k3aWOJvdhF"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-X7zfk0k3aWOJvdhF">
+    </script>
     <style>
-        .modal-body {
-		    font-family: Arial, sans-serif;
-		}
+    .modal-body {
+        font-family: Arial, sans-serif;
+    }
 
-		.cart-item {
-		    display: flex;
-		    align-items: center;
-		    border-bottom: 1px solid #ccc;
-		    padding: 10px 0;
-		}
+    .cart-item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+    }
 
-		.cart-image img {
-		    width: 50px;
-		    height: 50px;
-		    object-fit: cover;
-		    margin-right: 10px;
-		}
+    .cart-image img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 10px;
+    }
 
-		.cart-details {
-		    display: flex;
-		    flex: 1;
-		    align-items: center;
-		    justify-content: space-between;
-		}
+    .cart-details {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-		.product-name {
-		    font-weight: bold;
-		    margin-right: auto;
-		}
+    .product-name {
+        font-weight: bold;
+        margin-right: auto;
+    }
 
-		.product-price {
-		    margin-left: 10px;
-		    color: #555;
-		}
+    .product-price {
+        margin-left: 10px;
+        color: #555;
+    }
 
-		.quantity-control {
-		    display: flex;
-		    align-items: center;
-		}
+    .quantity-control {
+        display: flex;
+        align-items: center;
+    }
 
-		.quantity-control input {
-		    width: 50px;
-		    margin-left: 5px;
-		    text-align: center;
-		}
+    .quantity-control input {
+        width: 50px;
+        margin-left: 5px;
+        text-align: center;
+    }
 
-		.delete-link {
-		    color: red;
-		    text-decoration: none;
-		    margin-left: 10px;
-		    font-size: 0.9em;
-		}
+    .delete-link {
+        color: red;
+        text-decoration: none;
+        margin-left: 10px;
+        font-size: 0.9em;
+    }
 
-		.delete-link:hover {
-		    text-decoration: underline;
-		}
+    .delete-link:hover {
+        text-decoration: underline;
+    }
 
-		.total-price {
-		    font-size: 1.2em;
-		    text-align: right;
-		    margin-top: 10px;
-		    font-weight: bold;
-		}
+    .total-price {
+        font-size: 1.2em;
+        text-align: right;
+        margin-top: 10px;
+        font-weight: bold;
+    }
 
-		.cart-actions {
-		    text-align: center;
-		    margin-top: 15px;
-		}
+    .cart-actions {
+        text-align: center;
+        margin-top: 15px;
+    }
 
-		.cart-actions button {
-		    padding: 10px 20px;
-		    font-size: 1em;
-		    background-color: #28a745;
-		    color: white;
-		    border: none;
-		    border-radius: 5px;
-		    cursor: pointer;
-		}
+    /* .cart-actions button {
+        padding: 10px 20px;
+        font-size: 1em;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-		.cart-actions button:hover {
-		    background-color: #218838;
-		}
+    .cart-actions button:hover {
+        background-color: #218838;
+    } */
     </style>
 </head>
+
 <body>
-	<!-- Navbar, Search, Keranjang, User -->
+    <!-- Navbar, Search, Keranjang, User -->
     <nav class="navbar">
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">
                 Alzi Petshop
             </a>
-             <?php if (!in_array($user_level, $restricted_levels)): ?>
+            <?php if (!in_array($user_level, $restricted_levels)): ?>
             <div class="search-box me-3">
                 <input type="text" id="searchInput" placeholder="Cari produk..." autocomplete="off">
                 <div class="search-dropdown" id="searchResults"></div>
             </div>
             <?php endif; ?>
             <div class="navbar-item">
-            	 <?php if (!in_array($user_level, $restricted_levels)): ?>
+                <?php if (!in_array($user_level, $restricted_levels)): ?>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#keranjangModal">
-	                <img src="imgs/cart.png" alt="Keranjang" class="me-2">
-	            </a>
-	            <?php endif; ?>
+                    <img src="imgs/cart.png" alt="Keranjang" class="me-2">
+                </a>
+                <?php endif; ?>
                 <a href="detail.php">
                     <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
                     <span id="user"><?php echo getFirstName($nama); ?></span>
@@ -199,28 +202,32 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
                 </div>
                 <div class="modal-body">
                     <form method="post" action="update_cart.php">
-						<?php while ($row = mysqli_fetch_assoc($resultcart_display)): ?>
-						<div class="cart-item">
-						    <div class="cart-image">
-						        <img src="<?= $row['image']; ?>" alt="<?= $row['product_name']; ?>">
-						    </div>
-						    <div class="cart-details">
-						        <p class="product-name"><?= $row['product_name']; ?></p>
-						        <p class="product-price">Rp<?= number_format($row['price'], 0, ',', '.'); ?></p>
-						        <div class="quantity-control">
-						            <input type="number" id="quantity-<?= $row['product_id']; ?>" name="quantity[<?= $row['product_id']; ?>]" 
-						                   value="<?= $row['quantity']; ?>" min="1">
-						        </div>
-						        <a href="delete_cart_item.php?product_id=<?= $row['product_id']; ?>" 
-						           onclick="return confirm('Hapus produk ini?')" class="delete-link">Hapus</a>
-						    </div>
-						</div>
-						<?php 
+                        <?php while ($row = mysqli_fetch_assoc($resultcart_display)): ?>
+                        <div class="cart-item">
+                            <div class="cart-image">
+                                <img src="<?= $row['image']; ?>" alt="<?= $row['product_name']; ?>">
+                            </div>
+                            <div class="cart-details">
+                                <p class="product-name"><?= $row['product_name']; ?></p>
+                                <p class="product-price">Rp<?= number_format($row['price'], 0, ',', '.'); ?></p>
+                                <div class="quantity-control">
+                                    <input type="number" id="quantity-<?= $row['product_id']; ?>"
+                                        name="quantity[<?= $row['product_id']; ?>]" value="<?= $row['quantity']; ?>"
+                                        min="1">
+                                </div>
+                                <a href="delete_cart_item.php?product_id=<?= $row['product_id']; ?>"
+                                    onclick="return confirm('Hapus produk ini?')" class="delete-link">Hapus</a>
+                            </div>
+                        </div>
+                        <?php 
 						    $total_price_display += $row['price'] * $row['quantity']; // Hitung total price untuk tampilan modal
 						endwhile; ?>
-						<p class="total-price">Total Belanja: Rp<?= number_format($total_price_display, 0, ',', '.'); ?></p>
-                        <div class="cart-actions">
-                            <button type="submit" formaction="checkout.php">Checkout</button>
+                        <p class="total-price">Total Belanja: Rp<?= number_format($total_price_display, 0, ',', '.'); ?>
+                        </p>
+                        <div class="cart-actions container-fluid d-flex justify-content-between">
+                            <button class="btn btn-warning" type="update" formaction="update_cart.php">Update
+                                Keranjang</button>
+                            <button class="btn btn-success" type="submit" formaction="checkout.php">Checkout</button>
                         </div>
                     </form>
                 </div>
@@ -232,58 +239,59 @@ require 'midtrans_config.php'; // Konfigurasi Midtrans
     <!-- Js Search -->
     <!-- TODO: Pisahke kode ini di file script yang berbeda(External) -->
     <script>
-	    const products = <?php echo json_encode($products); ?>;
-	    const searchInput = document.getElementById('searchInput');
-	    const searchResults = document.getElementById('searchResults');
+    const products = <?php echo json_encode($products); ?>;
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
 
-	    searchInput.addEventListener('input', function() {
-	        const query = searchInput.value.toLowerCase().trim();
+    searchInput.addEventListener('input', function() {
+        const query = searchInput.value.toLowerCase().trim();
 
-	        searchResults.innerHTML = '';
+        searchResults.innerHTML = '';
 
-	        if (query.length > 0) {
-	            const filteredProducts = products.filter(product =>
-	                product.name.toLowerCase().includes(query)
-	            );
+        if (query.length > 0) {
+            const filteredProducts = products.filter(product =>
+                product.name.toLowerCase().includes(query)
+            );
 
-	            if (filteredProducts.length > 0) {
-	                searchResults.style.display = 'block';
-	                filteredProducts.forEach(product => {
-	                    const item = document.createElement('div');
-	                    item.classList.add('item');
-	                    item.innerHTML = `
+            if (filteredProducts.length > 0) {
+                searchResults.style.display = 'block';
+                filteredProducts.forEach(product => {
+                    const item = document.createElement('div');
+                    item.classList.add('item');
+                    item.innerHTML = `
 	                                <img src="${product.image}" loading:="lazy" alt="${product.name}" class="item-image">
 	                                <div class="item-details">
 	                                    <h5>${product.name}</h5>
 	                                    <span>Rp${product.price.toLocaleString()}</span>
 	                                </div>
 	                            `;
-	                    item.addEventListener('click', () => {
-	                        window.location.href = `produk.php?product_id=${product.id}`;
-	                    });
-	                    searchResults.appendChild(item);
-	                });
-	            } else {
-	                searchResults.style.display = 'none';
-	            }
-	        } else {
-	            searchResults.style.display = 'none';
-	        }
-	    });
+                    item.addEventListener('click', () => {
+                        window.location.href = `produk.php?product_id=${product.id}`;
+                    });
+                    searchResults.appendChild(item);
+                });
+            } else {
+                searchResults.style.display = 'none';
+            }
+        } else {
+            searchResults.style.display = 'none';
+        }
+    });
 
-	    // searchInput.addEventListener('blur', function() {
-	    //     searchInput.value = '';
-	    //     searchResults.style.display = 'none';
-	    // });
-        document.addEventListener('DOMContentLoaded', function() {
-		    const keranjangButton = document.querySelector('#keranjangButton'); // ID tombol keranjang
-		    const keranjangModal = new bootstrap.Modal(document.getElementById('keranjangModal'));
+    // searchInput.addEventListener('blur', function() {
+    //     searchInput.value = '';
+    //     searchResults.style.display = 'none';
+    // });
+    document.addEventListener('DOMContentLoaded', function() {
+        const keranjangButton = document.querySelector('#keranjangButton'); // ID tombol keranjang
+        const keranjangModal = new bootstrap.Modal(document.getElementById('keranjangModal'));
 
-		    keranjangButton.addEventListener('click', function() {
-		        keranjangModal.show();
-		    });
-		});
+        keranjangButton.addEventListener('click', function() {
+            keranjangModal.show();
+        });
+    });
     </script>
     <!-- End Js Search -->
 </body>
+
 </html>
