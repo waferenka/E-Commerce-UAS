@@ -57,7 +57,8 @@
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-    html, body {
+    html,
+    body {
         width: 100%;
         height: 100%;
     }
@@ -306,7 +307,20 @@
                         <tr>
                             <th>Tanggal Lahir</th>
                             <td>:</td>
-                            <td><?php echo $tanggal_lahir; ?></td>
+                            <td><?php
+                            function formatTanggalIndonesia($tanggal) {
+                                $bulan = [
+                                    1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 
+                                    'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+                                ];
+                                $pecahkan = explode('-', $tanggal); // Pecah string tanggal
+                                return $pecahkan[2] . '-' . $bulan[(int)$pecahkan[1]] . '-' . $pecahkan[0];
+                            }
+                            
+                            $tanggal_asli = "$tanggal_lahir";
+                            $tanggal_format = formatTanggalIndonesia($tanggal_asli);
+                            echo $tanggal_format;
+                            ?></td>
                         </tr>
                         <tr>
                             <th>Alamat</th>

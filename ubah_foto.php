@@ -67,7 +67,7 @@
         }
 
         // Cek ukuran file
-        if ($_FILES["fileToUpload"]["size"] > 500000) {
+        if ($_FILES["fileToUpload"]["size"] > 5000000) {
             echo "Sorry, your file is too large.";
             $uploadOk = 0;
         }
@@ -132,25 +132,26 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <style>
-        html, body {
-            height: 100vh;
-        }
+    html,
+    body {
+        height: 100vh;
+    }
 
-        .navbar {
-            position: sticky;
-        }
+    .navbar {
+        position: sticky;
+    }
 
-        footer {
-            background-color: white;
-            width: 100%;
-            bottom: 0;
-        }
+    footer {
+        background-color: white;
+        width: 100%;
+        bottom: 0;
+    }
 
-        @media (max-width: 768px) {
-            .navbar-brand {
-                display: inline;
-            }
+    @media (max-width: 768px) {
+        .navbar-brand {
+            display: inline;
         }
+    }
     </style>
 </head>
 
