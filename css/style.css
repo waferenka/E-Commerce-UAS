@@ -244,7 +244,7 @@ footer {
 .product {
   text-align: left;
   display: none;
-  border-radius: 10px;
+  border-radius: 0px 0px 10px 10px;
   transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
   text-decoration: none;
@@ -252,19 +252,15 @@ footer {
 }
 
 .ppp {
-  border-radius: 20px;
-  background-color: rgba(0, 0, 0, 0.1);
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -o-border-radius: 20px;
+  border-radius: 0px 0px 10px 10px;
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .ppp img {
-  border-radius: 20px;
+  border-radius: 0px 0px 10px 10px;
 }
 
-.card-img-top .product:hover {
+.product:hover {
   transform: translateY(-10px);
 }
 
@@ -273,20 +269,16 @@ footer {
 }
 
 .product img {
-  border-radius: 20px;
+  border-radius: 0px 0px 10px 10px;
   max-width: 100%;
-  border-radius: 10px 10px 0px 0px;
   display: block;
   mix-blend-mode: multiply;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  -ms-border-radius: 20px;
-  -o-border-radius: 20px;
 }
 
 .product.active {
   display: block;
 }
+
 /*End Item Produk*/
 
 /* Produk.php */
