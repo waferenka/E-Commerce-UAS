@@ -317,9 +317,11 @@
                                 return $pecahkan[2] . '-' . $bulan[(int)$pecahkan[1]] . '-' . $pecahkan[0];
                             }
                             
-                            $tanggal_asli = "$tanggal_lahir";
-                            $tanggal_format = formatTanggalIndonesia($tanggal_asli);
-                            echo $tanggal_format;
+                            if (!empty($tanggal_lahir)) {
+                                $tanggal_asli = $tanggal_lahir;
+                                $tanggal_format = formatTanggalIndonesia($tanggal_asli);
+                                echo $tanggal_format;
+                            }
                             ?></td>
                         </tr>
                         <tr>

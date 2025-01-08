@@ -89,7 +89,9 @@
                 
                 // Hapus file foto lama jika ada
                 if ($old_photo_path && file_exists($old_photo_path)) {
+                    if ($old_photo_path =! "/imgs/user/default.png") {
                     unlink($old_photo_path);
+                }
                 }
 
                 // Update path foto di database

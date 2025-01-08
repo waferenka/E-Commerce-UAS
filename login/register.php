@@ -6,7 +6,7 @@
         $email = $_POST['email'];
         $password = sha1($_POST['password']);
         $level = "pembeli";
-        $default_foto = 'imgs/user.png'; // Path foto default
+        $default_foto = 'imgs/user/default.png'; // Path foto default
 
         // Mulai transaksi
         $conn->begin_transaction();

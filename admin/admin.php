@@ -244,7 +244,7 @@ $users = $conn->query("SELECT * FROM tbluser");
                         <a href="users.php?edit=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm edit-btn"
                             data-id="<?php echo $row['id']; ?>" data-bs-toggle="modal"
                             data-bs-target="#userModal">Edit</a>
-                        <a href="users.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="admin.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
                 <?php endwhile; ?>
