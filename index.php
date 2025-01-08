@@ -127,7 +127,9 @@
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="product" data-id="' . htmlspecialchars($row['id']) . '" data-category="' . htmlspecialchars($row['category']) . '">';
-                    echo '<img src="' . htmlspecialchars($row['image']) . '" loading:="lazy" alt="' . htmlspecialchars($row['name']) . '">
+                    echo ' <div class="ppp">
+                        <img src="' . htmlspecialchars($row['image']) . '" loading:="lazy" alt="' . htmlspecialchars($row['name']) . '">
+                        </div>
                           <h3>' . htmlspecialchars($row['name']) . '</h3>
                           <p>' . rupiah($row['price']) . '</p>';
                     echo '</div>';

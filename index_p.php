@@ -67,33 +67,34 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .navbar-brand {
-            display: inline !important;
-        }
+    .navbar-brand {
+        display: inline !important;
+    }
 
-        .categories {
-            margin-top: 3.5rem;
-        }
-        
+    .categories {
+        margin-top: 3.5rem;
+    }
+
+    .d-flex {
+        display: flex;
+        justify-content: flex-end;
+        margin-left: auto;
+    }
+
+    @media (max-width: 436px) {
         .d-flex {
-            display: flex;
-            justify-content: flex-end;
-            margin-left: auto;
+            justify-content: flex-start;
+            margin: auto 0;
         }
 
-        @media (max-width: 436px) {
-            .d-flex {
-                justify-content: flex-start;
-                margin: auto 0;
-            }
-
-            .d-flex a {
-                font-size: 14px;
-            }
+        .d-flex a {
+            font-size: 14px;
         }
+    }
     </style>
     <title>Alzi Petshop</title>
 </head>
+
 <body>
     <!-- Navbar, Search, Keranjang, User -->
     <?php require('php/navbar.php'); ?>
@@ -129,7 +130,9 @@
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="product" data-id="' . htmlspecialchars($row['id']) . '" data-category="' . htmlspecialchars($row['category']) . '">';
-                    echo '<img src="' . htmlspecialchars($row['image']) . '" loading:="lazy" alt="' . htmlspecialchars($row['name']) . '">
+                    echo ' <div class="ppp">
+                        <img src="' . htmlspecialchars($row['image']) . '" loading:="lazy" alt="' . htmlspecialchars($row['name']) . '">
+                        </div>
                           <h3>' . htmlspecialchars($row['name']) . '</h3>
                           <p>' . rupiah($row['price']) . '</p>';
                     echo '</div>';
@@ -141,51 +144,51 @@
             $conn->close();
         ?>
     </div>
-    
+
     <script>
-        const products_l = document.querySelectorAll('.product');
-        products_l.forEach(product => {
-            product.addEventListener('click', function() {
-                const productId = this.getAttribute('data-id');
-                window.location.href = `edit.php?product_id=${productId}`;
-            });
+    const products_l = document.querySelectorAll('.product');
+    products_l.forEach(product => {
+        product.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            window.location.href = `edit.php?product_id=${productId}`;
         });
+    });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const defaultCategory = 'Makanan';
-            showCategory(defaultCategory);
+    document.addEventListener('DOMContentLoaded', function() {
+        const defaultCategory = 'Makanan';
+        showCategory(defaultCategory);
 
-            document.querySelectorAll('.category').forEach(category => {
-                category.addEventListener('click', function() {
-                    const selectedCategory = this.getAttribute('data-category');
-                    showCategory(selectedCategory);
-
-                    document.querySelectorAll('.category').forEach(cat => {
-                        cat.classList.remove('active');
-                    });
-
-                    this.classList.add('active');
-                });
-            });
-
-            function showCategory(category) {
-                document.querySelectorAll('.product').forEach(product => {
-                    product.classList.remove('active');
-                });
-
-                document.querySelectorAll(`.product[data-category="${category}"]`).forEach(product => {
-                    product.classList.add('active');
-                });
+        document.querySelectorAll('.category').forEach(category => {
+            category.addEventListener('click', function() {
+                const selectedCategory = this.getAttribute('data-category');
+                showCategory(selectedCategory);
 
                 document.querySelectorAll('.category').forEach(cat => {
-                    if (cat.getAttribute('data-category') === category) {
-                        cat.classList.add('active');
-                    } else {
-                        cat.classList.remove('active');
-                    }
+                    cat.classList.remove('active');
                 });
-            }
+
+                this.classList.add('active');
+            });
         });
+
+        function showCategory(category) {
+            document.querySelectorAll('.product').forEach(product => {
+                product.classList.remove('active');
+            });
+
+            document.querySelectorAll(`.product[data-category="${category}"]`).forEach(product => {
+                product.classList.add('active');
+            });
+
+            document.querySelectorAll('.category').forEach(cat => {
+                if (cat.getAttribute('data-category') === category) {
+                    cat.classList.add('active');
+                } else {
+                    cat.classList.remove('active');
+                }
+            });
+        }
+    });
     </script>
     <!-- List Produk Sesuai Kategori -->
 

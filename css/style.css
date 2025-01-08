@@ -249,10 +249,22 @@ footer {
   cursor: pointer;
   text-decoration: none;
   color: #4c5262;
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
-.product:hover {
+.ppp {
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+}
+
+.ppp img {
+  border-radius: 20px;
+}
+
+.card-img-top .product:hover {
   transform: translateY(-10px);
 }
 
@@ -261,10 +273,15 @@ footer {
 }
 
 .product img {
+  border-radius: 20px;
   max-width: 100%;
   border-radius: 10px 10px 0px 0px;
   display: block;
   mix-blend-mode: multiply;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
 }
 
 .product.active {
