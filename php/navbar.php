@@ -47,10 +47,6 @@
 	";
 	$result_user = mysqli_query($conn, $query_user);
 	$user = mysqli_fetch_assoc($result_user);
-	// Buat parameter transaksi
-    // Periksa apakah keranjang kosong
-
-
 
     // Periksa apakah keranjang kosong
 $snap_token = null; // Default nilai token

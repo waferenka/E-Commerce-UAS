@@ -106,6 +106,93 @@
     }
 
     require("php/navbar.php");
+    $user_id = $_SESSION['userid'];
+
+// Ambil informasi user dari tabel tbluser dan user_detail
+$query_user = "
+    SELECT u.nama, u.email, d.alamat, d.no_telepon
+    FROM tbluser u
+    JOIN user_detail d ON u.id = d.id
+    WHERE u.id = '$user_id'
+";
+$result_user = mysqli_query($conn, $query_user);
+$user = mysqli_fetch_assoc($result_user);
+
+// Ambil informasi produk dari tabel cart
+$query_cart = "
+    SELECT c.product_id, p.name AS product_name, c.quantity, p.price, (c.quantity * p.price) AS total_price
+    FROM cart c
+    JOIN products p ON c.product_id = p.id
+    WHERE c.user_id = '$user_id'
+";
+$result_cart = mysqli_query($conn, $query_cart);
+
+// Hitung total harga
+
+$total_price = 0; // Inisialisasi total_price
+$items = [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
+    $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
+
+    $product_query = "SELECT name, price FROM products WHERE id = ?";
+    $product_stmt = $conn->prepare($product_query);
+
+    if ($product_stmt) {
+        $product_stmt->bind_param("i", $product_id);
+        $product_stmt->execute();
+        $product_result = $product_stmt->get_result();
+
+        if ($product_result->num_rows > 0) {
+            $product = $product_result->fetch_assoc();
+            $product_name = $product['name'];
+            $price = $product['price'] * $quantity;
+
+            $items[] = [
+                'id' => $product_id,
+                'price' => $price,
+                'quantity' => $quantity,
+                'name' => $product_name
+            ];
+
+            $total_price += $price; // Tambahkan harga produk ke total_price
+        }
+    }
+}
+
+if (empty($items) || $total_price <= 0) {
+    die("Tidak ada item yang diproses atau total harga tidak valid.");
+}
+
+
+$snap_token = null;
+if (!empty($items) && $total_price > 0) {
+    $transaction_details = [
+        'order_id' => rand(),
+        'gross_amount' => $total_price
+    ];
+
+    $customer_details = [
+        'first_name' => $user['nama'],
+        'email' => $user['email'],
+        'phone' => $user['no_telepon'],
+        'shipping_address' => $user['alamat']
+    ];
+
+    $transaction_data = [
+        'transaction_details' => $transaction_details,
+        'customer_details' => $customer_details,
+        'item_details' => $items
+    ];
+
+    try {
+        $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+    } catch (Exception $e) {
+        error_log("Midtrans Error: " . $e->getMessage());
+    }
+}
+
+
     $conn->close();
 ?>
 
@@ -270,6 +357,7 @@
                             <!-- Tombol Beli Sekarang -->
                             <button type="submit" name="action" value="buy_now" class="btn-beli">Masukkan
                                 Keranjang</button>
+                            <a class="btn btn-success" type="checkout" id="pay-buttons">Checkout</a>
                         </div>
                     </form>
                 </form>
@@ -369,6 +457,26 @@
                 dropdown.hide();
             }
         });
+
+    var payButton = document.getElementById('pay-buttons');
+    payButton.addEventListener('click', function() {
+        window.snap.pay('<?= $snap_token; ?>', {
+            onSuccess: function(result) {
+                alert("Pembayaran berhasil!");
+                console.log(result);
+                window.location.href = "success.php";
+            },
+            onPending: function(result) {
+                alert("Menunggu pembayaran.");
+                console.log(result);
+            },
+            onError: function(result) {
+                alert("Pembayaran gagal!");
+                console.log(result);
+            }
+        });
+    });
+   
     </script>
     <!-- End Js Search -->
     <!-- Sementara tanpa footer -->
