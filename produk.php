@@ -91,6 +91,8 @@
 
         if ($insert_stmt->execute()) {
             echo "<p>Produk berhasil ditambahkan ke keranjang!</p>";
+            header("Location: #");
+            exit;
         } else {
             echo "<p>Gagal menambahkan produk: " . $conn->error . "</p>";
         }

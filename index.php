@@ -54,9 +54,9 @@
         $parts = explode(" ", $fullName);
         return $parts[0];
     }
-    
+    require('php/navbar.php');
 ?>
-<!-- End PHP Data Js Search -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,7 +73,7 @@
 
 <body>
     <script src="script/script.js"></script>
-    <?php require('php/navbar.php'); ?>
+    <?php  ?>
 
     <!-- Slider Otomatis Carousel Bootstrap v5.3 -->
     <div class="container mt-5 pt-4">
