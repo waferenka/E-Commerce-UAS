@@ -60,6 +60,7 @@
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['action']) && $_POST['action'] === 'buy_now') {
         // Ambil data dari form
         $user_id = $_SESSION['userid'];
         $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
@@ -98,6 +99,7 @@
         $product_stmt->close();
         $insert_stmt->close();
     }
+    }
 
     //Nama Depan
     function getFirstName($fullName) {
@@ -115,7 +117,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.ico" />
+    <!-- Metadata -->
+    <?php include('metadata.php'); ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
@@ -199,7 +202,7 @@
 <body>
     <script src="script/script.js"></script>
     <!-- Detail Produk -->
-    <div id="container-p" class="container mt-5" style="padding-top: 1.5rem; color: black;">
+    <div id="container-p" class="container mt-5 vh-100" style="padding-top: 1.5rem; color: black;">
         <?php if ($productd): ?>
         <div class="row">
             <!-- Gambar Produk -->
@@ -237,7 +240,7 @@
                             <!-- Tombol Beli Sekarang -->
                             <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Beli Sekarang
+                                Keranjang
                             </button>
                             <!-- Div Dropdown -->
                             <div class="dropdown-menu p-4" aria-labelledby="beliButton" id="beliDropdown">
@@ -252,7 +255,7 @@
                                         <button type="button" class="btn btn-outline-secondary increaseBtn">+</button>
                                     </div>
                                 </div>
-                                <button type="submit" name="action" value="buy_now" class="btn-beli">Beli</button>
+                                <button type="submit" name="action" value="buy_now" class="btn-beli">Masukkan Keranjang</button>
                             </div>
                         </div>
                         <!-- Tombol Tablet + Dekstop -->

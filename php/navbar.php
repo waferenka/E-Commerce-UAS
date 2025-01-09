@@ -36,6 +36,8 @@
 	    WHERE c.user_id = '$user_id'
 	";
 	$resultcart_display = mysqli_query($conn, $querycart_display);
+
+
 	$total_price_display = 0; // Total price untuk tampilan modal
 
 	// Ambil informasi user dari tabel tbluser dan user_detail
@@ -45,53 +47,64 @@
 	    JOIN user_detail d ON u.id = d.id
 	    WHERE u.id = '$user_id'
 	";
+    
 	$result_user = mysqli_query($conn, $query_user);
 	$user = mysqli_fetch_assoc($result_user);
-	// Buat parameter transaksi
-    // Periksa apakah keranjang kosong
-
-
 
     // Periksa apakah keranjang kosong
-$snap_token = null; // Default nilai token
-if (!empty($items) && $total_price_midtrans > 0) {
-    // Data transaksi jika keranjang tidak kosong
-    $transaction_details = [
-        'order_id' => rand(),
-        'gross_amount' => $total_price_midtrans
-    ];
+    $snap_token = null; // Default nilai token
+    if (!empty($items) && $total_price_midtrans > 0) {
+        // Data transaksi jika keranjang tidak kosong
+        $transaction_details = [
+            'order_id' => rand(),
+            'gross_amount' => $total_price_midtrans
+        ];
 
-    $customer_details = [
-        'first_name' => $user['nama'],
-        'email' => $user['email'],
-        'phone' => $user['no_telepon'],
-        'address' => $user['alamat']
-    ];
+        $customer_details = [
+            'first_name' => $user['nama'],
+            'email' => $user['email'],
+            'phone' => $user['no_telepon'],
+            'shipping_address' => $user['alamat']
+        ];
 
-    $shipping_address = [
-        'first_name' => $user['nama'],
-      'email' => $user['email'],
-      'phone' => $user['no_telepon'],
-      'address' => $user['alamat']
-    ];
+       $transaction_data = [
+    'transaction_details' => $transaction_details,
+    'customer_details' => $customer_details,
+    'item_details' => $items // Ini adalah array data produk
+];
 
-    $transaction_data = [
-        'transaction_details' => $transaction_details,
-        'customer_details' => $customer_details,
-        'item_details' => $items
-    ];
 
-    // Dapatkan token Snap dari Midtrans
-    try {
-        $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
-    } catch (Exception $e) {
-        error_log("Midtrans Error: " . $e->getMessage());
-        $snap_token = null;
+
+        // Dapatkan token Snap dari Midtrans
+        try {
+            // Ubah items menjadi JSON
+$item_details_json = json_encode($items);
+
+// Simpan transaksi ke database
+$stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
+                       VALUES (?, ?, ?, ?, ?)");
+$payment_status = 'success'; // Status transaksi awal
+$payment_type = 'credit_card'; // Tipe pembayaran yang digunakan
+$stmt->bind_param("sssss", 
+                  $transaction_details['order_id'],
+                  $payment_type,
+                  $payment_status, 
+                  $transaction_details['gross_amount'],
+                  $item_details_json); // Masukkan JSON data produk
+
+$stmt->execute();
+$stmt->close();
+            $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+        } catch (Exception $e) {
+            error_log("Midtrans Error: " . $e->getMessage());
+            $snap_token = null;
+        }
+    } else {
+        // Keranjang kosong, tidak ada transaksi
+        $transaction_data = null; // Tidak ada data transaksi
     }
-} else {
-    // Keranjang kosong, tidak ada transaksi
-    $transaction_data = null; // Tidak ada data transaksi
-}
+
+
 	// Update Cart
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Pastikan data 'quantity' diterima sebagai array
@@ -111,12 +124,14 @@ if (!empty($items) && $total_price_midtrans > 0) {
 					echo "Kesalahan saat mempersiapkan query: " . $conn->error;
 				}
 			}
-			header("Location: index.php"); // Redirect ke halaman keranjang
+			header("Location: #"); // Redirect ke halaman keranjang
 			exit;
 		} else {
-			echo "Data tidak valid.";
+			
 		}
 	}
+    $queryriwayat = "SELECT * FROM `transactions`";
+    $resultriwayat = $conn->query($queryriwayat);
 ?>
 
 <!DOCTYPE html>
@@ -129,7 +144,7 @@ if (!empty($items) && $total_price_midtrans > 0) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-X7zfk0k3aWOJvdhF">
+    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="Mid-client-A2jiukqkqsZik1Kl">
     </script>
     <style>
     .modal-body {
@@ -237,6 +252,7 @@ if (!empty($items) && $total_price_midtrans > 0) {
             <?php endif; ?>
             <div class="navbar-item">
                 <?php if (!in_array($user_level, $restricted_levels)): ?>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#riwayatModal" class="me-3 fw-bold">Riwayat</a>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#keranjangModal">
                     <img src="imgs/cart.png" alt="Keranjang" class="me-2">
                 </a>
@@ -282,8 +298,7 @@ if (!empty($items) && $total_price_midtrans > 0) {
                         <p class="total-price">Total Belanja: Rp<?= number_format($total_price_display, 0, ',', '.'); ?>
                         </p>
                         <div class="cart-actions container-fluid d-flex justify-content-between">
-                            <button class="btn btn-warning" type="submit">Update
-                                Keranjang</button>
+                            <button class="btn btn-warning" type="submit">Update Keranjang</button>
                             <a class="btn btn-success" type="checkout" id="pay-button">Checkout</a>
                         </div>
                     </form>
@@ -292,6 +307,76 @@ if (!empty($items) && $total_price_midtrans > 0) {
         </div>
     </div>
     <!-- End keranjang -->
+    <!-- Modal Riwayat -->
+    <div class="modal fade" id="riwayatModal" tabindex="-1" aria-labelledby="riwayatModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="riwayatModalLabel">Riwayat</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2 class="text-center">Transactions Table</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Transaction ID</th>
+            <th>Order ID</th>
+            <th>Payment Type</th>
+            <th>Transaction Status</th>
+            <th>Gross Amount</th>
+            <th>Payment Time</th>
+            <th>Update Time</th>
+            <th>Item Details</th> <!-- Menambahkan kolom untuk item details -->
+        </tr>
+    </thead>
+    <tbody>
+        <?php if ($resultriwayat && $resultriwayat->num_rows > 0): ?>
+            <?php while ($row = $resultriwayat->fetch_assoc()): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['transaction_id']); ?></td>
+                    <td><?= htmlspecialchars($row['order_id']); ?></td>
+                    <td><?= htmlspecialchars($row['payment_type']); ?></td>
+                    <td><?= htmlspecialchars($row['transaction_status']); ?></td>
+                    <td><?= htmlspecialchars($row['gross_amount']); ?></td>
+                    <td><?= htmlspecialchars($row['payment_time']); ?></td>
+                    <td><?= htmlspecialchars($row['update_time']); ?></td>
+
+                    <?php 
+                    // Decode item_details JSON
+                    $item_details = json_decode($row['item_details'], true);
+                    if ($item_details): ?>
+                        <td>
+                            <ul>
+                                <?php foreach ($item_details as $item): ?>
+                                    <li>
+                                        <?= htmlspecialchars($item['name']); ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </td>
+                    <?php else: ?>
+                        <td>No items found</td>
+                    <?php endif; ?>
+                </tr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="8" class="text-center">No transactions found</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+
+    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
     var payButton = document.getElementById('pay-button');
@@ -300,7 +385,7 @@ if (!empty($items) && $total_price_midtrans > 0) {
             onSuccess: function(result) {
                 alert("Pembayaran berhasil!");
                 console.log(result);
-                window.location.href = "success.php";
+                window.location.href = "#";
             },
             onPending: function(result) {
                 alert("Menunggu pembayaran.");
