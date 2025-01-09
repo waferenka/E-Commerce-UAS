@@ -335,14 +335,20 @@ if (isset($_POST['update_cart'])) {
                                             $item_details = json_decode($row['item_details'], true);
                                             if ($item_details): ?>
                                                 <td>
-                                                    <?php foreach ($item_details as $item): ?>
-                                                            <?= htmlspecialchars($item['name']); ?>
-                                                    <?php endforeach; ?>
+                                                    <?php 
+                                                    $item_names = array_map(function($item) {
+                                                        return htmlspecialchars($item['name']);
+                                                    }, $item_details);
+                                                    echo implode(", ", $item_names);
+                                                    ?>
                                                 </td>
                                                 <td>
-                                                    <?php foreach ($item_details as $item): ?>
-                                                            <?= htmlspecialchars($item['quantity']); ?>
-                                                    <?php endforeach; ?>
+                                                    <?php 
+                                                    $item_quantities = array_map(function($item) {
+                                                        return htmlspecialchars($item['quantity']);
+                                                    }, $item_details);
+                                                    echo implode(", ", $item_quantities);
+                                                    ?>
                                                 </td>
                                             <?php else: ?>
                                                 <td>No items found</td>
