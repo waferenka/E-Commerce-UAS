@@ -80,8 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
             $item_details_json = json_encode($items);
             $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
                 VALUES (?, ?, ?, ?, ?)");
-            $payment_status = 'success';
-            $payment_type = 'credit_card';
+            $payment_status = 'Success';
+            $payment_type = 'Gopay';
 
             $stmt->bind_param("sssss", 
                 $transaction_details['order_id'],
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
     }
 }
 
- elseif (isset($_POST['update_cart'])) {
+if (isset($_POST['update_cart'])) {
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		// Pastikan data 'quantity' diterima sebagai array
 		if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
@@ -241,11 +241,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
             </div>
             <?php endif; ?>
             <div class="navbar-item">
+                <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php'): ?>
+                <?php else: ?>
                 <?php if (!in_array($user_level, $restricted_levels)): ?>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#riwayatModal" class="me-3 fw-bold" id="riwayatLink">Riwayat</a>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#keranjangModal" id="keranjangLink">
-                    <img src="imgs/cart.png" alt="Keranjang" class="me-2">
-                </a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#riwayatModal" id="riwayatLink">
+                        <img src="imgs/riwayat.jpg" alt="riwayat" class="me-2">
+                    </a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#keranjangModal" id="keranjangLink">
+                        <img src="imgs/cart.png" alt="Keranjang" class="me-2">
+                    </a>
+                <?php endif; ?>
                 <?php endif; ?>
                 <a href="detail.php">
                     <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
@@ -288,8 +293,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
                         <p class="total-price">Total Belanja: Rp<?= number_format($total_price_display, 0, ',', '.'); ?>
                         </p>
                         <div class="cart-actions container-fluid d-flex justify-content-between">
-                            <!-- <button class="btn btn-warning" type="submit">Update Keranjang</button>
-                            <a class="btn btn-success" type="checkout" id="pay-button">Checkout</a> -->
                             <button class="btn btn-warning" type="submit" name="update_cart">Update Keranjang</button>
                             <a class="btn btn-success" type="checkout" id="pay-button" href="#">Checkout</a>
                         </div>
@@ -305,7 +308,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="riwayatModalLabel">Riwayat</h5>
+                    <h5 class="modal-title fw-bold" id="riwayatModalLabel">Riwayat</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -338,7 +341,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
                                             <?php endif; ?>
                                             <td><?= htmlspecialchars($row['order_id']); ?></td>
                                             <td><?= htmlspecialchars($row['payment_type']); ?></td>
-                                            <td><?= htmlspecialchars($row['gross_amount']); ?></td>
+                                            <td><?= htmlspecialchars(rupiah($row['gross_amount'])); ?></td>
                                             <td><?= htmlspecialchars($row['transaction_status']); ?></td>
                                             <td><?= htmlspecialchars($row['payment_time']); ?></td>
                                         </tr>
