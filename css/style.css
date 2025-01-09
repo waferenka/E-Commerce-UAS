@@ -252,12 +252,12 @@ footer {
 }
 
 .ppp {
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 8px;
   background-color: rgba(0, 0, 0, 0.04);
 }
 
 .ppp img {
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 8px;
 }
 
 .product:hover {
@@ -269,7 +269,7 @@ footer {
 }
 
 .product img {
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 8px;
   max-width: 100%;
   display: block;
   mix-blend-mode: multiply;
