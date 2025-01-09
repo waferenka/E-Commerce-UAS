@@ -5,7 +5,7 @@
     
     // Periksa apakah user sudah login
     if (!isset($_SESSION['userid'])) {
-        header("Location: login/login_form.php");
+        header("Location: landing_page.php");
         exit;
     }
 
