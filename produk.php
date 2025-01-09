@@ -59,50 +59,76 @@
         $satuan_p = $productd['satuan'];
     }
 
+
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['action']) && $_POST['action'] === 'buy_now') {
-        // Ambil data dari form
-        $user_id = $_SESSION['userid'];
-        $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
-        $quantity = (int) $_POST['quantity'];
+            // Ambil data dari form
+            $user_id = $_SESSION['userid'];
+            $quantity = (int) $_POST['quantity'];
 
-        // Ambil nama user berdasarkan user_id
-        $user_query = "SELECT nama FROM tbluser WHERE id = ?";
-        $user_stmt = $conn->prepare($user_query);
-        $user_stmt->bind_param("i", $user_id);
-        $user_stmt->execute();
-        $user_result = $user_stmt->get_result();
-        $user_name = $user_result->fetch_assoc()['nama'];
+            // Ambil nama user berdasarkan user_id
+            $user_query = "SELECT nama FROM tbluser WHERE id = ?";
+            $user_stmt = $conn->prepare($user_query);
+            $user_stmt->bind_param("i", $user_id);
+            $user_stmt->execute();
+            $user_result = $user_stmt->get_result();
+            $user_name = $user_result->fetch_assoc()['nama'];
 
-        // Ambil nama produk dan harga berdasarkan product_id
-        $product_query = "SELECT name, price FROM products WHERE id = ?";
-        $product_stmt = $conn->prepare($product_query);
-        $product_stmt->bind_param("i", $product_id);
-        $product_stmt->execute();
-        $product_result = $product_stmt->get_result();
-        $product = $product_result->fetch_assoc();
-        $product_name = $product['name'];
-        $price = $product['price'] * $quantity;
+            // Ambil nama produk dan harga berdasarkan product_id
+            $product_query = "SELECT name, price FROM products WHERE id = ?";
+            $product_stmt = $conn->prepare($product_query);
+            $product_stmt->bind_param("i", $product_id);
+            $product_stmt->execute();
+            $product_result = $product_stmt->get_result();
+            $product = $product_result->fetch_assoc();
+            $product_name = $product['name'];
+            $price = $product['price'] * $quantity;
 
-        // Masukkan data ke tabel cart
-        $insert_query = "INSERT INTO cart (user_id, user_name, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
-        $insert_stmt = $conn->prepare($insert_query);
-        $insert_stmt->bind_param("isissi", $user_id, $user_name, $product_id, $product_name, $quantity, $price);
+            // Cek apakah kombinasi user_id dan product_id sudah ada di tabel cart
+            $check_query = "SELECT quantity FROM cart WHERE user_id = ? AND product_id = ?";
+            $check_stmt = $conn->prepare($check_query);
+            $check_stmt->bind_param("ii", $user_id, $product_id);
+            $check_stmt->execute();
+            $check_result = $check_stmt->get_result();
 
-        if ($insert_stmt->execute()) {
-            echo "<p>Produk berhasil ditambahkan ke keranjang!</p>";
-            header("Location: #");
-            exit;
-        } else {
-            echo "<p>Gagal menambahkan produk: " . $conn->error . "</p>";
+            if ($check_result->num_rows > 0) {
+                // Jika data sudah ada, lakukan update pada kolom quantity
+                $existing_data = $check_result->fetch_assoc();
+                $new_quantity = $existing_data['quantity'] + $quantity;
+
+                $update_query = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
+                $update_stmt = $conn->prepare($update_query);
+                $update_stmt->bind_param("iii", $new_quantity, $user_id, $product_id);
+
+                if ($update_stmt->execute()) {
+                    header("Location: #");
+                    exit;
+                } else {
+                    
+                }
+                $update_stmt->close();
+            } else {
+                // Jika data tidak ada, lakukan insert
+                $insert_query = "INSERT INTO cart (user_id, user_name, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
+                $insert_stmt = $conn->prepare($insert_query);
+                $insert_stmt->bind_param("isissi", $user_id, $user_name, $product_id, $product_name, $quantity, $price);
+
+                if ($insert_stmt->execute()) {
+                    header("Location: #");
+                    exit;
+                } else {
+                    
+                }
+                $insert_stmt->close();
+            }
+
+            $check_stmt->close();
+            $user_stmt->close();
+            $product_stmt->close();
         }
-
-        $user_stmt->close();
-        $product_stmt->close();
-        $insert_stmt->close();
     }
-    }
-
+    
     //Nama Depan
     function getFirstName($fullName) {
         $parts = explode(" ", $fullName);

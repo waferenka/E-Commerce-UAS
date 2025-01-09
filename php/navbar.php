@@ -158,7 +158,7 @@ if (isset($_POST['update_cart'])) {
     .cart-item {
         display: flex;
         align-items: center;
-        border-bottom: 1px solid #ccc;
+/*         border-bottom: 1px solid #ccc;  */
         padding: 10px 0;
     }
 
@@ -195,6 +195,7 @@ if (isset($_POST['update_cart'])) {
         width: 50px;
         margin-left: 5px;
         text-align: center;
+        transform: translateY(-8px);
     }
 
     .delete-link {
@@ -202,6 +203,7 @@ if (isset($_POST['update_cart'])) {
         text-decoration: none;
         margin-left: 10px;
         font-size: 0.9em;
+        transform: translateY(-8px);
     }
 
     .delete-link:hover {
@@ -211,7 +213,7 @@ if (isset($_POST['update_cart'])) {
     .total-price {
         font-size: 1.2em;
         text-align: right;
-        margin-top: 10px;
+        margin-top: 0px;
         font-weight: bold;
     }
 
@@ -317,6 +319,7 @@ if (isset($_POST['update_cart'])) {
                             <thead class="table-dark">
                                 <tr>
                                     <th>Nama</th>
+                                    <th>Quantity</th>
                                     <th>Order ID</th>
                                     <th>Payment Type</th>
                                     <th>Harga</th>
@@ -334,6 +337,11 @@ if (isset($_POST['update_cart'])) {
                                                 <td>
                                                     <?php foreach ($item_details as $item): ?>
                                                             <?= htmlspecialchars($item['name']); ?>
+                                                    <?php endforeach; ?>
+                                                </td>
+                                                <td>
+                                                    <?php foreach ($item_details as $item): ?>
+                                                            <?= htmlspecialchars($item['quantity']); ?>
                                                     <?php endforeach; ?>
                                                 </td>
                                             <?php else: ?>
