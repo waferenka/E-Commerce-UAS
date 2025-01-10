@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat 2 Arah</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        #chatDisplay {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            position: relative;
+            box-sizing: border-box; /* Agar padding dihitung dalam ukuran total */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time {
+            font-size: 10px;
+            color: gray;
+            margin-top: 5px; /* Memberikan sedikit jarak antara pesan dan waktu */
+            align-self: flex-end; /* Agar waktu berada di sudut kanan (untuk pengirim) */
+        }
+
+        .message.you .message-content {
+            background-color: #d1e7ff;
+            color: black;
+        }
+
+        .message.them .message-content {
+            background-color: #d4edda;
+            color: black;
+        }
+
+        .message {
+            display: flex;
+            margin: 5px 0;
+        }
+
+        .message.you {
+            justify-content: flex-end;
+        }
+
+        .message.them {
+            justify-content: flex-start;
+        }
+
+        textarea {
+            width: 100%;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat Real-Time 2 Arah</h1>
+    <div id="chatDisplay"></div>
+    <textarea id="messageInput" placeholder="Tulis pesan Anda..."></textarea>
+    <button id="sendButton">Kirim</button>
+
+    <script>
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjOgFNedEapKjvBemwB-vReZFEcuigO2A",
+            authDomain: "pesan-alzi-petshop-a5634.firebaseapp.com",
+            databaseURL: "https://pesan-alzi-petshop-a5634-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "pesan-alzi-petshop-a5634",
+            storageBucket: "pesan-alzi-petshop-a5634.firebasestorage.app",
+            messagingSenderId: "79902090408",
+            appId: "1:79902090408:web:fa82f4d3133e3dcae3ce9d",
+            measurementId: "G-TEP1LQ65M9"
+          };
+
+        // Inisialisasi Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        // Elemen DOM
+        const chatDisplay = document.getElementById("chatDisplay");
+        const messageInput = document.getElementById("messageInput");
+        const sendButton = document.getElementById("sendButton");
+
+        // Identifikasi pengguna (ganti sesuai kebutuhan)
+        const currentUser = "user2"; // User 2 (pengguna halaman ini)
+        const otherUser = "user1"; // User 1 (lawan bicara)
+
+        // Kirim pesan ke Firebase
+        sendButton.addEventListener("click", function () {
+            const message = messageInput.value.trim();
+            if (message) {
+                const timestamp = Date.now();
+                firebase.database().ref("messages").push({
+                    sender: currentUser, // Ubah pengirim ke `currentUser` halaman ini
+                    text: message,
+                    timestamp: timestamp
+                });
+                messageInput.value = ""; // Kosongkan input setelah terkirim
+            }
+        });
+
+        // Tampilkan pesan secara real-time
+        firebase.database().ref("messages").on("child_added", function (snapshot) {
+            const messageData = snapshot.val();
+            const timestamp = new Date(messageData.timestamp).toLocaleTimeString([], {
+                hour: '2-digit', 
+                minute: '2-digit', 
+                hour12: true // Menampilkan format AM/PM
+            });
+
+            // Elemen pesan
+            const messageElement = document.createElement("div");
+            const messageContent = document.createElement("div");
+            const timeElement = document.createElement("span");
+
+            // Tambahkan teks ke elemen pesan
+            messageContent.textContent = messageData.text;
+
+            // Tambahkan waktu ke elemen waktu
+            timeElement.textContent = timestamp;
+            timeElement.classList.add("time");
+
+            // Tambahkan kelas berdasarkan pengirim
+            if (messageData.sender === currentUser) {
+                messageElement.classList.add("message", "you");
+            } else {
+                messageElement.classList.add("message", "them");
+            }
+
+            // Tambahkan konten dan waktu ke elemen pesan
+            messageContent.classList.add("message-content");
+            messageContent.appendChild(timeElement); // Tambahkan waktu ke dalam bubble
+            messageElement.appendChild(messageContent);
+
+            // Tambahkan pesan ke chat display
+            chatDisplay.appendChild(messageElement);
+
+            // Scroll otomatis ke bawah
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        });
+
+// Tangkap Enter untuk mengirim pesan
+        messageInput.addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
