@@ -390,7 +390,7 @@
                         onSuccess: function(result) {
                             alert("Pembayaran berhasil!");
                             console.log(result);
-                            window.location.href = `./proses_status.php?order_id=<?php $order_ids ?>`;
+                            window.location.href = `./proses_status.php?order_id=<?php echo urlencode($order_ids); ?>`;
                         },
                         onPending: function(result) {
                             alert("Menunggu pembayaran.");
