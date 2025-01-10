@@ -37,7 +37,6 @@
 	";
 	$resultcart_display = mysqli_query($conn, $querycart_display);
 
-
 	$total_price_display = 0; // Total price untuk tampilan modal
 
 	// Ambil informasi user dari tabel tbluser dan user_detail
@@ -51,89 +50,89 @@
 	$result_user = mysqli_query($conn, $query_user);
 	$user = mysqli_fetch_assoc($result_user);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
-    header('Content-Type: application/json'); // Tambahkan header JSON di sini
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
+        header('Content-Type: application/json'); // Tambahkan header JSON di sini
 
-    // Periksa apakah keranjang kosong
-    $snap_token = null;
-    if (!empty($items) && $total_price_midtrans > 0) {
-        // Data transaksi
-        $transaction_details = [
-            'order_id' => rand(),
-            'gross_amount' => $total_price_midtrans
-        ];
+        // Periksa apakah keranjang kosong
+        $snap_token = null;
+        if (!empty($items) && $total_price_midtrans > 0) {
+            // Data transaksi
+            $transaction_details = [
+                'order_id' => rand(),
+                'gross_amount' => $total_price_midtrans
+            ];
 
-        $customer_details = [
-            'first_name' => $user['nama'],
-            'email' => $user['email'],
-            'phone' => $user['no_telepon'],
-            'shipping_address' => $user['alamat']
-        ];
+            $customer_details = [
+                'first_name' => $user['nama'],
+                'email' => $user['email'],
+                'phone' => $user['no_telepon'],
+                'shipping_address' => $user['alamat']
+            ];
 
-        $transaction_data = [
-            'transaction_details' => $transaction_details,
-            'customer_details' => $customer_details,
-            'item_details' => $items
-        ];
+            $transaction_data = [
+                'transaction_details' => $transaction_details,
+                'customer_details' => $customer_details,
+                'item_details' => $items
+            ];
 
-        try {
-            $item_details_json = json_encode($items);
-            $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
-                VALUES (?, ?, ?, ?, ?)");
-            $payment_status = 'Success';
-            $payment_type = 'Gopay';
+            try {
+                $item_details_json = json_encode($items);
+                $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
+                    VALUES (?, ?, ?, ?, ?)");
+                $payment_status = 'Success';
+                $payment_type = 'Gopay';
 
-            $stmt->bind_param("sssss", 
-                $transaction_details['order_id'],
-                $payment_type,
-                $payment_status, 
-                $transaction_details['gross_amount'],
-                $item_details_json
-            );
-            $stmt->execute();
-            $stmt->close();
+                $stmt->bind_param("sssss", 
+                    $transaction_details['order_id'],
+                    $payment_type,
+                    $payment_status, 
+                    $transaction_details['gross_amount'],
+                    $item_details_json
+                );
+                $stmt->execute();
+                $stmt->close();
 
-            $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+                $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
 
-            // Kirim respons JSON
-            echo json_encode(['success' => true, 'snap_token' => $snap_token]);
-            exit;
-        } catch (Exception $e) {
-            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+                // Kirim respons JSON
+                echo json_encode(['success' => true, 'snap_token' => $snap_token]);
+                exit;
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+                exit;
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Keranjang kosong atau total harga tidak valid.']);
             exit;
         }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Keranjang kosong atau total harga tidak valid.']);
-        exit;
     }
-}
 
-if (isset($_POST['update_cart'])) {
-	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-		// Pastikan data 'quantity' diterima sebagai array
-		if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
-			foreach ($_POST['quantity'] as $product_id => $quantity) {
-				$product_id = intval($product_id); // Pastikan product_id adalah integer
-				$quantity = max(1, intval($quantity)); // Pastikan quantity minimal 1
-	
-				// Update jumlah barang dalam tabel cart
-				$updateQuery = "UPDATE cart SET quantity = ?, price = (SELECT price FROM products WHERE id = ?) * ? WHERE product_id = ? AND user_id = ?";
-				$stmt = $conn->prepare($updateQuery);
-				if ($stmt) {
-					$stmt->bind_param("iiiii", $quantity, $product_id, $quantity, $product_id, $user_id);
-					$stmt->execute();
-					$stmt->close();
-				} else {
-					echo "Kesalahan saat mempersiapkan query: " . $conn->error;
-				}
-			}
-			header("Location: #"); // Redirect ke halaman keranjang
-			exit;
-		} else {
-			
-		}
-	}
-}
+    if (isset($_POST['update_cart'])) {
+    	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    		// Pastikan data 'quantity' diterima sebagai array
+    		if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
+    			foreach ($_POST['quantity'] as $product_id => $quantity) {
+    				$product_id = intval($product_id); // Pastikan product_id adalah integer
+    				$quantity = max(1, intval($quantity)); // Pastikan quantity minimal 1
+    	
+    				// Update jumlah barang dalam tabel cart
+    				$updateQuery = "UPDATE cart SET quantity = ?, price = (SELECT price FROM products WHERE id = ?) * ? WHERE product_id = ? AND user_id = ?";
+    				$stmt = $conn->prepare($updateQuery);
+    				if ($stmt) {
+    					$stmt->bind_param("iiiii", $quantity, $product_id, $quantity, $product_id, $user_id);
+    					$stmt->execute();
+    					$stmt->close();
+    				} else {
+    					echo "Kesalahan saat mempersiapkan query: " . $conn->error;
+    				}
+    			}
+    			header("Location: #"); // Redirect ke halaman keranjang
+    			exit;
+    		} else {
+    			
+    		}
+    	}
+    }
     $queryriwayat = "SELECT * FROM `transactions`";
     $resultriwayat = $conn->query($queryriwayat);
 ?>
@@ -374,103 +373,96 @@ if (isset($_POST['update_cart'])) {
     </div>
 
     <script>
-    document.getElementById('pay-button').addEventListener('click', function(event) {
-    event.preventDefault(); // Cegah refresh halaman
-    fetch(window.location.href, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'checkout=true'
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Panggil Snap Midtrans
-            window.snap.pay(data.snap_token, {
-                onSuccess: function(result) {
-                    alert("Pembayaran berhasil!");
-                    console.log(result);
-                    window.location.href = "success.php"; // Redirect ke halaman sukses
+        document.getElementById('pay-button').addEventListener('click', function(event) {
+            event.preventDefault(); // Cegah refresh halaman
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                onPending: function(result) {
-                    alert("Menunggu pembayaran.");
-                    console.log(result);
-                },
-                onError: function(result) {
-                    alert("Pembayaran gagal!");
-                    console.log(result);
-                }
-            });
-        } else {
-            alert("Gagal memproses transaksi: " + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Gagal memproses transaksi. Silakan coba lagi.');
-    });
-});
-
-
-    </script>
-
-    <!-- Js Search -->
-    <!-- TODO: Pisahke kode ini di file script yang berbeda(External) -->
-    <script>
-    const products = <?php echo json_encode($products); ?>;
-    const searchInput = document.getElementById('searchInput');
-    const searchResults = document.getElementById('searchResults');
-
-    searchInput.addEventListener('input', function() {
-        const query = searchInput.value.toLowerCase().trim();
-
-        searchResults.innerHTML = '';
-
-        if (query.length > 0) {
-            const filteredProducts = products.filter(product =>
-                product.name.toLowerCase().includes(query)
-            );
-
-            if (filteredProducts.length > 0) {
-                searchResults.style.display = 'block';
-                filteredProducts.forEach(product => {
-                    const item = document.createElement('div');
-                    item.classList.add('item');
-                    item.innerHTML = `
-	                                <img src="${product.image}" loading:="lazy" alt="${product.name}" class="item-image">
-	                                <div class="item-details">
-	                                    <h5>${product.name}</h5>
-	                                    <span>Rp${product.price.toLocaleString()}</span>
-	                                </div>
-	                            `;
-                    item.addEventListener('click', () => {
-                        window.location.href = `produk.php?product_id=${product.id}`;
+                body: 'checkout=true'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Panggil Snap Midtrans
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            alert("Pembayaran berhasil!");
+                            console.log(result);
+                            window.location.href = "success.php"; // Redirect ke halaman sukses
+                        },
+                        onPending: function(result) {
+                            alert("Menunggu pembayaran.");
+                            console.log(result);
+                        },
+                        onError: function(result) {
+                            alert("Pembayaran gagal!");
+                            console.log(result);
+                        }
                     });
-                    searchResults.appendChild(item);
-                });
+                } else {
+                    alert("Gagal memproses transaksi: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Gagal memproses transaksi. Silakan coba lagi.');
+            });
+        });
+
+        const products = <?php echo json_encode($products); ?>;
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('input', function() {
+            const query = searchInput.value.toLowerCase().trim();
+
+            searchResults.innerHTML = '';
+
+            if (query.length > 0) {
+                const filteredProducts = products.filter(product =>
+                    product.name.toLowerCase().includes(query)
+                );
+
+                if (filteredProducts.length > 0) {
+                    searchResults.style.display = 'block';
+                    filteredProducts.forEach(product => {
+                        const item = document.createElement('div');
+                        item.classList.add('item');
+                        item.innerHTML = `
+    	                                <img src="${product.image}" loading:="lazy" alt="${product.name}" class="item-image">
+    	                                <div class="item-details">
+    	                                    <h5>${product.name}</h5>
+    	                                    <span>Rp${product.price.toLocaleString()}</span>
+    	                                </div>
+    	                            `;
+                        item.addEventListener('click', () => {
+                            window.location.href = `produk.php?product_id=${product.id}`;
+                        });
+                        searchResults.appendChild(item);
+                    });
+                } else {
+                    searchResults.style.display = 'none';
+                }
             } else {
                 searchResults.style.display = 'none';
             }
-        } else {
-            searchResults.style.display = 'none';
-        }
-    });
-
-    // searchInput.addEventListener('blur', function() {
-    //     searchInput.value = '';
-    //     searchResults.style.display = 'none';
-    // });
-    document.addEventListener('DOMContentLoaded', function() {
-        const keranjangButton = document.querySelector('#keranjangButton'); // ID tombol keranjang
-        const keranjangModal = new bootstrap.Modal(document.getElementById('keranjangModal'));
-
-        keranjangButton.addEventListener('click', function() {
-            keranjangModal.show();
         });
-    });
+
+        // searchInput.addEventListener('blur', function() {
+        //     searchInput.value = '';
+        //     searchResults.style.display = 'none';
+        // });
+        document.addEventListener('DOMContentLoaded', function() {
+            const keranjangButton = document.querySelector('#keranjangButton'); // ID tombol keranjang
+            const keranjangModal = new bootstrap.Modal(document.getElementById('keranjangModal'));
+
+            keranjangButton.addEventListener('click', function() {
+                keranjangModal.show();
+            });
+        });
     </script>
-    <!-- End Js Search -->
 </body>
 
 </html>
