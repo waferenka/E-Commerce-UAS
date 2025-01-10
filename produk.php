@@ -110,7 +110,7 @@
                     $item_details_json = json_encode($items);
                     $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
                         VALUES (?, ?, ?, ?, ?)");
-                    $payment_status = 'Success';
+                    $payment_status = 'Pending';
                     $payment_type = 'Gopay';
                     $stmt->bind_param("sssss", 
                         $transaction_details['order_id'],
@@ -122,7 +122,7 @@
                     $stmt->execute();
                     $stmt->close();
                     $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
-                    echo json_encode(['success' => true, 'snap_token' => $snap_token]);
+                    echo json_encode(['success' => true, 'snap_token' => $snap_token, 'order_id' => $transaction_details['order_id']]);
                     exit;
                 } catch (Exception $e) {
                     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -452,9 +452,7 @@
                     // Panggil Snap Midtrans
                     window.snap.pay(data.snap_token, {
                         onSuccess: function(result) {
-                            alert("Pembayaran berhasil!");
-                            console.log(result);
-                            window.location.href = "success.php";
+                            window.location.href = `proses_status.php?order_id=${encodeURIComponent(data.order_id)}`;
                         },
                         onPending: function(result) {
                             alert("Menunggu pembayaran.");

@@ -49,7 +49,6 @@
     
 	$result_user = mysqli_query($conn, $query_user);
 	$user = mysqli_fetch_assoc($result_user);
-    $order_ids = rand();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
         header('Content-Type: application/json'); // Tambahkan header JSON di sini
@@ -58,7 +57,7 @@
         if (!empty($items) && $total_price_midtrans > 0) {
             // Data transaksi
             $transaction_details = [
-                'order_id' => $order_ids,
+                'order_id' => rand(),
                 'gross_amount' => $total_price_midtrans
             ];
 
@@ -95,7 +94,7 @@
                 $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
 
                 // Kirim respons JSON
-                echo json_encode(['success' => true, 'snap_token' => $snap_token]);
+                echo json_encode(['success' => true, 'snap_token' => $snap_token, 'order_id' => $transaction_details['order_id']]);
                 exit;
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -228,7 +227,7 @@
     <nav class="navbar">
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">
-                Alzi Petshop <?php echo "$order_ids"; ?>
+                Alzi Petshop
             </a>
             <?php if (!in_array($user_level, $restricted_levels)): ?>
             <div class="search-box me-3">
@@ -388,9 +387,7 @@
                     // Panggil Snap Midtrans
                     window.snap.pay(data.snap_token, {
                         onSuccess: function(result) {
-                            alert("Pembayaran berhasil!");
-                            console.log(result);
-                            window.location.href = `./proses_status.php?order_id=<?php echo urlencode($order_ids); ?>`;
+                            window.location.href = `./proses_status.php?order_id=${encodeURIComponent(data.order_id)}`;
                         },
                         onPending: function(result) {
                             alert("Menunggu pembayaran.");
