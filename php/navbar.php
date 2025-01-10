@@ -49,16 +49,16 @@
     
 	$result_user = mysqli_query($conn, $query_user);
 	$user = mysqli_fetch_assoc($result_user);
+    $order_ids = rand();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
         header('Content-Type: application/json'); // Tambahkan header JSON di sini
-
         // Periksa apakah keranjang kosong
         $snap_token = null;
         if (!empty($items) && $total_price_midtrans > 0) {
             // Data transaksi
             $transaction_details = [
-                'order_id' => rand(),
+                'order_id' => $order_ids,
                 'gross_amount' => $total_price_midtrans
             ];
 
@@ -79,7 +79,7 @@
                 $item_details_json = json_encode($items);
                 $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
                     VALUES (?, ?, ?, ?, ?)");
-                $payment_status = 'Success';
+                $payment_status = 'Pending';
                 $payment_type = 'Gopay';
 
                 $stmt->bind_param("sssss", 
@@ -228,7 +228,7 @@
     <nav class="navbar">
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">
-                Alzi Petshop
+                Alzi Petshop <?php echo "$order_ids"; ?>
             </a>
             <?php if (!in_array($user_level, $restricted_levels)): ?>
             <div class="search-box me-3">
@@ -390,7 +390,7 @@
                         onSuccess: function(result) {
                             alert("Pembayaran berhasil!");
                             console.log(result);
-                            window.location.href = "success.php"; // Redirect ke halaman sukses
+                            window.location.href = `./proses_status.php?order_id=<?php $order_ids ?>`;
                         },
                         onPending: function(result) {
                             alert("Menunggu pembayaran.");
