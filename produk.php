@@ -319,7 +319,6 @@
                 <img src="<?php echo $productd['image']; ?>" alt="<?php echo $productd['name']; ?>"
                     class="product-image">
             </div>
-
             <!-- Detail Produk -->
             <div class="col-md-6 item-konten-p">
                 <h4 class="nama-p"><?php echo htmlspecialchars($productd['name']); ?></h4>
@@ -342,23 +341,18 @@
                             Selengkapnya</button>
                         <?php endif; ?>
                     </div>
-
+                    <!-- Tombol Mobile -->
                     <form action="produk.php" method="POST">
-                        <!-- Tombol Mobile -->
                         <div id="A" class="d-flex align-items-center gap-2 item-button-mobile">
-                            <!-- Gambar dengan tautan -->
                             <a href="https://api.whatsapp.com/send?phone=6283192655757">
                                 <img src="imgs/message.jpg" class="message-image">
                             </a>
-                            <!-- Tombol Keranjang -->
                             <button type="button" class="btn-keranjang" id="cartButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 + Keranjang
                             </button>
-                            <!-- Tombol Beli Sekarang -->
                             <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 Beli Sekarang
                             </button>
-                            <!-- Div Dropdown -->
                             <div class="dropdown-menu p-4" aria-labelledby="beliButton" id="beliDropdown">
                                 <h6>Konfirmasi Pembelian</h6>
                                 <!-- Jumlah Barang -->
@@ -386,9 +380,13 @@
                                     <button type="button" class="btn btn-outline-secondary increaseBtn">+</button>
                                 </div>
                             </div>
-                            <!-- Tombol Beli Sekarang -->
-                            <button type="submit" name="action" value="add_cart" class="btn-keranjang">+ Keranjang</button>
-                            <button class="btn-beli" type="buy_now" id="beli_sekarangs">Beli Sekarang</button>
+                            <div class="d-flex align-items-center justify-content-start gap-2 action-row">
+                                <a href="https://api.whatsapp.com/send?phone=6283192655757">
+                                    <img src="imgs/message.jpg" class="message-image" />
+                                </a>
+                                <button type="submit" name="action" value="add_cart" class="btn-keranjang">+ Keranjang</button>
+                                <button class="btn-beli" type="buy_now" id="beli_sekarangs">Beli Sekarang</button>
+                            </div>
                         </div>
                     </form>
                 </form>
