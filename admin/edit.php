@@ -174,7 +174,7 @@ function getFirstName($fullName) {
             </div>
             <button type="submit" class="btn btn-success">Simpan Perubahan</button>
         </form>
-        <a href="product_a.php" class="btn btn-warning my-3">Kembali</a>
+        <a href="products.php" class="btn btn-warning my-3">Kembali</a>
         <a href="../php/hapus.php?product_id=<?= $product_id ?>" class="btn btn-danger my-3">Hapus</a>
     </div>
     <!-- Footer start -->
