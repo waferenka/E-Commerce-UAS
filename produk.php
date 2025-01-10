@@ -1,13 +1,10 @@
 <?php
     session_start();
-    // PHP Data Js Search
     include('php/php.php');
-    // Cek koneksi
     if ($conn->connect_error) {
         die("Koneksi gagal: " . $conn->connect_error);
     }
 
-    // Periksa apakah user sudah login
     if (!isset($_SESSION['userid'])) {
         header("Location: login/login_form.php");
         exit;
@@ -17,9 +14,9 @@
         header("Location: login/login_form.php");
         exit;
     }
+
     $userid = $_SESSION['userid'];
 
-    // Query untuk mengambil data user
     $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
     FROM tbluser u 
     LEFT JOIN user_detail d ON u.id = d.id 
@@ -32,12 +29,13 @@
         $foto = $row['foto'];
         $nama = $row['nama'];
         $email = $row['email'];
+        $phone = $row['no_telepon'];
+        $address = $row['alamat'];
         $level = $row['level'];
     } else {
         echo "Data user tidak ditemukan.";
     }
 
-    // Ambil semua produk untuk pencarian
     $query = "SELECT id, name, price, image FROM products";
     $result = $conn->query($query);
 
@@ -48,7 +46,6 @@
         }
     }
 
-    // Ambil produk berdasarkan ID dari parameter URL
     $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
 
     $data = mysqli_query($conn, "SELECT * FROM products WHERE id = '$product_id'");
@@ -59,48 +56,153 @@
         $satuan_p = $productd['satuan'];
     }
 
+    require 'midtrans_config.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['action']) && $_POST['action'] === 'buy_now') {
-        // Ambil data dari form
-        $user_id = $_SESSION['userid'];
-        $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
-        $quantity = (int) $_POST['quantity'];
+        if (isset($_POST['buy_now'])) {
+            $user_id = $_SESSION['userid'];
+            $quantity = isset($_POST['quantity']) ? (int) $_POST['quantity'] : 0;
+            $user_query = "SELECT nama FROM tbluser WHERE id = ?";
+            $user_stmt = $conn->prepare($user_query);
+            $user_stmt->bind_param("i", $user_id);
+            $user_stmt->execute();
+            $user_result = $user_stmt->get_result();
+            $user_name = $user_result->fetch_assoc()['nama'];
+            $product_query = "SELECT name, price FROM products WHERE id = ?";
+            $product_stmt = $conn->prepare($product_query);
+            $product_stmt->bind_param("i", $product_id);
+            $product_stmt->execute();
+            $product_result = $product_stmt->get_result();
+            $product = $product_result->fetch_assoc();
+            $product_name = $product['name'];
+            $price = $product['price'] * $quantity;
+            $items = [];
+            $total_price_midtrans = 0;
+            if ($product['price'] > 0 && $quantity > 0) {
+                $total_price_midtrans += $price;
+                $items[] = [
+                    'id' => $product_id,
+                    'price' => $product['price'],
+                    'quantity' => $quantity,
+                    'name' => $product_name
+                ];
+            }
 
-        // Ambil nama user berdasarkan user_id
-        $user_query = "SELECT nama FROM tbluser WHERE id = ?";
-        $user_stmt = $conn->prepare($user_query);
-        $user_stmt->bind_param("i", $user_id);
-        $user_stmt->execute();
-        $user_result = $user_stmt->get_result();
-        $user_name = $user_result->fetch_assoc()['nama'];
+            header('Content-Type: application/json');
 
-        // Ambil nama produk dan harga berdasarkan product_id
-        $product_query = "SELECT name, price FROM products WHERE id = ?";
-        $product_stmt = $conn->prepare($product_query);
-        $product_stmt->bind_param("i", $product_id);
-        $product_stmt->execute();
-        $product_result = $product_stmt->get_result();
-        $product = $product_result->fetch_assoc();
-        $product_name = $product['name'];
-        $price = $product['price'] * $quantity;
-
-        // Masukkan data ke tabel cart
-        $insert_query = "INSERT INTO cart (user_id, user_name, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
-        $insert_stmt = $conn->prepare($insert_query);
-        $insert_stmt->bind_param("isissi", $user_id, $user_name, $product_id, $product_name, $quantity, $price);
-
-        if ($insert_stmt->execute()) {
-            echo "<p>Produk berhasil ditambahkan ke keranjang!</p>";
-        } else {
-            echo "<p>Gagal menambahkan produk: " . $conn->error . "</p>";
+            $snap_token = null;
+            if (!empty($items) && $total_price_midtrans > 0) {
+                $transaction_details = [
+                    'order_id' => rand(),
+                    'gross_amount' => $total_price_midtrans
+                ];
+                $customer_details = [
+                    'first_name' => $nama,
+                    'email' => $email,
+                    'phone' => $phone,
+                    'shipping_address' => $address
+                ];
+                $transaction_data = [
+                    'transaction_details' => $transaction_details,
+                    'customer_details' => $customer_details,
+                    'item_details' => $items
+                ];
+                try {
+                    $item_details_json = json_encode($items);
+                    $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
+                        VALUES (?, ?, ?, ?, ?)");
+                    $payment_status = 'Success';
+                    $payment_type = 'Gopay';
+                    $stmt->bind_param("sssss", 
+                        $transaction_details['order_id'],
+                        $payment_type,
+                        $payment_status, 
+                        $transaction_details['gross_amount'],
+                        $item_details_json
+                    );
+                    $stmt->execute();
+                    $stmt->close();
+                    $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+                    echo json_encode(['success' => true, 'snap_token' => $snap_token]);
+                    exit;
+                } catch (Exception $e) {
+                    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+                    exit;
+                }
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Keranjang kosong atau total harga tidak valid.']);
+                exit;
+            }
+            $user_stmt->close();
+            $product_stmt->close();
         }
 
-        $user_stmt->close();
-        $product_stmt->close();
-        $insert_stmt->close();
-    }
-    }
+        if (isset($_POST['action']) && $_POST['action'] === 'add_cart') {
+            // Ambil data dari form
+            $user_id = $_SESSION['userid'];
+            $quantity = (int) $_POST['quantity'];
 
+            // Ambil nama user berdasarkan user_id
+            $user_query = "SELECT nama FROM tbluser WHERE id = ?";
+            $user_stmt = $conn->prepare($user_query);
+            $user_stmt->bind_param("i", $user_id);
+            $user_stmt->execute();
+            $user_result = $user_stmt->get_result();
+            $user_name = $user_result->fetch_assoc()['nama'];
+
+            // Ambil nama produk dan harga berdasarkan product_id
+            $product_query = "SELECT name, price FROM products WHERE id = ?";
+            $product_stmt = $conn->prepare($product_query);
+            $product_stmt->bind_param("i", $product_id);
+            $product_stmt->execute();
+            $product_result = $product_stmt->get_result();
+            $product = $product_result->fetch_assoc();
+            $product_name = $product['name'];
+            $price = $product['price'] * $quantity;
+
+            // Cek apakah kombinasi user_id dan product_id sudah ada di tabel cart
+            $check_query = "SELECT quantity FROM cart WHERE user_id = ? AND product_id = ?";
+            $check_stmt = $conn->prepare($check_query);
+            $check_stmt->bind_param("ii", $user_id, $product_id);
+            $check_stmt->execute();
+            $check_result = $check_stmt->get_result();
+
+            if ($check_result->num_rows > 0) {
+                // Jika data sudah ada, lakukan update pada kolom quantity
+                $existing_data = $check_result->fetch_assoc();
+                $new_quantity = $existing_data['quantity'] + $quantity;
+
+                $update_query = "UPDATE cart SET quantity = ? WHERE user_id = ? AND product_id = ?";
+                $update_stmt = $conn->prepare($update_query);
+                $update_stmt->bind_param("iii", $new_quantity, $user_id, $product_id);
+
+                if ($update_stmt->execute()) {
+                    header("Location: #");
+                    exit;
+                } else {
+                    
+                }
+                $update_stmt->close();
+            } else {
+                // Jika data tidak ada, lakukan insert
+                $insert_query = "INSERT INTO cart (user_id, user_name, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
+                $insert_stmt = $conn->prepare($insert_query);
+                $insert_stmt->bind_param("isissi", $user_id, $user_name, $product_id, $product_name, $quantity, $price);
+
+                if ($insert_stmt->execute()) {
+                    header("Location: #");
+                    exit;
+                } else {
+                    
+                }
+                $insert_stmt->close();
+            }
+
+            $check_stmt->close();
+            $user_stmt->close();
+            $product_stmt->close();
+        }
+    }
+    
     //Nama Depan
     function getFirstName($fullName) {
         $parts = explode(" ", $fullName);
@@ -146,6 +248,14 @@
             box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.05);
         }
 
+        .message-image {
+            width: auto;
+            height: 40px;
+            display: block;
+            border: 1.5px rgb(255, 180, 0) solid;
+            border-radius: 6px;
+        }
+
         @media (max-width: 436px) {
             #container-p {
                 padding-bottom: 4rem;
@@ -173,8 +283,7 @@
                 display: none;
             }
 
-            .btn-keranjang,
-            .btn-beli {
+            .btn-keranjang, .btn-beli {
                 flex: 1;
             }
         }
@@ -210,7 +319,6 @@
                 <img src="<?php echo $productd['image']; ?>" alt="<?php echo $productd['name']; ?>"
                     class="product-image">
             </div>
-
             <!-- Detail Produk -->
             <div class="col-md-6 item-konten-p">
                 <h4 class="nama-p"><?php echo htmlspecialchars($productd['name']); ?></h4>
@@ -233,16 +341,18 @@
                             Selengkapnya</button>
                         <?php endif; ?>
                     </div>
-
+                    <!-- Tombol Mobile -->
                     <form action="produk.php" method="POST">
-                        <!-- Tombol Mobile -->
-                        <div id="A" class="gap-3 item-button-mobile">
-                            <!-- Tombol Beli Sekarang -->
-                            <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Keranjang
+                        <div id="A" class="d-flex align-items-center gap-2 item-button-mobile">
+                            <a href="https://api.whatsapp.com/send?phone=6283192655757">
+                                <img src="imgs/message.jpg" class="message-image">
+                            </a>
+                            <button type="button" class="btn-keranjang" id="cartButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                + Keranjang
                             </button>
-                            <!-- Div Dropdown -->
+                            <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Beli Sekarang
+                            </button>
                             <div class="dropdown-menu p-4" aria-labelledby="beliButton" id="beliDropdown">
                                 <h6>Konfirmasi Pembelian</h6>
                                 <!-- Jumlah Barang -->
@@ -250,12 +360,12 @@
                                     <label for="quantity" class="me-2">Jumlah:</label>
                                     <div class="quantity-box d-flex">
                                         <button type="button" class="btn btn-outline-secondary decreaseBtn">-</button>
-                                        <input type="number" class="quantityInput form-control mx-2" name="quantity"
-                                            min="1" value="1" />
+                                        <input type="number" class="quantityInput form-control mx-2" name="quantity" id="quantity" min="1" value="1">
                                         <button type="button" class="btn btn-outline-secondary increaseBtn">+</button>
                                     </div>
                                 </div>
-                                <button type="submit" name="action" value="buy_now" class="btn-beli">Masukkan Keranjang</button>
+                                <button type="submit" name="action" value="add_cart" class="btn-keranjang">Masukkan Keranjang</button>
+                                <button class="btn-beli" type="buy_now" id="beli_sekarang">Beli Sekarang</button>
                             </div>
                         </div>
                         <!-- Tombol Tablet + Dekstop -->
@@ -265,14 +375,18 @@
                                 <label for="quantity" class="me-2">Jumlah:</label>
                                 <div class="quantity-box d-flex">
                                     <button type="button" class="btn btn-outline-secondary decreaseBtn">-</button>
-                                    <input type="number" class="quantityInput form-control mx-2" name="quantity" min="1"
+                                    <input type="number" class="quantityInput form-control mx-2" name="quantity" id="quantity" min="1"
                                         value="1" />
                                     <button type="button" class="btn btn-outline-secondary increaseBtn">+</button>
                                 </div>
                             </div>
-                            <!-- Tombol Beli Sekarang -->
-                            <button type="submit" name="action" value="buy_now" class="btn-beli">Masukkan
-                                Keranjang</button>
+                            <div class="d-flex align-items-center justify-content-start gap-2 action-row">
+                                <a href="https://api.whatsapp.com/send?phone=6283192655757">
+                                    <img src="imgs/message.jpg" class="message-image" />
+                                </a>
+                                <button type="submit" name="action" value="add_cart" class="btn-keranjang">+ Keranjang</button>
+                                <button class="btn-beli" type="buy_now" id="beli_sekarangs">Beli Sekarang</button>
+                            </div>
                         </div>
                     </form>
                 </form>
@@ -285,6 +399,78 @@
 
     <!-- Js -->
     <script>
+        // Order
+        document.getElementById('beli_sekarang').addEventListener('click', function(event) {
+            event.preventDefault(); // Cegah refresh halaman
+            const quantity = document.getElementById('quantity').value;
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `buy_now=true&quantity=${encodeURIComponent(quantity)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Panggil Snap Midtrans
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            alert("Pembayaran berhasil!");
+                            console.log(result);
+                            window.location.href = "success.php";
+                        },
+                        onPending: function(result) {
+                            alert("Menunggu pembayaran.");
+                            console.log(result);
+                        },
+                        onError: function(result) {
+                            alert("Pembayaran gagal!");
+                            console.log(result);
+                        }
+                    });
+                } else {
+                    alert("Gagal memproses transaksi: " + data.message);
+                }
+            })
+            
+        });
+
+        document.getElementById('beli_sekarangs').addEventListener('click', function(event) {
+            event.preventDefault(); // Cegah refresh halaman
+            const quantity = document.getElementById('quantity').value;
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `buy_now=true&quantity=${encodeURIComponent(quantity)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Panggil Snap Midtrans
+                    window.snap.pay(data.snap_token, {
+                        onSuccess: function(result) {
+                            alert("Pembayaran berhasil!");
+                            console.log(result);
+                            window.location.href = "success.php";
+                        },
+                        onPending: function(result) {
+                            alert("Menunggu pembayaran.");
+                            console.log(result);
+                        },
+                        onError: function(result) {
+                            alert("Pembayaran gagal!");
+                            console.log(result);
+                        }
+                    });
+                } else {
+                    alert("Gagal memproses transaksi: " + data.message);
+                }
+            })
+            
+        });
         // Kuantitas/Jumlah Barang
         document.addEventListener("DOMContentLoaded", function() {
             const decreaseBtns = document.querySelectorAll('.decreaseBtn');
@@ -348,33 +534,46 @@
             }
         }
 
-        // Dropdown Beli
+        // Dropdown
         const beliButton = document.querySelector('#beliButton');
+        const cartButton = document.querySelector('#cartButton');
         const beliDropdown = document.querySelector('#beliDropdown');
 
-        beliButton.addEventListener('click', function(event) {
+        function toggleDropdown(event, button) {
             const isOpen = beliDropdown.classList.contains('show');
+            event.stopPropagation();
+
             if (!isOpen) {
-                const dropdown = new bootstrap.Dropdown(beliButton);
-                dropdown.show();
+                const dropdown = new bootstrap.Dropdown(button);
+                dropdown.hide();
             } else {
-                event.stopPropagation();
+                const dropdown = new bootstrap.Dropdown(button);
+                dropdown.show();
             }
+        }
+
+        beliButton.addEventListener('click', function (event) {
+            toggleDropdown(event, beliButton);
         });
 
-        beliDropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
+        cartButton.addEventListener('click', function (event) {
+            toggleDropdown(event, cartButton);
         });
 
-        document.addEventListener('click', function(e) {
-            if (!beliButton.contains(e.target) && !beliDropdown.contains(e.target)) {
+        document.addEventListener('click', function (e) {
+            if (!beliButton.contains(e.target) && 
+                !cartButton.contains(e.target) && 
+                !beliDropdown.contains(e.target)) {
                 const dropdown = new bootstrap.Dropdown(beliButton);
                 dropdown.hide();
             }
         });
+
+        beliDropdown.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+
     </script>
-    <!-- End Js Search -->
-    <!-- Sementara tanpa footer -->
     <footer class="text-center">
         <p>Create by Alzi Petshop | &copy 2024</p>
     </footer>

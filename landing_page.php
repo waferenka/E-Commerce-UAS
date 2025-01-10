@@ -115,8 +115,7 @@
     }
 
     .nav-link {
-      color: black;
-      text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+      color: rgb(220, 220, 220);
       font-weight: bold;
     }
 
@@ -124,14 +123,10 @@
       text-decoration: none;
     }
 
-    .navbar {
-      color: white;
-    }
-
     .navbar .brand-name {
       font-size: 1.3rem;
       font-weight: bold;
-      color: black;
+      color: rgb(220, 220, 220);
     }
 
     .section {
@@ -352,6 +347,28 @@
   </footer>
 
   <script>
+    document.addEventListener("scroll", function() {
+      let aboutSection = document.getElementById("about");
+      let sectionRect = aboutSection.getBoundingClientRect();
+      let sectionBackgroundColor = window.getComputedStyle(aboutSection).backgroundColor;
+      
+      const navbar = document.querySelector(".navbar");
+      const navbarBrand = document.querySelector(".navbar-brand");
+      const navLinks = document.querySelectorAll(".navbar .nav-link");
+
+      if (sectionRect.top < 0 && sectionBackgroundColor !== "rgba(0, 0, 0, 0)") {
+        navbarBrand.style.color = "black";
+        navLinks.forEach((link) => {
+          link.style.color = "black";
+        });
+      } else {
+        navbarBrand.style.color = "rgb(220, 220, 220)";
+        navLinks.forEach((link) => {
+          link.style.color = "rgb(220, 220, 220)";
+        });
+      }
+    });
+
     document.addEventListener("scroll", () => {
       const reveals = document.querySelectorAll(".reveal");
       const windowHeight = window.innerHeight;

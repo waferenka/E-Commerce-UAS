@@ -66,3 +66,54 @@ ERROR: Empty notification payload received
 RAW PAYLOAD: 
 ERROR: Empty notification payload received
 ERROR: Empty notification payload received
+
+
+{"order_id": "12345", "status": "settlement"}
+
+
+{"transaction_type":"off-us","transaction_time":"2025-01-10 14:39:52","transaction_status":"expire","transaction_id":"77fdb25c-aedc-47dc-a905-abb41992acec","status_message":"midtrans payment notification","status_code":"202","signature_key":"1856e77a54d395057f0369baf8f0676fcfc8ce1c25f6b112fcc76b249c65d2e663d0fb05658815a1127abe843020f4b33c8c2093ad69c907340cfa127173fe5a","payment_type":"qris","order_id":"329340396","merchant_id":"G911148444","gross_amount":"18000.00","fraud_status":"accept","expiry_time":"2025-01-10 14:54:52","currency":"IDR"}
+
+{"order_id": "12345", "status": "settlement"}
+
+{"order_id": "12345", "status": "settlement"}
+{"order_id": "12345", "status": "settlement"}
+{"order_id": "12345", "status": "settlement"}
+{"order_id": "12345", "status": "settlement"}
+{"order_id": "12345", "status": "settlement"}
+{"order_id": "12345", "status": "settlement"}
+{"order_id": "12345", "status": "settlement"}
+
+
+{
+  "transaction_id": "77fdb25c-aedc-47dc-a905-abb41992acec",
+  "order_id": "329340396",
+  "payment_type": "qris",
+  "transaction_status": "settlement",
+  "gross_amount": "18000.00",
+  "transaction_time": "2025-01-10 14:39:52"
+}
+{
+  "transaction_id": "77fdb25c-aedc-47dc-a905-abb41992acec",
+  "order_id": 329340396,
+  "payment_type": "qris",
+  "transaction_status": "settlement",
+  "gross_amount": 18000.00,
+  "transaction_time": "2025-01-10 14:39:52"
+}
+{
+  "transaction_id": "77fdb25c-aedc-47dc-a905-abb41992acec",
+  "order_id": 329340396,
+  "payment_type": "qris",
+  "transaction_status": "settlement",
+  "gross_amount": 18000.00,
+  "transaction_time": "2025-01-10 14:39:52"
+}
+{
+  "transaction_id": "77fdb25c-aedc-47dc-a905-abb41992acec",
+  "order_id": "329340396",
+  "payment_type": "qris",
+  "transaction_status": "settlement",
+  "gross_amount": "18000.00",
+  "transaction_time": "2025-01-10 14:39:52"
+}
+
