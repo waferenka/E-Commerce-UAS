@@ -2,25 +2,50 @@
 include('php/php.php');
 $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 $new_status = "Success";
+$new_shipping_status = 2;
 
-$sql = "UPDATE transactions SET transaction_status = ? WHERE order_id = ?";
+// Mulai transaksi untuk memastikan konsistensi data
+$conn->begin_transaction();
 
-$stmt = $conn->prepare($sql);
-if ($stmt) {
-    $stmt->bind_param("ss", $new_status, $order_id);
-        if ($stmt->execute()) {
-        if (isset($_SERVER['HTTP_REFERER'])) {
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-            exit;
+try {
+    // Update transaction_status di tabel transactions
+    $sql = "UPDATE transactions SET transaction_status = ? WHERE order_id = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("ss", $new_status, $order_id);
+        if (!$stmt->execute()) {
+            throw new Exception("Gagal memperbarui transaction status: " . $stmt->error);
         }
+        $stmt->close();
     } else {
-        echo "Gagal memperbarui transaction status: " . $stmt->error;
+        throw new Exception("Gagal mempersiapkan statement untuk transactions: " . $conn->error);
     }
-    
-    // Tutup statement
-    $stmt->close();
-} else {
-    echo "Gagal mempersiapkan statement: " . $conn->error;
+
+    // Update status_pengiriman di tabel shipping_detail
+    $sql = "UPDATE shipping_detail SET status_pengiriman = ? WHERE order_id = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("is", $new_shipping_status, $order_id);
+        if (!$stmt->execute()) {
+            throw new Exception("Gagal memperbarui shipping status: " . $stmt->error);
+        }
+        $stmt->close();
+    } else {
+        throw new Exception("Gagal mempersiapkan statement untuk shipping_detail: " . $conn->error);
+    }
+
+    // Commit transaksi
+    $conn->commit();
+
+    // Redirect jika berhasil
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit;
+    }
+} catch (Exception $e) {
+    // Rollback jika terjadi error
+    $conn->rollback();
+    echo $e->getMessage();
 }
 
 // Tutup koneksi

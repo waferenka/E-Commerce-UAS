@@ -108,13 +108,12 @@
                 ];
                 try {
                     $item_details_json = json_encode($items);
-                    $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
+                    $stmt = $conn->prepare("INSERT INTO transactions (order_id, user_id, transaction_status, gross_amount, item_details) 
                         VALUES (?, ?, ?, ?, ?)");
                     $payment_status = 'Pending';
-                    $payment_type = 'Gopay';
                     $stmt->bind_param("sssss", 
                         $transaction_details['order_id'],
-                        $payment_type,
+                        $userid,
                         $payment_status, 
                         $transaction_details['gross_amount'],
                         $item_details_json
