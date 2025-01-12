@@ -5,6 +5,48 @@
 	$restricted_levels = ['admin', 'penjual'];
 	// Query untuk mengambil data dari tabel cart berdasarkan user_id
 
+    // hitung ongkir
+$sql = "SELECT * FROM detail_address WHERE user_id = ?";
+// Persiapkan statement
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);  // "i" berarti integer
+// Eksekusi statement
+$stmt->execute();
+// Ambil hasilnya
+$result = $stmt->get_result();
+
+$shipping_cost = 0; // Inisialisasi nilai shipping_cost
+
+if ($result->num_rows > 0) {
+    // Menampilkan data
+    while ($row = $result->fetch_assoc()) {
+        $lat1 = -3.0113878;
+        $lon1 = 104.6895402;
+        $lat2 = $row["latitude"];
+        $lon2 = $row["longitude"];
+        // Haversine Formula
+        function haversine($lat1, $lon1, $lat2, $lon2) {
+            $earthRadius = 6371; // Radius of the earth in km
+            $latDiff = deg2rad($lat2 - $lat1);
+            $lonDiff = deg2rad($lon2 - $lon1);
+            $a = sin($latDiff / 2) * sin($latDiff / 2) +
+                cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * 
+                sin($lonDiff / 2) * sin($lonDiff / 2);
+            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+            $distance = $earthRadius * $c; // Distance in km
+            return $distance;
+        }
+        $distance = haversine($lat1, $lon1, $lat2, $lon2);
+        $costPerKm = 5000; // Biaya per km (contoh)
+        // Jika jarak kurang dari 1km, tetap dihitung Rp5000
+        if ($distance < 1) {
+            $shipping_cost = 5000;
+        } else {
+            $shipping_cost = round($distance * $costPerKm); // Dibulatkan ke integer terdekat
+        }
+    }
+}
+
 	// Ambil data keranjang untuk Midtrans
 	$items = [];
 	$total_price_midtrans = 0;  // Total price untuk Midtrans
@@ -18,7 +60,7 @@
 	$resultcart = mysqli_query($conn, $querycart);
 	while ($rowc = mysqli_fetch_assoc($resultcart)) {
         if ($rowc['price'] > 0 && $rowc['quantity'] > 0) {
-            $total_price_midtrans += $rowc['total_price'];
+            $total_price_midtrans = $shipping_cost + $rowc['total_price'];
             $items[] = [
                 'id' => $rowc['product_id'],
                 'price' => $rowc['price'],
@@ -38,6 +80,7 @@
 	$resultcart_display = mysqli_query($conn, $querycart_display);
 
 	$total_price_display = 0; // Total price untuk tampilan modal
+
 
 	// Ambil informasi user dari tabel tbluser dan user_detail
 	$query_user = "
@@ -68,8 +111,16 @@
                 'shipping_address' => $user['alamat']
             ];
 
+            $shipping_details = [
+                'id' => 'shipping',
+                'price' => $shipping_cost,
+                'quantity' => 1,
+                'name' => 'Ongkos Kirim'
+            ];
+
             $transaction_data = [
                 'transaction_details' => $transaction_details,
+                'shipping_details' => $shipping_details,
                 'customer_details' => $customer_details,
                 'item_details' => $items
             ];
@@ -227,6 +278,7 @@
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">
                 Alzi Petshop
+                <?php echo "Total harga + ongkir: " . $total_price_midtrans . ", ongkir:" . $shipping_cost; ?>
             </a>
             <?php if (!in_array($user_level, $restricted_levels)): ?>
             <div class="search-box me-3">
@@ -289,7 +341,8 @@
                         <?php 
 						    $total_price_display += $row['price'] * $row['quantity']; // Hitung total price untuk tampilan modal
 						endwhile; ?>
-                        <p class="total-price">Total Belanja: Rp<?= number_format($total_price_display, 0, ',', '.'); ?>
+                        <p class="total-price">Total Belanja:
+                            Rp<?= number_format($total_price_display, 0, ',', '.'); ?>abc <?= $shipping_cost; ?>
                         </p>
                         <div class="cart-actions container-fluid d-flex justify-content-between">
                             <button class="btn btn-warning" type="submit" name="update_cart">Update Keranjang</button>

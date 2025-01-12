@@ -17,6 +17,48 @@
 
     $userid = $_SESSION['userid'];
 
+    // hitung ongkir
+$sql = "SELECT * FROM detail_address WHERE user_id = ?";
+// Persiapkan statement
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);  // "i" berarti integer
+// Eksekusi statement
+$stmt->execute();
+// Ambil hasilnya
+$result = $stmt->get_result();
+
+$shipping_cost = 0; // Inisialisasi nilai shipping_cost
+
+if ($result->num_rows > 0) {
+    // Menampilkan data
+    while ($row = $result->fetch_assoc()) {
+        $lat1 = -3.0113878;
+        $lon1 = 104.6895402;
+        $lat2 = $row["latitude"];
+        $lon2 = $row["longitude"];
+        // Haversine Formula
+        function haversine($lat1, $lon1, $lat2, $lon2) {
+            $earthRadius = 6371; // Radius of the earth in km
+            $latDiff = deg2rad($lat2 - $lat1);
+            $lonDiff = deg2rad($lon2 - $lon1);
+            $a = sin($latDiff / 2) * sin($latDiff / 2) +
+                cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * 
+                sin($lonDiff / 2) * sin($lonDiff / 2);
+            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+            $distance = $earthRadius * $c; // Distance in km
+            return $distance;
+        }
+        $distance = haversine($lat1, $lon1, $lat2, $lon2);
+        $costPerKm = 5000; // Biaya per km (contoh)
+        // Jika jarak kurang dari 1km, tetap dihitung Rp5000
+        if ($distance < 1) {
+            $shipping_cost = 5000;
+        } else {
+            $shipping_cost = round($distance * $costPerKm); // Dibulatkan ke integer terdekat
+        }
+    }
+}
+
     $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
     FROM tbluser u 
     LEFT JOIN user_detail d ON u.id = d.id 
@@ -78,7 +120,7 @@
             $items = [];
             $total_price_midtrans = 0;
             if ($product['price'] > 0 && $quantity > 0) {
-                $total_price_midtrans += $price;
+                $total_price_midtrans = $shipping_cost + $price;
                 $items[] = [
                     'id' => $product_id,
                     'price' => $product['price'],
