@@ -263,9 +263,7 @@ $users = $conn->query("SELECT * FROM tbluser");
                 <div class="modal-content">
                     <form method="POST" action="admin.php">
                         <div class="modal-header">
-                            <h5 class="modal-title fw-bold" id="userModalLabel">
-                                <?php echo isset($_GET['edit']) ? 'Edit User' : 'Add User'; ?>
-                            </h5>
+                            
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
