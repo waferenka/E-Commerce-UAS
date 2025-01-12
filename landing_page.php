@@ -79,14 +79,14 @@
       display: inline-block;
       padding: 10px 20px;
       color: white;
-      border: 2px #ff6347 solid;
+      border: 2px rgb(255, 180, 0) solid;
       text-decoration: none;
       border-radius: 5px;
       transition: background-color 0.3s;
     }
 
     .header a.btn:hover {
-      background: #ff6347;
+      background: rgb(255, 180, 0);
     }
 
     .about p {

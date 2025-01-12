@@ -52,7 +52,6 @@
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
         header('Content-Type: application/json'); // Tambahkan header JSON di sini
-
         // Periksa apakah keranjang kosong
         $snap_token = null;
         if (!empty($items) && $total_price_midtrans > 0) {
@@ -79,7 +78,7 @@
                 $item_details_json = json_encode($items);
                 $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
                     VALUES (?, ?, ?, ?, ?)");
-                $payment_status = 'Success';
+                $payment_status = 'Pending';
                 $payment_type = 'Gopay';
 
                 $stmt->bind_param("sssss", 
@@ -95,7 +94,7 @@
                 $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
 
                 // Kirim respons JSON
-                echo json_encode(['success' => true, 'snap_token' => $snap_token]);
+                echo json_encode(['success' => true, 'snap_token' => $snap_token, 'order_id' => $transaction_details['order_id']]);
                 exit;
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -147,7 +146,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-X7zfk0k3aWOJvdhF">
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-A2jiukqkqsZik1Kl">
     </script>
     <style>
     .modal-body {
@@ -388,9 +387,8 @@
                     // Panggil Snap Midtrans
                     window.snap.pay(data.snap_token, {
                         onSuccess: function(result) {
-                            alert("Pembayaran berhasil!");
-                            console.log(result);
-                            window.location.href = "success.php"; // Redirect ke halaman sukses
+                            window.location.href =
+                                `./proses_status.php?order_id=${encodeURIComponent(data.order_id)}`;
                         },
                         onPending: function(result) {
                             alert("Menunggu pembayaran.");

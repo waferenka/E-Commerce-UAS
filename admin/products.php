@@ -85,7 +85,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="admin.php">Users</a></li>
-                    <li><a class="dropdown-item" href="#">Cart</a></li>
+                    <li><a class="dropdown-item" href="cart.php">Cart</a></li>
                 </ul>
             </div>
             <div class="d-flex ms-auto">

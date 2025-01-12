@@ -110,7 +110,7 @@
                     $item_details_json = json_encode($items);
                     $stmt = $conn->prepare("INSERT INTO transactions (order_id, payment_type, transaction_status, gross_amount, item_details) 
                         VALUES (?, ?, ?, ?, ?)");
-                    $payment_status = 'Success';
+                    $payment_status = 'Pending';
                     $payment_type = 'Gopay';
                     $stmt->bind_param("sssss", 
                         $transaction_details['order_id'],
@@ -122,7 +122,7 @@
                     $stmt->execute();
                     $stmt->close();
                     $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
-                    echo json_encode(['success' => true, 'snap_token' => $snap_token]);
+                    echo json_encode(['success' => true, 'snap_token' => $snap_token, 'order_id' => $transaction_details['order_id']]);
                     exit;
                 } catch (Exception $e) {
                     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -225,85 +225,86 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .deskripsi-terbatas {
-            cursor: pointer;
-            position: relative;
-            padding-bottom: 1rem;
+    .deskripsi-terbatas {
+        cursor: pointer;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+
+    .deskripsi-terbatas span {
+        display: block;
+    }
+
+    .deskripsi-terbatas button {
+        color: #007bff;
+        text-decoration: underline;
+        border: none;
+        background: transparent;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+        border: none;
+        box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .message-image {
+        width: auto;
+        height: 40px;
+        display: block;
+        border: 1.5px rgb(255, 180, 0) solid;
+        border-radius: 6px;
+    }
+
+    @media (max-width: 436px) {
+        #container-p {
+            padding-bottom: 4rem;
         }
 
-        .deskripsi-terbatas span {
-            display: block;
+        .item-konten-p {
+            padding: 1rem 1.5rem 0rem 1.5rem;
         }
 
-        .deskripsi-terbatas button {
-            color: #007bff;
-            text-decoration: underline;
-            border: none;
-            background: transparent;
-        }
-
-        .dropdown-menu {
+        .item-button-mobile {
+            display: flex;
+            position: fixed;
             width: 100%;
-            border: none;
-            box-shadow: 0 -4px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .message-image {
-            width: auto;
-            height: 40px;
-            display: block;
-            border: 1.5px rgb(255, 180, 0) solid;
-            border-radius: 6px;
-        }
-
-        @media (max-width: 436px) {
-            #container-p {
-                padding-bottom: 4rem;
-            }
-
-            .item-konten-p {
-                padding: 1rem 1.5rem 0rem 1.5rem;
-            }
-
-            .item-button-mobile {
-                display: flex;
-                position: fixed;
-                width: 100%;
-                bottom: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                padding: 0.4rem 0.8rem;
-                background-color: white;
-                justify-content: center;
-                z-index: 1000;
-                box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-            }
-
-            .item-button-tabdesk {
-                display: none;
-            }
-
-            .btn-keranjang, .btn-beli {
-                flex: 1;
-            }
-        }
-
-        @media (min-width: 436px) {
-            .item-button-tabdesk {
-                display: block;
-            }
-
-            .item-button-mobile {
-                display: none;
-            }
-        }
-
-        footer {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.4rem 0.8rem;
             background-color: white;
-            margin-top: 2rem;
-            padding: 1rem 0 3rem 0;
-            width: 100%;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
         }
+
+        .item-button-tabdesk {
+            display: none;
+        }
+
+        .btn-keranjang,
+        .btn-beli {
+            flex: 1;
+        }
+    }
+
+    @media (min-width: 436px) {
+        .item-button-tabdesk {
+            display: block;
+        }
+
+        .item-button-mobile {
+            display: none;
+        }
+    }
+
+    footer {
+        background-color: white;
+        margin-top: 2rem;
+        padding: 1rem 0 3rem 0;
+        width: 100%;
+    }
     </style>
     <title>Alzi Petshop</title>
 </head>
@@ -347,10 +348,12 @@
                             <a href="https://api.whatsapp.com/send?phone=6283192655757">
                                 <img src="imgs/message.jpg" class="message-image">
                             </a>
-                            <button type="button" class="btn-keranjang" id="cartButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button type="button" class="btn-keranjang" id="cartButton" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                 + Keranjang
                             </button>
-                            <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button type="button" class="btn-beli" id="beliButton" data-bs-toggle="dropdown"
+                                aria-expanded="false">
                                 Beli Sekarang
                             </button>
                             <div class="dropdown-menu p-4" aria-labelledby="beliButton" id="beliDropdown">
@@ -360,11 +363,13 @@
                                     <label for="quantity" class="me-2">Jumlah:</label>
                                     <div class="quantity-box d-flex">
                                         <button type="button" class="btn btn-outline-secondary decreaseBtn">-</button>
-                                        <input type="number" class="quantityInput form-control mx-2" name="quantity" id="quantity" min="1" value="1">
+                                        <input type="number" class="quantityInput form-control mx-2" name="quantity"
+                                            id="quantity" min="1" value="1">
                                         <button type="button" class="btn btn-outline-secondary increaseBtn">+</button>
                                     </div>
                                 </div>
-                                <button type="submit" name="action" value="add_cart" class="btn-keranjang">Masukkan Keranjang</button>
+                                <button type="submit" name="action" value="add_cart" class="btn-keranjang">Masukkan
+                                    Keranjang</button>
                                 <button class="btn-beli" type="buy_now" id="beli_sekarang">Beli Sekarang</button>
                             </div>
                         </div>
@@ -375,8 +380,8 @@
                                 <label for="quantity" class="me-2">Jumlah:</label>
                                 <div class="quantity-box d-flex">
                                     <button type="button" class="btn btn-outline-secondary decreaseBtn">-</button>
-                                    <input type="number" class="quantityInput form-control mx-2" name="quantity" id="quantity" min="1"
-                                        value="1" />
+                                    <input type="number" class="quantityInput form-control mx-2" name="quantity"
+                                        id="quantity" min="1" value="1" />
                                     <button type="button" class="btn btn-outline-secondary increaseBtn">+</button>
                                 </div>
                             </div>
@@ -384,7 +389,8 @@
                                 <a href="https://api.whatsapp.com/send?phone=6283192655757">
                                     <img src="imgs/message.jpg" class="message-image" />
                                 </a>
-                                <button type="submit" name="action" value="add_cart" class="btn-keranjang">+ Keranjang</button>
+                                <button type="submit" name="action" value="add_cart" class="btn-keranjang">+
+                                    Keranjang</button>
                                 <button class="btn-beli" type="buy_now" id="beli_sekarangs">Beli Sekarang</button>
                             </div>
                         </div>
@@ -399,11 +405,11 @@
 
     <!-- Js -->
     <script>
-        // Order
-        document.getElementById('beli_sekarang').addEventListener('click', function(event) {
-            event.preventDefault(); // Cegah refresh halaman
-            const quantity = document.getElementById('quantity').value;
-            fetch(window.location.href, {
+    // Order
+    document.getElementById('beli_sekarang').addEventListener('click', function(event) {
+        event.preventDefault(); // Cegah refresh halaman
+        const quantity = document.getElementById('quantity').value;
+        fetch(window.location.href, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -433,13 +439,13 @@
                     alert("Gagal memproses transaksi: " + data.message);
                 }
             })
-            
-        });
 
-        document.getElementById('beli_sekarangs').addEventListener('click', function(event) {
-            event.preventDefault(); // Cegah refresh halaman
-            const quantity = document.getElementById('quantity').value;
-            fetch(window.location.href, {
+    });
+
+    document.getElementById('beli_sekarangs').addEventListener('click', function(event) {
+        event.preventDefault(); // Cegah refresh halaman
+        const quantity = document.getElementById('quantity').value;
+        fetch(window.location.href, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -452,9 +458,8 @@
                     // Panggil Snap Midtrans
                     window.snap.pay(data.snap_token, {
                         onSuccess: function(result) {
-                            alert("Pembayaran berhasil!");
-                            console.log(result);
-                            window.location.href = "success.php";
+                            window.location.href =
+                                `proses_status.php?order_id=${encodeURIComponent(data.order_id)}`;
                         },
                         onPending: function(result) {
                             alert("Menunggu pembayaran.");
@@ -469,110 +474,109 @@
                     alert("Gagal memproses transaksi: " + data.message);
                 }
             })
-            
-        });
-        // Kuantitas/Jumlah Barang
-        document.addEventListener("DOMContentLoaded", function() {
-            const decreaseBtns = document.querySelectorAll('.decreaseBtn');
-            const increaseBtns = document.querySelectorAll('.increaseBtn');
-            const quantityInputs = document.querySelectorAll('.quantityInput');
-            const form = document.querySelector('form'); // Ambil form
 
-            // Fungsi untuk mengurangi jumlah
-            decreaseBtns.forEach((btn, index) => {
-                btn.addEventListener('click', function() {
-                    let quantity = parseInt(quantityInputs[index].value);
-                    if (quantity > 1) {
-                        quantityInputs[index].value = quantity - 1;
-                    }
-                });
-            });
+    });
+    // Kuantitas/Jumlah Barang
+    document.addEventListener("DOMContentLoaded", function() {
+        const decreaseBtns = document.querySelectorAll('.decreaseBtn');
+        const increaseBtns = document.querySelectorAll('.increaseBtn');
+        const quantityInputs = document.querySelectorAll('.quantityInput');
+        const form = document.querySelector('form'); // Ambil form
 
-            // Fungsi untuk menambah jumlah
-            increaseBtns.forEach((btn, index) => {
-                btn.addEventListener('click', function() {
-                    let quantity = parseInt(quantityInputs[index].value);
-                    quantityInputs[index].value = quantity + 1;
-                });
-            });
-
-            // Saat form disubmit, pastikan value quantity yang terbaru dikirimkan
-            form.addEventListener('submit', function() {
-                const quantity = quantityInputs[0].value; // Ambil nilai dari input pertama
-                console.log("Form submitted with quantity: " + quantity); // Debug log
+        // Fungsi untuk mengurangi jumlah
+        decreaseBtns.forEach((btn, index) => {
+            btn.addEventListener('click', function() {
+                let quantity = parseInt(quantityInputs[index].value);
+                if (quantity > 1) {
+                    quantityInputs[index].value = quantity - 1;
+                }
             });
         });
 
-        // Hapus Div Width Tertentu
-        function checkWidthA() {
-            var divA = document.getElementById("A");
-            var divB = document.getElementById("B");
-            if (window.innerWidth > 436) {
-                divA.innerHTML = '';
-            } else {
-                divB.innerHTML = '';
-            }
+        // Fungsi untuk menambah jumlah
+        increaseBtns.forEach((btn, index) => {
+            btn.addEventListener('click', function() {
+                let quantity = parseInt(quantityInputs[index].value);
+                quantityInputs[index].value = quantity + 1;
+            });
+        });
+
+        // Saat form disubmit, pastikan value quantity yang terbaru dikirimkan
+        form.addEventListener('submit', function() {
+            const quantity = quantityInputs[0].value; // Ambil nilai dari input pertama
+            console.log("Form submitted with quantity: " + quantity); // Debug log
+        });
+    });
+
+    // Hapus Div Width Tertentu
+    function checkWidthA() {
+        var divA = document.getElementById("A");
+        var divB = document.getElementById("B");
+        if (window.innerWidth > 436) {
+            divA.innerHTML = '';
+        } else {
+            divB.innerHTML = '';
         }
+    }
 
-        window.addEventListener("resize", checkWidthA);
-        window.addEventListener("load", checkWidthA);
+    window.addEventListener("resize", checkWidthA);
+    window.addEventListener("load", checkWidthA);
 
-        // Lihat Selengkapnya
-        function toggleDescription() {
-            const shortDesc = document.getElementById('short-desc');
-            const fullDesc = document.getElementById('full-desc');
-            const button = document.getElementById('toggle-desc');
+    // Lihat Selengkapnya
+    function toggleDescription() {
+        const shortDesc = document.getElementById('short-desc');
+        const fullDesc = document.getElementById('full-desc');
+        const button = document.getElementById('toggle-desc');
 
-            if (fullDesc.style.display === 'none' || fullDesc.style.display === '') {
-                fullDesc.style.display = 'inline';
-                shortDesc.style.display = 'none';
-                button.textContent = 'Sembunyikan';
-            } else {
-                fullDesc.style.display = 'none';
-                shortDesc.style.display = 'inline';
-                button.textContent = 'Lihat Selengkapnya';
-            }
+        if (fullDesc.style.display === 'none' || fullDesc.style.display === '') {
+            fullDesc.style.display = 'inline';
+            shortDesc.style.display = 'none';
+            button.textContent = 'Sembunyikan';
+        } else {
+            fullDesc.style.display = 'none';
+            shortDesc.style.display = 'inline';
+            button.textContent = 'Lihat Selengkapnya';
         }
+    }
 
-        // Dropdown
-        const beliButton = document.querySelector('#beliButton');
-        const cartButton = document.querySelector('#cartButton');
-        const beliDropdown = document.querySelector('#beliDropdown');
+    // Dropdown
+    const beliButton = document.querySelector('#beliButton');
+    const cartButton = document.querySelector('#cartButton');
+    const beliDropdown = document.querySelector('#beliDropdown');
 
-        function toggleDropdown(event, button) {
-            const isOpen = beliDropdown.classList.contains('show');
-            event.stopPropagation();
+    function toggleDropdown(event, button) {
+        const isOpen = beliDropdown.classList.contains('show');
+        event.stopPropagation();
 
-            if (!isOpen) {
-                const dropdown = new bootstrap.Dropdown(button);
-                dropdown.hide();
-            } else {
-                const dropdown = new bootstrap.Dropdown(button);
-                dropdown.show();
-            }
+        if (!isOpen) {
+            const dropdown = new bootstrap.Dropdown(button);
+            dropdown.hide();
+        } else {
+            const dropdown = new bootstrap.Dropdown(button);
+            dropdown.show();
         }
+    }
 
-        beliButton.addEventListener('click', function (event) {
-            toggleDropdown(event, beliButton);
-        });
+    beliButton.addEventListener('click', function(event) {
+        toggleDropdown(event, beliButton);
+    });
 
-        cartButton.addEventListener('click', function (event) {
-            toggleDropdown(event, cartButton);
-        });
+    cartButton.addEventListener('click', function(event) {
+        toggleDropdown(event, cartButton);
+    });
 
-        document.addEventListener('click', function (e) {
-            if (!beliButton.contains(e.target) && 
-                !cartButton.contains(e.target) && 
-                !beliDropdown.contains(e.target)) {
-                const dropdown = new bootstrap.Dropdown(beliButton);
-                dropdown.hide();
-            }
-        });
+    document.addEventListener('click', function(e) {
+        if (!beliButton.contains(e.target) &&
+            !cartButton.contains(e.target) &&
+            !beliDropdown.contains(e.target)) {
+            const dropdown = new bootstrap.Dropdown(beliButton);
+            dropdown.hide();
+        }
+    });
 
-        beliDropdown.addEventListener('click', function (e) {
-            e.stopPropagation();
-        });
-
+    beliDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
     </script>
     <footer class="text-center">
         <p>Create by Alzi Petshop | &copy 2024</p>
