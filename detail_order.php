@@ -110,6 +110,11 @@ function getFirstName($fullName) {
     $parts = explode(" ", $fullName);
     return $parts[0];
 }
+
+function rupiah($angka){
+    $hasil_rupiah = "Rp" . number_format($angka,0,',','.');
+    return $hasil_rupiah;
+}
 ?>
 
 <!DOCTYPE html>
@@ -263,7 +268,6 @@ function getFirstName($fullName) {
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Understood</button>
                                             </div>
                                         </div>
                                     </div>

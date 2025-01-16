@@ -174,7 +174,7 @@ function getFirstName($fullName) {
                                 <td><?= $order_id ?></td>
                             </tr>
                             <tr>
-                                <th>Status Transaksi</th>
+                                <th>Status Pembayaran</th>
                                 <td>
                                     <div class=" <?php if ($transaction_status === "pending"): ?>
                                     btn btn-outline-warning text-black
