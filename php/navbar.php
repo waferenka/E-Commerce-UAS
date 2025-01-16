@@ -333,19 +333,19 @@
             <div class="navbar-item">
                 <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php'): ?>
                 <?php else: ?>
-                    <?php if (!in_array($user_level, $restricted_levels)): ?>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#riwayatModal" id="riwayatLink">
-                        <img src="imgs/riwayat.jpg" alt="riwayat" class="me-2">
-                    </a>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#keranjangModal" id="keranjangLink">
-                        <img src="imgs/cart.png" alt="Keranjang" class="me-2">
-                    </a>
-                    <?php endif; ?>
+                <?php if (!in_array($user_level, $restricted_levels)): ?>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#riwayatModal" id="riwayatLink">
+                    <img src="imgs/riwayat.jpg" alt="riwayat" class="me-2">
+                </a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#keranjangModal" id="keranjangLink">
+                    <img src="imgs/cart.png" alt="Keranjang" class="me-2">
+                </a>
+                <?php endif; ?>
                 <?php endif; ?>
                 <?php if ($user_level == 'penjual'): ?>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#riwayatModalPembeli" id="riwayatLinkPembeli">
-                        <img src="imgs/riwayat.jpg" alt="riwayat" class="me-2">
-                    </a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#riwayatModalPembeli" id="riwayatLinkPembeli">
+                    <img src="imgs/riwayat.jpg" alt="riwayat" class="me-2">
+                </a>
                 <?php endif; ?>
                 <a href="detail.php">
                     <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
@@ -398,7 +398,7 @@
     </div>
     <!-- End keranjang -->
 
-    <!-- Modal Riwayat -->
+    <!-- Modal Riwayat Pembeli-->
     <div class="modal fade" id="riwayatModal" tabindex="-1" aria-labelledby="riwayatModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -468,8 +468,9 @@
         </div>
     </div>
 
-    <!-- Modal Riwayat Pembeli -->
-    <div class="modal fade" id="riwayatModalPembeli" tabindex="-1" aria-labelledby="riwayatModalLabelPembeli" aria-hidden="true">
+    <!-- Modal Riwayat Penjual -->
+    <div class="modal fade" id="riwayatModalPembeli" tabindex="-1" aria-labelledby="riwayatModalLabelPembeli"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -520,7 +521,7 @@
                                     <td><?= htmlspecialchars(rupiah($row['gross_amount'])); ?></td>
                                     <td><?= htmlspecialchars($row['transaction_status']); ?></td>
                                     <td><?= htmlspecialchars($row['payment_time']); ?></td>
-                                    <td><a href="detail_riwayat.php?order_id=<?php echo $row['order_id']; ?>"
+                                    <td><a href="detail_order.php?order_id=<?php echo $row['order_id']; ?>"
                                             class="btn btn-primary">Detail</a>
                                     </td>
                                 </tr>

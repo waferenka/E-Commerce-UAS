@@ -46,17 +46,40 @@ echo "Data user tidak ditemukan.";
 $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : '';
 
 // Jika tombol konfirmasi diklik
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
-    $update_query = "UPDATE shipping_detail SET status_pengiriman = 6 WHERE order_id = ?";
-    $update_stmt = $conn->prepare($update_query);
-    $update_stmt->bind_param("s", $order_id); // Gunakan tipe data string untuk order_id
-    if ($update_stmt->execute()) {
-        echo '<div class="alert alert-success">Status pengiriman berhasil diperbarui menjadi "Selesai"!</div>';
-    } else {
-        echo '<div class="alert alert-danger">Gagal memperbarui status pengiriman.</div>';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['pembayaran'])) {
+        $update_query = "UPDATE shipping_detail SET status_pengiriman = 3 WHERE order_id = ?";
+        $update_stmt = $conn->prepare($update_query);
+        $update_stmt->bind_param("s", $order_id); // Gunakan tipe data string untuk order_id
+        if ($update_stmt->execute()) {
+            echo '<div class="alert alert-success">Status pengiriman berhasil diperbarui!</div>';
+        } else {
+            echo '<div class="alert alert-danger">Gagal memperbarui status pengiriman.</div>';
+        }
+        $update_stmt->close();
+    } elseif (isset($_POST['pengemasan'])) {
+        $update_query = "UPDATE shipping_detail SET status_pengiriman = 4 WHERE order_id = ?";
+        $update_stmt = $conn->prepare($update_query);
+        $update_stmt->bind_param("s", $order_id); // Gunakan tipe data string untuk order_id
+        if ($update_stmt->execute()) {
+            echo '<div class="alert alert-success">Status pengiriman berhasil diperbarui!</div>';
+        } else {
+            echo '<div class="alert alert-danger">Gagal memperbarui status pengiriman.</div>';
+        }
+        $update_stmt->close();
+    } elseif (isset($_POST['pengiriman'])) {
+        $update_query = "UPDATE shipping_detail SET status_pengiriman = 5 WHERE order_id = ?";
+        $update_stmt = $conn->prepare($update_query);
+        $update_stmt->bind_param("s", $order_id); // Gunakan tipe data string untuk order_id
+        if ($update_stmt->execute()) {
+            echo '<div class="alert alert-success">Status pengiriman berhasil diperbarui!</div>';
+        } else {
+            echo '<div class="alert alert-danger">Gagal memperbarui status pengiriman.</div>';
+        }
+        $update_stmt->close();
     }
-    $update_stmt->close();
 }
+
 
 // Query untuk mengambil data transaksi
 $query = "
@@ -89,7 +112,7 @@ if ($stmt) {
     if ($result && $row = $result->fetch_assoc()) {
         $name = htmlspecialchars($row['name']);
         $transaction_status = htmlspecialchars($row['transaction_status']);
-        $gross_amount = htmlspecialchars($row['gross_amount']);
+        $gross_amount = rupiah($row['gross_amount']);
         $shipping_status = htmlspecialchars($row['shipping_status']);
         $shipping_status_id = intval($row['shipping_status_id']);
         $payment_time = htmlspecialchars($row['payment_time']);
@@ -109,11 +132,6 @@ if ($stmt) {
 function getFirstName($fullName) {
     $parts = explode(" ", $fullName);
     return $parts[0];
-}
-
-function rupiah($angka){
-    $hasil_rupiah = "Rp" . number_format($angka,0,',','.');
-    return $hasil_rupiah;
 }
 ?>
 
@@ -234,45 +252,18 @@ function rupiah($angka){
                         </table>
                         <div class="container-fluid d-flex justify-content-between">
                             <div class="a">
-                                <?php if ($shipping_status_id === 5): ?>
-                                <form method="post">
-                                    <button type="submit" name="confirm" class="btn btn-success mt-3">Konfirmasi
+                                <form method="post" action="">
+                                    <?php if ($shipping_status_id === 2): ?>
+                                    <button type="submit" name="pembayaran" class="btn btn-primary mt-3">Konfirmasi
+                                        Pembayaran</button>
+                                    <?php elseif ($shipping_status_id === 3): ?>
+                                    <button type="submit" name="pengemasan" class="btn btn-primary mt-3">Konfirmasi
+                                        Pengemasan</button>
+                                    <?php elseif ($shipping_status_id === 4): ?>
+                                    <button type="submit" name="pengiriman" class="btn btn-primary mt-3">Konfirmasi
                                         Pengiriman</button>
+                                    <?php endif; ?>
                                 </form>
-                                <?php elseif (!empty($snap_token && $transaction_status === "pending")): ?>
-                                <!-- Vertically centered scrollable modal -->
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop">
-                                    Bayar Sekarang
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="ratio ratio-4x3">
-                                                    <iframe
-                                                        src="https://app.sandbox.midtrans.com/snap/v2/vtweb/<?php echo $snap_token ?>"
-                                                        allowfullscreen style="border: none;"></iframe>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php endif; ?>
                             </div>
 
                             <div class="b">
