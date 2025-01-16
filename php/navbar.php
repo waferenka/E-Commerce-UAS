@@ -132,13 +132,13 @@
                     VALUES (?, ?, ?, ?, ?, ?)");
                 $payment_status = 'Pending';
                 $order_ids = $transaction_details['order_id'];
-                $gross_amount = $transaction_details['gross_amount'];
+                $gross_amount = $transaction_details['gross_amount'] + $shipping_cost;
                 $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
-                $stmt->bind_param("ssssss", 
-                    $order_ids,
+                $stmt->bind_param("sssiss", 
+                $transaction_details['order_id'],
                     $user_id,
                     $payment_status, 
-                    $gross_amount,
+                    $transaction_details['gross_amount'],
                     $item_details_json,
                     $snap_token
                 );

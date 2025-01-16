@@ -1,31 +1,82 @@
 <?php
-ob_start();  // Mulai output buffering
+
+session_start();
 require 'dompdf/autoload.inc.php';
+require 'php.php';
 
 use Dompdf\Dompdf;
 
-// Fungsi validasi data transaksi
-function validate_data($data) {
-    return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
+// Mulai output buffering
+ob_start();
+
+// Validasi `order_id` dari GET
+$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
+$user_id = $_SESSION['userid'];
+
+// Pastikan `order_id` valid
+if ($order_id <= 0) {
+    die("Invalid Order ID.");
 }
 
-$dompdf = new Dompdf();
+$query_user = "
+        SELECT u.nama, u.email, d.alamat, d.no_telepon
+        FROM tbluser u
+        JOIN user_detail d ON u.id = d.id
+        WHERE u.id = '$user_id'
+    ";
+    
+    $result_user = mysqli_query($conn, $query_user);
+    $user = mysqli_fetch_assoc($result_user);
 
-// Simulasi data transaksi (sesuaikan dengan data real)
-$store_name = validate_data("Alzi Petshop");
-$order_id = validate_data("12345");
-$customer_name = validate_data("John Doe");
-$transaction_date = validate_data("2025-01-13");
-$items = [
-    ['name' => 'Cat Food Premium', 'quantity' => 2, 'unit_price' => 90000, 'total' => 180000],
-    ['name' => 'Cat Toy - Mouse', 'quantity' => 1, 'unit_price' => 25000, 'total' => 25000],
-];
-$total_price = 205000;
-$payment_type = validate_data("QRIS");
-$transaction_status = validate_data("Success");
+// Query transaksi menggunakan `Prepared Statement`
+$queryriwayat = "
+    SELECT 
+        t.*, 
+        ss.status_pengiriman AS shipping_status 
+    FROM transactions t
+    LEFT JOIN tbluser u ON t.user_id = u.id
+    LEFT JOIN shipping_detail sd ON t.order_id = sd.order_id
+    LEFT JOIN shipping_status ss ON sd.status_pengiriman = ss.id
+    WHERE t.order_id = ?
+";
+
+$stmt = $conn->prepare($queryriwayat);
+$stmt->bind_param("i", $order_id);
+$stmt->execute();
+$resultriwayat = $stmt->get_result();
+
+if (!$resultriwayat || $resultriwayat->num_rows === 0) {
+    die("Order not found.");
+}
+
+// Ambil data transaksi
+$transaction = $resultriwayat->fetch_assoc();
+$customer_name = htmlspecialchars($user['nama']);
+$transaction_date = htmlspecialchars($transaction['update_time']);
+$transaction_status = htmlspecialchars($transaction['status']);
+$item_details = json_decode($transaction['item_details'], true);
+
+// Validasi data item
+$items = [];
+if (is_array($item_details)) {
+    foreach ($item_details as $item) {
+        $items[] = [
+            'name' => htmlspecialchars($item['name']),
+            'quantity' => intval($item['quantity']),
+            'unit_price' => floatval($item['price']),
+            'total' => floatval($item['quantity']) * floatval($item['price']),
+        ];
+    }
+}
+
+// Hitung total harga
+$total_price = array_sum(array_column($items, 'total'));
+
+// Informasi tambahan
+$store_name = "Alzi Petshop";
 $logo_url = "https://via.placeholder.com/150x60?text=Petshop+Logo";
 
-// Buat template HTML
+// Template HTML
 $html = "
 <style>
     body {
@@ -104,8 +155,8 @@ $html = "
 foreach ($items as $item) {
     $html .= "
             <tr>
-                <td>" . validate_data($item['name']) . "</td>
-                <td>" . validate_data($item['quantity']) . "</td>
+                <td>{$item['name']}</td>
+                <td>{$item['quantity']}</td>
                 <td>IDR " . number_format($item['unit_price'], 0, ',', '.') . "</td>
                 <td>IDR " . number_format($item['total'], 0, ',', '.') . "</td>
             </tr>";
@@ -118,7 +169,6 @@ $html .= "
             </tr>
         </table>
     </div>
-    <p>Payment Type: $payment_type</p>
     <p>Status: $transaction_status</p>
     <div class='footer'>
         <p>Thank you for shopping with us!</p>
@@ -127,9 +177,12 @@ $html .= "
 </div>
 ";
 
+// Buat PDF
+$dompdf = new Dompdf();
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
-ob_end_clean();  // Hapus buffer output sebelumnya
+
+// Hapus buffer output sebelumnya dan unduh file
+ob_end_clean();
 $dompdf->stream("invoice_$order_id.pdf", ["Attachment" => true]);
-?>

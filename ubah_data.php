@@ -32,49 +32,58 @@
     }
 
     // Proses update data user
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $nama_baru = $_POST['nama'];
-        $email_baru = $_POST['email'];
-        $jenis_kelamin_baru = $_POST['jenis_kelamin'];
-        $tanggal_lahir_baru = $_POST['tanggal_lahir'];
-        $alamat_baru = $_POST['alamat'];
-        $no_telepon_baru = $_POST['no_telepon'];
-        $destination = explode(',', $_POST['destination']);
-        
-        // Update tbluser
-        $sql_update_user = "UPDATE tbluser SET nama = ?, email = ? WHERE id = ?";
-        $stmt_user = $conn->prepare($sql_update_user);
-        $stmt_user->bind_param('ssi', $nama_baru, $email_baru, $userid);
-        $stmt_user->execute();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama_baru = $_POST['nama'];
+    $email_baru = $_POST['email'];
+    $jenis_kelamin_baru = $_POST['jenis_kelamin'];
+    $tanggal_lahir_baru = $_POST['tanggal_lahir'];
+    $alamat_baru = $_POST['alamat'];
+    $no_telepon_baru = $_POST['no_telepon'];
+    $destination = explode(',', $_POST['destination']);
 
-        // Update user_detail
-        $sql_update_detail = "UPDATE user_detail SET jenis_kelamin = ?, tanggal_lahir = ?, alamat = ?, no_telepon = ? WHERE id = ?";
-        $stmt_detail = $conn->prepare($sql_update_detail);
-        $stmt_detail->bind_param('ssssi', $jenis_kelamin_baru, $tanggal_lahir_baru, $alamat_baru, $no_telepon_baru, $userid);
-        $stmt_detail->execute();
+    // Update tbluser
+    $sql_update_user = "UPDATE tbluser SET nama = ?, email = ? WHERE id = ?";
+    $stmt_user = $conn->prepare($sql_update_user);
+    $stmt_user->bind_param('ssi', $nama_baru, $email_baru, $userid);
+    $stmt_user->execute();
 
-        
-        // Validasi data latitude dan longitude
-        if (count($destination) == 2) {
-            $lat = floatval(trim($destination[0]));
-            $lon = floatval(trim($destination[1]));
-        } else {
-            die("Data lokasi tidak valid.");
-        }
+    // Update user_detail
+    $sql_update_detail = "UPDATE user_detail SET jenis_kelamin = ?, tanggal_lahir = ?, alamat = ?, no_telepon = ? WHERE id = ?";
+    $stmt_detail = $conn->prepare($sql_update_detail);
+    $stmt_detail->bind_param('ssssi', $jenis_kelamin_baru, $tanggal_lahir_baru, $alamat_baru, $no_telepon_baru, $userid);
+    $stmt_detail->execute();
 
-        $sqls = "SELECT id FROM detail_address WHERE user_id = $userid";
-        $resultaddress = mysqli_query($conn, $sqls);
+    // Validasi data latitude dan longitude
+    if (count($destination) == 2) {
+        $lat = floatval(trim($destination[0]));
+        $lon = floatval(trim($destination[1]));
+    } else {
+        die("Data lokasi tidak valid.");
+    }
 
-        if ($resultaddress->num_rows > 0) {
-            $rowaddress = mysqli_fetch_assoc($resultaddress);
-            $id_address = $rowaddress['id'];
-        }
+    // Cek apakah user_id sudah ada di detail_address
+    $sql_check_address = "SELECT id FROM detail_address WHERE user_id = ?";
+    $stmt_check = $conn->prepare($sql_check_address);
+    $stmt_check->bind_param('i', $userid);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
 
-        // Insert ke tabel detail_address
-        $sql_insert_address = "UPDATE detail_address SET user_id = ?, latitude = ?, longitude = ? WHERE id = ?";
-        $stmt_address = $conn->prepare($sql_insert_address);
-        $stmt_address->bind_param('sssi', $userid, $lat, $lon, $id_address);
-        $stmt_address->execute();
+    if ($result_check->num_rows > 0) {
+        // Jika data ada, lakukan update
+        $row = $result_check->fetch_assoc();
+        $id_address = $row['id'];
+
+        $sql_update_address = "UPDATE detail_address SET latitude = ?, longitude = ? WHERE id = ?";
+        $stmt_update_address = $conn->prepare($sql_update_address);
+        $stmt_update_address->bind_param('ddi', $lat, $lon, $id_address);
+        $stmt_update_address->execute();
+    } else {
+        // Jika data tidak ada, lakukan insert
+        $sql_insert_address = "INSERT INTO detail_address (user_id, latitude, longitude) VALUES (?, ?, ?)";
+        $stmt_insert_address = $conn->prepare($sql_insert_address);
+        $stmt_insert_address->bind_param('idd', $userid, $lat, $lon);
+        $stmt_insert_address->execute();
+    }
 
         // Redirect setelah update
         header("Location: detail.php");
@@ -103,52 +112,53 @@
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        html, body {
-            width: 100%;
-            height: 100vh;
-        }
+    html,
+    body {
+        width: 100%;
+        height: 100vh;
+    }
 
-        .card {
-            padding-top: 1rem;
-        }
+    .card {
+        padding-top: 1rem;
+    }
 
-        .row {
-            padding-top: 2.5rem;
-        }
+    .row {
+        padding-top: 2.5rem;
+    }
 
-        .navbar {
-            position: sticky;
-            z-index: 9999;
+    .navbar {
+        position: sticky;
+        z-index: 9999;
+    }
+
+    footer {
+        bottom: 0;
+    }
+
+    @media (max-width: 435px) {
+        body {
+            overflow-y: auto;
         }
 
         footer {
+            position: static;
             bottom: 0;
+            padding-top: 1rem;
         }
+    }
 
-        @media (max-width: 435px) {
-            body {
-                overflow-y: auto;
-            }
-
-            footer {
-                position: static;
-                bottom: 0;
-                padding-top: 1rem;
-            }
+    @media (min-width: 768px) {
+        footer {
+            background-color: white;
+            margin-top: 2rem;
+            padding: 1rem 0 0.1rem 0;
+            width: 100%;
         }
+    }
 
-        @media (min-width: 768px) {
-            footer {
-                background-color: white;
-                margin-top: 2rem;
-                padding: 1rem 0 0.1rem 0;
-                width: 100%;
-            }
-        }
-
-        h4 {
-            font-weight: bold;
-        }
+    h4 {
+        font-weight: bold;
+    }
     </style>
 </head>
 
@@ -197,7 +207,8 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="jenis_kelamin">Jenis Kelamin:</label>
-                                <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required autocomplete="off">
+                                <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required
+                                    autocomplete="off">
                                     <option value="Laki-laki"
                                         <?php if ($jenis_kelamin == 'Laki-laki') echo 'selected'; ?>>Laki-laki</option>
                                     <option value="Perempuan"
@@ -283,8 +294,8 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="alamat">Alamat:</label>
-                                <textarea class="form-control" id="alamat" name="alamat"
-                                    required autocomplete="off"><?php echo $alamat; ?></textarea>
+                                <textarea class="form-control" id="alamat" name="alamat" required
+                                    autocomplete="off"><?php echo $alamat; ?></textarea>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="no_telepon">No. Telepon:</label>
@@ -303,7 +314,7 @@
         </footer>
     </div>
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
