@@ -216,7 +216,6 @@
         display: inline-block;
         padding: 10px 20px;
         color: white;
-        border: 1px #ff6347 solid;
         text-decoration: none;
         border-radius: 5px;
 

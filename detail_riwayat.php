@@ -160,8 +160,8 @@ function getFirstName($fullName) {
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header bg-warning text-black">
-                        <h3>Detail Transaksi</h3>
+                    <div class="container-fluid card-header bg-warning text-black">
+                        <h3 class="text-center" style="margin:0 auto;">Detail Transaksi</h3>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped table-hover">
