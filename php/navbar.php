@@ -1,66 +1,67 @@
 <?php 
     require 'midtrans_config.php'; // Konfigurasi Midtrans
-	$user_id = $_SESSION['userid'];
-	$user_level = $_SESSION['level'];
-	$restricted_levels = ['admin', 'penjual'];
-	// Query untuk mengambil data dari tabel cart berdasarkan user_id
+    $user_id = $_SESSION['userid'];
+    $user_level = $_SESSION['level'];
+    $restricted_levels = ['admin', 'penjual'];
+    // Query untuk mengambil data dari tabel cart berdasarkan user_id
+
 
     // hitung ongkir
-$sql = "SELECT * FROM detail_address WHERE user_id = ?";
-// Persiapkan statement
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);  // "i" berarti integer
-// Eksekusi statement
-$stmt->execute();
-// Ambil hasilnya
-$result = $stmt->get_result();
+    $sql = "SELECT * FROM detail_address WHERE user_id = ?";
+    // Persiapkan statement
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);  // "i" berarti integer
+    // Eksekusi statement
+    $stmt->execute();
+    // Ambil hasilnya
+    $result = $stmt->get_result();
 
-$shipping_cost = 0; // Inisialisasi nilai shipping_cost
+    $shipping_cost = 0; // Inisialisasi nilai shipping_cost
 
-if ($result->num_rows > 0) {
-    // Menampilkan data
-    while ($row = $result->fetch_assoc()) {
-        $lat1 = -3.0113878;
-        $lon1 = 104.6895402;
-        $lat2 = $row["latitude"];
-        $lon2 = $row["longitude"];
-        // Haversine Formula
-        function haversine($lat1, $lon1, $lat2, $lon2) {
-            $earthRadius = 6371; // Radius of the earth in km
-            $latDiff = deg2rad($lat2 - $lat1);
-            $lonDiff = deg2rad($lon2 - $lon1);
-            $a = sin($latDiff / 2) * sin($latDiff / 2) +
-                cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * 
-                sin($lonDiff / 2) * sin($lonDiff / 2);
-            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-            $distance = $earthRadius * $c; // Distance in km
-            return $distance;
-        }
-        $distance = haversine($lat1, $lon1, $lat2, $lon2);
-        $costPerKm = 5000; // Biaya per km (contoh)
-        // Jika jarak kurang dari 1km, tetap dihitung Rp5000
-        if ($distance < 1) {
-            $shipping_cost = 5000;
-        } else {
-            $shipping_cost = round($distance * $costPerKm); // Dibulatkan ke integer terdekat
+    if ($result->num_rows > 0) {
+        // Menampilkan data
+        while ($row = $result->fetch_assoc()) {
+            $lat1 = -3.0113878;
+            $lon1 = 104.6895402;
+            $lat2 = $row["latitude"];
+            $lon2 = $row["longitude"];
+            // Haversine Formula
+            function haversine($lat1, $lon1, $lat2, $lon2) {
+                $earthRadius = 6371; // Radius of the earth in km
+                $latDiff = deg2rad($lat2 - $lat1);
+                $lonDiff = deg2rad($lon2 - $lon1);
+                $a = sin($latDiff / 2) * sin($latDiff / 2) +
+                    cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * 
+                    sin($lonDiff / 2) * sin($lonDiff / 2);
+                $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+                $distance = $earthRadius * $c; // Distance in km
+                return $distance;
+            }
+            $distance = haversine($lat1, $lon1, $lat2, $lon2);
+            $costPerKm = 5000; // Biaya per km (contoh)
+            // Jika jarak kurang dari 1km, tetap dihitung Rp5000
+            if ($distance < 1) {
+                $shipping_cost = 5000;
+            } else {
+                $shipping_cost = round($distance * $costPerKm); // Dibulatkan ke integer terdekat
+            }
         }
     }
-}
 
-	// Ambil data keranjang untuk Midtrans
-	$items = [];
-	$total_price_midtrans = 0;  // Total price untuk Midtrans
-	$querycart = "
-	    SELECT c.product_id, p.name AS product_name, p.image, c.quantity, p.price, (c.quantity * p.price) AS total_price 
-	    FROM cart c
-	    JOIN products p ON c.product_id = p.id
-	    WHERE c.user_id = '$user_id'
-	";
+    // Ambil data keranjang untuk Midtrans
+    $items = [];
+    $total_price_midtrans = 0;  // Total price untuk Midtrans
+    $querycart = "
+        SELECT c.product_id, p.name AS product_name, p.image, c.quantity, p.price, (c.quantity * p.price) AS total_price 
+        FROM cart c
+        JOIN products p ON c.product_id = p.id
+        WHERE c.user_id = '$user_id'
+    ";
 
-	$resultcart = mysqli_query($conn, $querycart);
-	while ($rowc = mysqli_fetch_assoc($resultcart)) {
+    $resultcart = mysqli_query($conn, $querycart);
+    while ($rowc = mysqli_fetch_assoc($resultcart)) {
         if ($rowc['price'] > 0 && $rowc['quantity'] > 0) {
-            $total_price_midtrans = $shipping_cost + $rowc['total_price'];
+            $total_price_midtrans = $rowc['total_price'];
             $items[] = [
                 'id' => $rowc['product_id'],
                 'price' => $rowc['price'],
@@ -70,28 +71,36 @@ if ($result->num_rows > 0) {
         }
     }
 
-	// Ambil data keranjang untuk tampilan modal (tanpa menghitung total price lagi)
-	$querycart_display = "
-	    SELECT c.id AS cart_id, c.product_id, p.name AS product_name, p.image, c.quantity, p.price 
-	    FROM cart c
-	    JOIN products p ON c.product_id = p.id
-	    WHERE c.user_id = '$user_id'
-	";
-	$resultcart_display = mysqli_query($conn, $querycart_display);
+    // Tambahkan ongkir sebagai item
+    $items[] = [
+        'id' => 'shipping',
+        'price' => $shipping_cost,
+        'quantity' => 1,
+        'name' => 'Ongkos Kirim'
+    ];
 
-	$total_price_display = 0; // Total price untuk tampilan modal
+    // Ambil data keranjang untuk tampilan modal (tanpa menghitung total price lagi)
+    $querycart_display = "
+        SELECT c.id AS cart_id, c.product_id, p.name AS product_name, p.image, c.quantity, p.price 
+        FROM cart c
+        JOIN products p ON c.product_id = p.id
+        WHERE c.user_id = '$user_id'
+    ";
+    $resultcart_display = mysqli_query($conn, $querycart_display);
+
+    $total_price_display = 0; // Total price untuk tampilan modal
 
 
-	// Ambil informasi user dari tabel tbluser dan user_detail
-	$query_user = "
-	    SELECT u.nama, u.email, d.alamat, d.no_telepon
-	    FROM tbluser u
-	    JOIN user_detail d ON u.id = d.id
-	    WHERE u.id = '$user_id'
-	";
+    // Ambil informasi user dari tabel tbluser dan user_detail
+    $query_user = "
+        SELECT u.nama, u.email, d.alamat, d.no_telepon
+        FROM tbluser u
+        JOIN user_detail d ON u.id = d.id
+        WHERE u.id = '$user_id'
+    ";
     
-	$result_user = mysqli_query($conn, $query_user);
-	$user = mysqli_fetch_assoc($result_user);
+    $result_user = mysqli_query($conn, $query_user);
+    $user = mysqli_fetch_assoc($result_user);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
         header('Content-Type: application/json'); // Tambahkan header JSON di sini
@@ -100,7 +109,7 @@ if ($result->num_rows > 0) {
         if (!empty($items) && $total_price_midtrans > 0) {
             // Data transaksi
             $transaction_details = [
-                'order_id' => rand(),
+                'order_id' => uniqid('order_', true),
                 'gross_amount' => $total_price_midtrans
             ];
 
@@ -111,16 +120,8 @@ if ($result->num_rows > 0) {
                 'shipping_address' => $user['alamat']
             ];
 
-            $shipping_details = [
-                'id' => 'shipping',
-                'price' => $shipping_cost,
-                'quantity' => 1,
-                'name' => 'Ongkos Kirim'
-            ];
-
             $transaction_data = [
                 'transaction_details' => $transaction_details,
-                'shipping_details' => $shipping_details,
                 'customer_details' => $customer_details,
                 'item_details' => $items
             ];
@@ -144,7 +145,12 @@ if ($result->num_rows > 0) {
                 $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
 
                 // Kirim respons JSON
-                echo json_encode(['success' => true, 'snap_token' => $snap_token, 'order_id' => $transaction_details['order_id']]);
+                echo json_encode([
+                    'success' => true,
+                    'snap_token' => $snap_token,
+                    'order_id' => $transaction_details['order_id'],
+                    'payment_url' => "https://app.sandbox.midtrans.com/snap/v2/vtweb/$snap_token" // URL untuk pembayaran
+                ]);
                 exit;
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'message' => $e->getMessage()]);
@@ -157,33 +163,47 @@ if ($result->num_rows > 0) {
     }
 
     if (isset($_POST['update_cart'])) {
-    	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    		// Pastikan data 'quantity' diterima sebagai array
-    		if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
-    			foreach ($_POST['quantity'] as $product_id => $quantity) {
-    				$product_id = intval($product_id); // Pastikan product_id adalah integer
-    				$quantity = max(1, intval($quantity)); // Pastikan quantity minimal 1
-    	
-    				// Update jumlah barang dalam tabel cart
-    				$updateQuery = "UPDATE cart SET quantity = ?, price = (SELECT price FROM products WHERE id = ?) * ? WHERE product_id = ? AND user_id = ?";
-    				$stmt = $conn->prepare($updateQuery);
-    				if ($stmt) {
-    					$stmt->bind_param("iiiii", $quantity, $product_id, $quantity, $product_id, $user_id);
-    					$stmt->execute();
-    					$stmt->close();
-    				} else {
-    					echo "Kesalahan saat mempersiapkan query: " . $conn->error;
-    				}
-    			}
-    			header("Location: #"); // Redirect ke halaman keranjang
-    			exit;
-    		} else {
-    			
-    		}
-    	}
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Pastikan data 'quantity' diterima sebagai array
+            if (isset($_POST['quantity']) && is_array($_POST['quantity'])) {
+                foreach ($_POST['quantity'] as $product_id => $quantity) {
+                    $product_id = intval($product_id); // Pastikan product_id adalah integer
+                    $quantity = max(1, intval($quantity)); // Pastikan quantity minimal 1
+        
+                    // Update jumlah barang dalam tabel cart
+                    $updateQuery = "UPDATE cart SET quantity = ?, price = (SELECT price FROM products WHERE id = ?) * ? WHERE product_id = ? AND user_id = ?";
+                    $stmt = $conn->prepare($updateQuery);
+                    if ($stmt) {
+                        $stmt->bind_param("iiiii", $quantity, $product_id, $quantity, $product_id, $user_id);
+                        $stmt->execute();
+                        $stmt->close();
+                    } else {
+                        echo "Kesalahan saat mempersiapkan query: " . $conn->error;
+                    }
+                }
+                header("Location: #"); // Redirect ke halaman keranjang
+                exit;
+            } else {
+                
+            }
+        }
     }
-    $queryriwayat = "SELECT * FROM `transactions`";
-    $resultriwayat = $conn->query($queryriwayat);
+    $queryriwayat = "
+        SELECT 
+        t.*, 
+        ss.status_pengiriman AS shipping_status 
+    FROM transactions t
+    LEFT JOIN tbluser u ON t.user_id = u.id
+    LEFT JOIN shipping_detail sd ON t.order_id = sd.order_id
+    LEFT JOIN shipping_status ss ON sd.status_pengiriman = ss.id
+    WHERE t.user_id = ?
+";
+
+// Gunakan prepared statement
+$stmt = $conn->prepare($queryriwayat);
+$stmt->bind_param("i", $user_id); // Pastikan $user_id adalah integer
+$stmt->execute();
+$resultriwayat = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -278,7 +298,6 @@ if ($result->num_rows > 0) {
         <div class="container-fluid">
             <a class="navbar-brand ms-2 font-weight-bold" href="index_p.php">
                 Alzi Petshop
-                <?php echo "Total harga + ongkir: " . $total_price_midtrans . ", ongkir:" . $shipping_cost; ?>
             </a>
             <?php if (!in_array($user_level, $restricted_levels)): ?>
             <div class="search-box me-3">
@@ -341,8 +360,7 @@ if ($result->num_rows > 0) {
                         <?php 
 						    $total_price_display += $row['price'] * $row['quantity']; // Hitung total price untuk tampilan modal
 						endwhile; ?>
-                        <p class="total-price">Total Belanja:
-                            Rp<?= number_format($total_price_display, 0, ',', '.'); ?>abc <?= $shipping_cost; ?>
+                        <p class="total-price">Total Belanja: Rp<?= number_format($total_price_display, 0, ',', '.'); ?>
                         </p>
                         <div class="cart-actions container-fluid d-flex justify-content-between">
                             <button class="btn btn-warning" type="submit" name="update_cart">Update Keranjang</button>
@@ -372,8 +390,9 @@ if ($result->num_rows > 0) {
                                     <th>Quantity</th>
                                     <th>Order ID</th>
                                     <th>Harga</th>
-                                    <th>Status</th>
+                                    <th>Status Pembayaran</th>
                                     <th>Waktu Pembayaran</th>
+                                    <th>Status Pengiriman</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -406,6 +425,8 @@ if ($result->num_rows > 0) {
                                     <td><?= htmlspecialchars(rupiah($row['gross_amount'])); ?></td>
                                     <td><?= htmlspecialchars($row['transaction_status']); ?></td>
                                     <td><?= htmlspecialchars($row['payment_time']); ?></td>
+                                    <td><a href="hapus.php" class="btn btn-primary">detail</a>
+                                    </td>
                                 </tr>
                                 <?php endwhile; ?>
                                 <?php else: ?>

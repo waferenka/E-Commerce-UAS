@@ -18,8 +18,8 @@
         }
 
         .message-content {
-            max-width: 70%;
-            padding: 10px;
+            max-width: 100%;
+            padding: 8px 11px;
             border-radius: 10px;
             font-size: 14px;
             position: relative;
@@ -31,7 +31,7 @@
         .time {
             font-size: 10px;
             color: gray;
-            margin-top: 5px; /* Memberikan sedikit jarak antara pesan dan waktu */
+            margin-top: 1px; /* Memberikan sedikit jarak antara pesan dan waktu */
             align-self: flex-end; /* Agar waktu berada di sudut kanan (untuk pengirim) */
         }
 
@@ -48,6 +48,7 @@
         .message {
             display: flex;
             margin: 5px 0;
+
         }
 
         .message.you {
@@ -65,7 +66,7 @@
     </style>
 </head>
 <body>
-    <h1>Chat Real-Time 2 Arah</h1>
+    <h1>Chat Penerima</h1>
     <div id="chatDisplay"></div>
     <textarea id="messageInput" placeholder="Tulis pesan Anda..."></textarea>
     <button id="sendButton">Kirim</button>

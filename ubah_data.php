@@ -39,7 +39,8 @@
         $tanggal_lahir_baru = $_POST['tanggal_lahir'];
         $alamat_baru = $_POST['alamat'];
         $no_telepon_baru = $_POST['no_telepon'];
-
+        $destination = explode(',', $_POST['destination']);
+        
         // Update tbluser
         $sql_update_user = "UPDATE tbluser SET nama = ?, email = ? WHERE id = ?";
         $stmt_user = $conn->prepare($sql_update_user);
@@ -51,6 +52,29 @@
         $stmt_detail = $conn->prepare($sql_update_detail);
         $stmt_detail->bind_param('ssssi', $jenis_kelamin_baru, $tanggal_lahir_baru, $alamat_baru, $no_telepon_baru, $userid);
         $stmt_detail->execute();
+
+        
+        // Validasi data latitude dan longitude
+        if (count($destination) == 2) {
+            $lat = floatval(trim($destination[0]));
+            $lon = floatval(trim($destination[1]));
+        } else {
+            die("Data lokasi tidak valid.");
+        }
+
+        $sqls = "SELECT id FROM detail_address WHERE user_id = $userid";
+        $resultaddress = mysqli_query($conn, $sqls);
+
+        if ($resultaddress->num_rows > 0) {
+            $rowaddress = mysqli_fetch_assoc($resultaddress);
+            $id_address = $rowaddress['id'];
+        }
+
+        // Insert ke tabel detail_address
+        $sql_insert_address = "UPDATE detail_address SET user_id = ?, latitude = ?, longitude = ? WHERE id = ?";
+        $stmt_address = $conn->prepare($sql_insert_address);
+        $stmt_address->bind_param('sssi', $userid, $lat, $lon, $id_address);
+        $stmt_address->execute();
 
         // Redirect setelah update
         header("Location: detail.php");
@@ -70,6 +94,11 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Open Street Map -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <!-- My Style -->
     <link rel="stylesheet" href="css/bootstrap_style.css">
     <link rel="stylesheet" href="css/style.css">
@@ -88,7 +117,8 @@
         }
 
         .navbar {
-            position: fixed;
+            position: sticky;
+            z-index: 9999;
         }
 
         footer {
@@ -140,7 +170,7 @@
                 <div class="navbar-item">
                     <a href="detail.php">
                         <img src="<?php echo $foto; ?>" class="rounded-circle me-2">
-                        <?php echo $nama; ?>
+                        <span class="fw-bold"><?php echo $nama; ?></span>
                     </a>
                 </div>
             </div>
@@ -180,6 +210,78 @@
                                     value="<?php echo $tanggal_lahir; ?>" required autocomplete="off">
                             </div>
                             <div class="form-group mb-3">
+                                <label for="destination">Alamat (Harap perhatikan titik lokasinya):</label>
+                                <input type="text" id="destination" name="destination" readonly required hidden><br>
+                                <div id="map" style="height: 500px; width: 100%;"></div>
+
+                                <script>
+                                // Inisialisasi peta
+                                var map = L.map('map').setView([-3.0, 104.7], 12);
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    attribution: '&copy; OpenStreetMap contributors'
+                                }).addTo(map);
+
+                                var destinationMarker;
+                                var searchMarker;
+
+                                // Ikon untuk marker klik dan hasil pencarian
+                                var clickIcon = L.icon({
+                                    iconUrl: 'imgs/marker/klik_marker.png',
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34]
+                                });
+
+                                var searchIcon = L.icon({
+                                    iconUrl: 'imgs/marker/search_marker.png',
+                                    iconSize: [25, 41],
+                                    iconAnchor: [12, 41],
+                                    popupAnchor: [1, -34]
+                                });
+
+                                // Fungsi untuk memperbarui marker klik
+                                function updateClickMarker(latlng) {
+                                    if (destinationMarker) {
+                                        map.removeLayer(destinationMarker); // Hapus marker sebelumnya
+                                    }
+                                    destinationMarker = L.marker(latlng, {
+                                        icon: clickIcon
+                                    }).addTo(map).bindPopup('Lokasi Tujuan').openPopup();
+                                    document.getElementById('destination').value = latlng.lat + ',' + latlng.lng;
+                                }
+
+                                // Fungsi untuk memperbarui marker hasil pencarian
+                                function updateSearchMarker(latlng) {
+                                    if (searchMarker) {
+                                        map.removeLayer(searchMarker); // Hapus marker sebelumnya
+                                    }
+                                    searchMarker = L.marker(latlng, {
+                                        icon: searchIcon
+                                    }).addTo(map).bindPopup('Hasil Pencarian').openPopup();
+                                    document.getElementById('destination').value = latlng.lat + ',' + latlng.lng;
+                                }
+
+                                // Tambahkan geocoder untuk pencarian lokasi
+                                var geocoder = L.Control.Geocoder.nominatim();
+                                var geocoderControl = L.Control.geocoder({
+                                    position: 'topleft',
+                                    geocoder: geocoder
+                                }).addTo(map);
+
+                                // Ketika hasil pencarian geocoder ditemukan
+                                geocoderControl.on('markgeocode', function(e) {
+                                    var latlng = e.geocode.center;
+                                    map.setView(latlng, 16); // Perbesar peta ke lokasi hasil pencarian
+                                    updateSearchMarker(latlng); // Perbarui marker hasil pencarian
+                                });
+
+                                // Klik pada peta untuk memilih atau mengganti lokasi tujuan
+                                map.on('click', function(e) {
+                                    updateClickMarker(e.latlng);
+                                });
+                                </script>
+                            </div>
+                            <div class="form-group mb-3">
                                 <label for="alamat">Alamat:</label>
                                 <textarea class="form-control" id="alamat" name="alamat"
                                     required autocomplete="off"><?php echo $alamat; ?></textarea>
@@ -196,11 +298,12 @@
                 </div>
             </div>
         </div>
+        <footer class="text-center p-2 mt-3">
+            <p>Create by Alzi Petshop | &copy 2024</p>
+        </footer>
     </div>
 
-    <footer class="text-center">
-        <p>Create by Alzi Petshop | &copy 2024</p>
-    </footer>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
