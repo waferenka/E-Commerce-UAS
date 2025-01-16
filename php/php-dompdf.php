@@ -53,7 +53,7 @@ if (!$resultriwayat || $resultriwayat->num_rows === 0) {
 $transaction = $resultriwayat->fetch_assoc();
 $customer_name = htmlspecialchars($user['nama']);
 $transaction_date = htmlspecialchars($transaction['update_time']);
-$transaction_status = htmlspecialchars($transaction['status']);
+$transaction_status = htmlspecialchars($transaction['transaction_status']);
 $item_details = json_decode($transaction['item_details'], true);
 
 // Validasi data item
@@ -172,7 +172,7 @@ $html .= "
     <p>Status: $transaction_status</p>
     <div class='footer'>
         <p>Thank you for shopping with us!</p>
-        <p>Contact us at: support@alzishop.com | +62 812 3456 7890</p>
+        <p>Contact us at: support@alzishop.com | +62 831 6107 6087</p>
     </div>
 </div>
 ";
