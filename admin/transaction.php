@@ -39,72 +39,84 @@ $result = $conn->query($query);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    th,
-    td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-    th {
-        background-color: #f4f4f4;
-    }
+        th {
+            background-color: #f4f4f4;
+        }
 
-    .btn {
-        padding: 5px 10px;
-        text-decoration: none;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
+        .btn {
+            padding: 5px 10px;
+            text-decoration: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-    .btn-delete {
-        color: red;
-    }
+        .btn-delete {
+            color: red;
+        }
+
+        /* Memperkecil kolom item details */
+        .item-details-col {
+            max-width: 200px; /* Menentukan batas maksimal lebar */
+            word-wrap: break-word;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Transaction Management</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Order ID</th>
-                    <th>Transaction Status</th>
-                    <th>Gross Amount</th>
-                    <th>Shipping Status</th>
-                    <th>Payment Time</th>
-                    <th>Update Time</th>
-                    <th>Item Details</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()) : ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['name']) ?></td>
-                    <td><?= htmlspecialchars($row['order_id']) ?></td>
-                    <td><?= htmlspecialchars($row['transaction_status']) ?></td>
-                    <td><?= htmlspecialchars($row['gross_amount']) ?></td>
-                    <td><?= htmlspecialchars($row['shipping_status']) ?></td>
-                    <td><?= htmlspecialchars($row['payment_time']) ?></td>
-                    <td><?= htmlspecialchars($row['update_time']) ?></td>
-                    <td><?= htmlspecialchars($row['item_details']) ?></td>
-                    <td>
-                        <a class="btn btn-delete" href="?delete=<?= $row['transaction_id'] ?>"
-                            onclick="return confirm('Are you sure you want to delete this transaction?');">Delete</a>
-                    </td>
-                </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+    <div class="container mt-5">
+        <h1 class="mb-4">Transaction Management</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Order ID</th>
+                        <th>Transaction Status</th>
+                        <th>Gross Amount</th>
+                        <th>Shipping Status</th>
+                        <th>Payment Time</th>
+                        <th>Update Time</th>
+                        <th class="item-details-col">Item Details</th> <!-- Kolom item details diperbesar batasnya -->
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()) : ?>
+                        <tr>
+                            <td><?= htmlspecialchars($row['name']) ?></td>
+                            <td><?= htmlspecialchars($row['order_id']) ?></td>
+                            <td><?= htmlspecialchars($row['transaction_status']) ?></td>
+                            <td><?= htmlspecialchars($row['gross_amount']) ?></td>
+                            <td><?= htmlspecialchars($row['shipping_status']) ?></td>
+                            <td><?= htmlspecialchars($row['payment_time']) ?></td>
+                            <td><?= htmlspecialchars($row['update_time']) ?></td>
+                            <td class="item-details-col"><?= htmlspecialchars($row['item_details']) ?></td> <!-- Menggunakan kelas item-details-col -->
+                            <td>
+                                <a class="btn btn-danger btn-sm" href="?delete=<?= $row['transaction_id'] ?>"
+                                   onclick="return confirm('Are you sure you want to delete this transaction?');">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b6HHjblfipTfcnRrQJkAHjFfK9dl54D7QAMWeAk2swIrPZ0P0eNweoEFjt1sbPL3"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
