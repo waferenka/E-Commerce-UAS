@@ -61,7 +61,8 @@
     $resultcart = mysqli_query($conn, $querycart);
     while ($rowc = mysqli_fetch_assoc($resultcart)) {
         if ($rowc['price'] > 0 && $rowc['quantity'] > 0) {
-            $total_price_midtrans = $rowc['total_price'];
+            // Tambahkan harga item ke total price
+            $total_price_midtrans += $rowc['total_price'];
             $items[] = [
                 'id' => $rowc['product_id'],
                 'price' => $rowc['price'],
@@ -79,6 +80,9 @@
         'name' => 'Ongkos Kirim'
     ];
 
+    // Tambahkan ongkir ke total price
+    $total_price_midtrans += $shipping_cost;
+
     // Ambil data keranjang untuk tampilan modal (tanpa menghitung total price lagi)
     $querycart_display = "
         SELECT c.id AS cart_id, c.product_id, p.name AS product_name, p.image, c.quantity, p.price 
@@ -89,7 +93,6 @@
     $resultcart_display = mysqli_query($conn, $querycart_display);
 
     $total_price_display = 0; // Total price untuk tampilan modal
-
 
     // Ambil informasi user dari tabel tbluser dan user_detail
     $query_user = "
@@ -128,20 +131,22 @@
 
             try {
                 $item_details_json = json_encode($items);
-                $stmt = $conn->prepare("INSERT INTO transactions (user_id, order_id, transaction_status, gross_amount, item_details) 
-                    VALUES (?, ?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO transactions (user_id, order_id, transaction_status, gross_amount, item_details, snap_token) 
+                    VALUES (?, ?, ?, ?, ?, ?)");
                 $payment_status = 'Pending';
-                $stmt->bind_param("sssss", 
-                    $user_id,
-                    $transaction_details['order_id'],
+                $order_ids = $transaction_details['order_id'];
+                $gross_amount = $transaction_details['gross_amount'] + $shipping_cost;
+                $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+                $stmt->bind_param("sssiss", $user_id,
+                $transaction_details['order_id'],
+                    
                     $payment_status, 
                     $transaction_details['gross_amount'],
-                    $item_details_json
+                    $item_details_json,
+                    $snap_token
                 );
                 $stmt->execute();
                 $stmt->close();
-
-                $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
 
                 // Kirim respons JSON
                 echo json_encode([
