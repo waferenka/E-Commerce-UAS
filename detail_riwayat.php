@@ -4,6 +4,7 @@ session_start();
 
 // Koneksi ke database
 require('php/php.php');
+require('midtrans_config.php');
 
 // Periksa apakah user sudah login
 if (!isset($_SESSION['userid'])) {
@@ -95,23 +96,7 @@ if ($stmt) {
         $item_details = json_decode($row['item_details'], true);
         $snap_token = htmlspecialchars($row['snap_token']);
     } else {
-        $name = htmlspecialchars($row['name']);
-        $transaction_status = htmlspecialchars($row['transaction_status']);
-        $gross_amount = htmlspecialchars($row['gross_amount']);
-        $shipping_status = htmlspecialchars($row['shipping_status']);
-        $shipping_status_id = intval($row['shipping_status_id']);
-        $payment_time = htmlspecialchars($row['payment_time']);
-        $item_details = json_decode($row['item_details'], true);
-        $snap_token = htmlspecialchars($row['snap_token']);
         echo '<div class="alert alert-warning">Data tidak ditemukan.</div>';
-        echo $name;
-        echo $transaction_status;
-        echo $gross_amount;
-        echo $shipping_status;
-        echo $shipping_status_id;
-        echo $payment_time;
-        echo $item_details;
-        echo $snap_token;
         exit;
     }
 
@@ -153,6 +138,11 @@ function getFirstName($fullName) {
         width: 100%;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         background-color: white;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
     }
 
     footer {
@@ -235,6 +225,40 @@ function getFirstName($fullName) {
                                     <button type="submit" name="confirm" class="btn btn-success mt-3">Konfirmasi
                                         Pengiriman</button>
                                 </form>
+                                <?php elseif (!empty($snap_token && $transaction_status === "pending")): ?>
+                                <!-- Vertically centered scrollable modal -->
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop">
+                                    Bayar Sekarang
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="ratio ratio-4x3">
+                                                    <iframe
+                                                        src="https://app.sandbox.midtrans.com/snap/v2/vtweb/<?php echo $snap_token ?>"
+                                                        allowfullscreen style="border: none;"></iframe>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary">Understood</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <?php endif; ?>
                             </div>
                             <div class="b">

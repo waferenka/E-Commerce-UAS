@@ -39,7 +39,7 @@ try {
 
     // Redirect jika berhasil
     if (isset($_SERVER['HTTP_REFERER'])) {
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        header('Location: index.php');
         exit;
     }
 } catch (Exception $e) {
@@ -47,6 +47,8 @@ try {
     $conn->rollback();
     echo $e->getMessage();
 }
+
+header('Location: index.php');
 
 // Tutup koneksi
 $conn->close();

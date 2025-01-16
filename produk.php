@@ -199,19 +199,23 @@ if ($result->num_rows > 0) {
                 ];
                 try {
                     $item_details_json = json_encode($items);
-                    $stmt = $conn->prepare("INSERT INTO transactions (order_id, user_id, transaction_status, gross_amount, item_details) 
-                        VALUES (?, ?, ?, ?, ?)");
+                    $stmt = $conn->prepare("INSERT INTO transactions (order_id, user_id, transaction_status, gross_amount, item_details, snap_token) 
+                        VALUES (?, ?, ?, ?, ?, ?)");
                     $payment_status = 'Pending';
-                    $stmt->bind_param("sssss", 
-                        $transaction_details['order_id'],
+                    $order_ids = $transaction_details['order_id'];
+                    $gross_amount = $transaction_details['gross_amount'];
+                    $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+                    $stmt->bind_param("ssssss", 
+                        $order_ids,
                         $userid,
                         $payment_status, 
-                        $transaction_details['gross_amount'],
-                        $item_details_json
+                        $gross_amount,
+                        $item_details_json,
+                        $snap_token
                     );
                     $stmt->execute();
                     $stmt->close();
-                    $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+
                     echo json_encode(['success' => true, 'snap_token' => $snap_token, 'order_id' => $transaction_details['order_id']]);
                     exit;
                 } catch (Exception $e) {
