@@ -326,9 +326,12 @@
             </div>
             <?php endif; ?>
             <?php if ($user_level == 'penjual'): ?>
-            <div class="d-flex">
-                <a href="tambah.php" class="btn btn-warning me-1" id="tambah">Tambah</a>
-            </div>
+                <?php if (basename($_SERVER['PHP_SELF']) == 'detail_order.php'): ?>
+                <?php else: ?>
+                    <div class="d-flex">
+                        <a href="tambah.php" class="btn btn-warning me-1" id="tambah">Tambah</a>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
             <div class="navbar-item">
                 <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php'): ?>
