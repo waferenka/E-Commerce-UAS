@@ -22,10 +22,10 @@ try {
     }
 
     // Update status_pengiriman di tabel shipping_detail
-    $sql = "UPDATE shipping_detail SET status_pengiriman = ? WHERE order_id = ?";
+    $sql = "UPDATE shipping_detail SET status_pengiriman = 2 WHERE order_id = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
-        $stmt->bind_param("is", $new_shipping_status, $order_id);
+        $stmt->bind_param("s", $order_id);
         if (!$stmt->execute()) {
             throw new Exception("Gagal memperbarui shipping status: " . $stmt->error);
         }
