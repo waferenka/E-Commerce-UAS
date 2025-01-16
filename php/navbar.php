@@ -107,9 +107,10 @@
         // Periksa apakah keranjang kosong
         $snap_token = null;
         if (!empty($items) && $total_price_midtrans > 0) {
+            $order_id = rand();
             // Data transaksi
             $transaction_details = [
-                'order_id' => uniqid('order_', true),
+                'order_id' => $order_id,
                 'gross_amount' => $total_price_midtrans
             ];
 
@@ -127,22 +128,23 @@
             ];
 
             try {
+                $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
+                
                 $item_details_json = json_encode($items);
-                $stmt = $conn->prepare("INSERT INTO transactions (order_id, user_id, transaction_status, gross_amount, item_details) 
-                    VALUES (?, ?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO transactions (order_id, user_id, transaction_status, gross_amount, item_details, snap_token) 
+                    VALUES (?, ?, ?, ?, ?, ?)");
                 $payment_status = 'Pending';
 
-                $stmt->bind_param("sssss", 
+                $stmt->bind_param("ssssss", 
                     $transaction_details['order_id'],
                     $user_id,
                     $payment_status, 
                     $transaction_details['gross_amount'],
-                    $item_details_json
+                    $item_details_json,
+                    $snap_token
                 );
                 $stmt->execute();
                 $stmt->close();
-
-                $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
 
                 // Kirim respons JSON
                 echo json_encode([
