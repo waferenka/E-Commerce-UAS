@@ -125,7 +125,7 @@ function getFirstName($fullName) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- My Style -->
-    <link rel="stylesheet" href="../css/bootstrap_style.css">
+    <link rel="stylesheet" href="css/bootstrap_style.css">
     <style>
     html,
     body {
@@ -160,7 +160,7 @@ function getFirstName($fullName) {
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header bg-primary text-white">
+                    <div class="card-header bg-warning text-black">
                         <h3>Detail Transaksi</h3>
                     </div>
                     <div class="card-body">
@@ -175,7 +175,16 @@ function getFirstName($fullName) {
                             </tr>
                             <tr>
                                 <th>Status Transaksi</th>
-                                <td><?= $transaction_status ?></td>
+                                <td>
+                                    <div class=" <?php if ($transaction_status === "pending"): ?>
+                                    btn btn-outline-warning text-black
+                                    <?php elseif ($transaction_status === "success"): ?>
+                                        btn btn-outline-success
+                                        <?php elseif ($transaction_status === "cancel" || "expire"): ?>
+                                            btn btn-outline-danger
+                                            <?php endif; ?>
+                                "> <?php echo $transaction_status ?></div>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Total</th>
@@ -261,9 +270,12 @@ function getFirstName($fullName) {
                                 </div>
                                 <?php endif; ?>
                             </div>
+
                             <div class="b">
+                                <?php if ($transaction_status === "success"): ?>
                                 <a href="php/php-dompdf.php?order_id=<?php echo $order_id ?>"
                                     class="btn btn-warning mt-3">Download Invoice</a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

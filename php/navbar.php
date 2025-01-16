@@ -128,22 +128,20 @@
 
             try {
                 $item_details_json = json_encode($items);
-                $stmt = $conn->prepare("INSERT INTO transactions (order_id, user_id, transaction_status, gross_amount, item_details, snap_token) 
-                    VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO transactions (user_id, order_id, transaction_status, gross_amount, item_details) 
+                    VALUES (?, ?, ?, ?, ?)");
                 $payment_status = 'Pending';
-                $order_ids = $transaction_details['order_id'];
-                $gross_amount = $transaction_details['gross_amount'] + $shipping_cost;
-                $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
-                $stmt->bind_param("sssiss", 
-                $transaction_details['order_id'],
+                $stmt->bind_param("sssss", 
                     $user_id,
+                    $transaction_details['order_id'],
                     $payment_status, 
                     $transaction_details['gross_amount'],
-                    $item_details_json,
-                    $snap_token
+                    $item_details_json
                 );
                 $stmt->execute();
                 $stmt->close();
+
+                $snap_token = \Midtrans\Snap::getSnapToken($transaction_data);
 
                 // Kirim respons JSON
                 echo json_encode([
