@@ -425,7 +425,8 @@ $resultriwayat = $stmt->get_result();
                                     <td><?= htmlspecialchars(rupiah($row['gross_amount'])); ?></td>
                                     <td><?= htmlspecialchars($row['transaction_status']); ?></td>
                                     <td><?= htmlspecialchars($row['payment_time']); ?></td>
-                                    <td><a href="hapus.php" class="btn btn-primary">detail</a>
+                                    <td><a href="detail_riwayat.php?order_id=<?php echo $row['order_id']; ?>"
+                                            class="btn btn-primary">detail</a>
                                     </td>
                                 </tr>
                                 <?php endwhile; ?>
