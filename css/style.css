@@ -22,7 +22,7 @@ body {
   line-height: 1.6;
   animation-name: fade;
   animation-duration: 1s;
-  user-select: none;
+  /* user-select: none; */
 }
 
 footer {

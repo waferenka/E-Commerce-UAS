@@ -54,8 +54,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- My Style -->
-    <link rel="stylesheet" href="css/bootstrap_style.css">
-    <link rel="stylesheet" href="css/style.css">
+    <!-- <link rel="stylesheet" href="css/bootstrap_style.css">
+    <link rel="stylesheet" href="css/style.css"> -->
     <style>
     html,
     body {
@@ -70,7 +70,7 @@
     #tambah {
         display: none;
     }
-    
+
     .container {
         width: 100%;
         height: 100%;
