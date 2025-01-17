@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat 2 Arah</title>
+    <title>Chat 2 Arah - Admin</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -23,7 +23,7 @@
             border-radius: 10px;
             font-size: 14px;
             position: relative;
-            box-sizing: border-box; /* Agar padding dihitung dalam ukuran total */
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
         }
@@ -31,8 +31,8 @@
         .time {
             font-size: 10px;
             color: gray;
-            margin-top: 1px; /* Memberikan sedikit jarak antara pesan dan waktu */
-            align-self: flex-end; /* Agar waktu berada di sudut kanan (untuk pengirim) */
+            margin-top: 1px;
+            align-self: flex-end;
         }
 
         .message.you .message-content {
@@ -48,7 +48,6 @@
         .message {
             display: flex;
             margin: 5px 0;
-
         }
 
         .message.you {
@@ -66,7 +65,12 @@
     </style>
 </head>
 <body>
-    <h1>Chat Penerima</h1>
+    <h1>Chat Admin</h1>
+    <div>
+        <h3>Daftar User:</h3>
+        <ul id="userList"></ul>
+    </div>
+
     <div id="chatDisplay"></div>
     <textarea id="messageInput" placeholder="Tulis pesan Anda..."></textarea>
     <button id="sendButton">Kirim</button>
@@ -82,28 +86,53 @@
             messagingSenderId: "79902090408",
             appId: "1:79902090408:web:fa82f4d3133e3dcae3ce9d",
             measurementId: "G-TEP1LQ65M9"
-          };
+        };
 
         // Inisialisasi Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database(app);
 
-        // Elemen DOM
         const chatDisplay = document.getElementById("chatDisplay");
         const messageInput = document.getElementById("messageInput");
         const sendButton = document.getElementById("sendButton");
+        const userList = document.getElementById("userList");
 
-        // Identifikasi pengguna (ganti sesuai kebutuhan)
-        const currentUser = "user2"; // User 2 (pengguna halaman ini)
-        const otherUser = "user1"; // User 1 (lawan bicara)
+        let currentUser = null;
+        let usersSet = new Set(); // Menyimpan daftar user yang unik
+
+        // Fungsi untuk menampilkan daftar pengguna
+        function displayUserList() {
+            firebase.database().ref("messages").on("child_added", function (snapshot) {
+                const messageData = snapshot.val();
+                if (messageData.sender && messageData.sender !== "admin") {
+                    // Cek jika user sudah ada di Set
+                    if (!usersSet.has(messageData.sender)) {
+                        usersSet.add(messageData.sender); // Tambahkan user ke Set
+                        
+                        const listItem = document.createElement("li");
+                        listItem.textContent = messageData.sender;
+                        listItem.onclick = () => startChat(messageData.sender);
+                        userList.appendChild(listItem);
+                    }
+                }
+            });
+        }
+
+        // Mulai percakapan dengan pengguna
+        function startChat(user) {
+            currentUser = user;
+            chatDisplay.innerHTML = ""; // Kosongkan chat display
+            loadMessages(user);
+        }
 
         // Kirim pesan ke Firebase
         sendButton.addEventListener("click", function () {
             const message = messageInput.value.trim();
-            if (message) {
+            if (message && currentUser) {
                 const timestamp = Date.now();
                 firebase.database().ref("messages").push({
-                    sender: currentUser, // Ubah pengirim ke `currentUser` halaman ini
+                    sender: "admin", // Admin mengirim pesan
+                    receiver: currentUser,
                     text: message,
                     timestamp: timestamp
                 });
@@ -111,53 +140,52 @@
             }
         });
 
-        // Tampilkan pesan secara real-time
-        firebase.database().ref("messages").on("child_added", function (snapshot) {
-            const messageData = snapshot.val();
-            const timestamp = new Date(messageData.timestamp).toLocaleTimeString([], {
-                hour: '2-digit', 
-                minute: '2-digit', 
-                hour12: true // Menampilkan format AM/PM
+        // Tampilkan pesan dari pengguna yang dipilih
+        function loadMessages(user) {
+            firebase.database().ref("messages").on("child_added", function (snapshot) {
+                const messageData = snapshot.val();
+                if (messageData.sender === user || messageData.receiver === user) {
+                    const timestamp = new Date(messageData.timestamp).toLocaleTimeString([], {
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        hour12: true
+                    });
+
+                    // Elemen pesan
+                    const messageElement = document.createElement("div");
+                    const messageContent = document.createElement("div");
+                    const timeElement = document.createElement("span");
+
+                    // Tambahkan teks ke elemen pesan
+                    messageContent.textContent = messageData.text;
+
+                    // Tambahkan waktu ke elemen waktu
+                    timeElement.textContent = timestamp;
+                    timeElement.classList.add("time");
+
+                    // Tambahkan kelas berdasarkan pengirim
+                    if (messageData.sender === "admin") {
+                        messageElement.classList.add("message", "you");
+                    } else {
+                        messageElement.classList.add("message", "them");
+                    }
+
+                    // Tambahkan konten dan waktu ke elemen pesan
+                    messageContent.classList.add("message-content");
+                    messageContent.appendChild(timeElement); // Tambahkan waktu ke dalam bubble
+                    messageElement.appendChild(messageContent);
+
+                    // Tambahkan pesan ke chat display
+                    chatDisplay.appendChild(messageElement);
+
+                    // Scroll otomatis ke bawah
+                    chatDisplay.scrollTop = chatDisplay.scrollHeight;
+                }
             });
+        }
 
-            // Elemen pesan
-            const messageElement = document.createElement("div");
-            const messageContent = document.createElement("div");
-            const timeElement = document.createElement("span");
-
-            // Tambahkan teks ke elemen pesan
-            messageContent.textContent = messageData.text;
-
-            // Tambahkan waktu ke elemen waktu
-            timeElement.textContent = timestamp;
-            timeElement.classList.add("time");
-
-            // Tambahkan kelas berdasarkan pengirim
-            if (messageData.sender === currentUser) {
-                messageElement.classList.add("message", "you");
-            } else {
-                messageElement.classList.add("message", "them");
-            }
-
-            // Tambahkan konten dan waktu ke elemen pesan
-            messageContent.classList.add("message-content");
-            messageContent.appendChild(timeElement); // Tambahkan waktu ke dalam bubble
-            messageElement.appendChild(messageContent);
-
-            // Tambahkan pesan ke chat display
-            chatDisplay.appendChild(messageElement);
-
-            // Scroll otomatis ke bawah
-            chatDisplay.scrollTop = chatDisplay.scrollHeight;
-        });
-
-// Tangkap Enter untuk mengirim pesan
-        messageInput.addEventListener("keydown", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                sendButton.click();
-            }
-        });
+        // Menampilkan daftar user ketika halaman dimuat
+        displayUserList();
     </script>
 </body>
 </html>
