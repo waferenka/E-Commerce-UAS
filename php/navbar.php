@@ -41,7 +41,7 @@
             $costPerKm = 5000; // Biaya per km (contoh)
             // Jika jarak kurang dari 1km, tetap dihitung Rp5000
             if ($distance < 1) {
-                $shipping_cost = 5000;
+                $shipping_cost = 1;
             } else {
                 $shipping_cost = round($distance * $costPerKm); // Dibulatkan ke integer terdekat
             }
@@ -153,7 +153,7 @@
                     'success' => true,
                     'snap_token' => $snap_token,
                     'order_id' => $transaction_details['order_id'],
-                    'payment_url' => "https://app.sandbox.midtrans.com/snap/v2/vtweb/$snap_token" // URL untuk pembayaran
+                    'payment_url' => "https://app.midtrans.com/snap/v2/vtweb/$snap_token" // URL untuk pembayaran
                 ]);
                 exit;
             } catch (Exception $e) {
@@ -236,7 +236,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-A2jiukqkqsZik1Kl">
+    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="Mid-client-A2jiukqkqsZik1Kl">
     </script>
     <style>
     .modal-body {

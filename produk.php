@@ -52,7 +52,7 @@ if ($result->num_rows > 0) {
         $costPerKm = 5000; // Biaya per km (contoh)
         // Jika jarak kurang dari 1km, tetap dihitung Rp5000
         if ($distance < 1) {
-            $shipping_cost = 5000;
+            $shipping_cost = 1;
         } else {
             $shipping_cost = round($distance * $costPerKm); // Dibulatkan ke integer terdekat
         }
@@ -98,8 +98,6 @@ if ($result->num_rows > 0) {
         $satuan_p = $productd['satuan'];
     }
 
-    
-
     require 'midtrans_config.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['buy_now'])) {
@@ -138,7 +136,7 @@ if ($result->num_rows > 0) {
                     $costPerKm = 5000; // Biaya per km (contoh)
                     // Jika jarak kurang dari 1km, tetap dihitung Rp5000
                     if ($distance < 1) {
-                        $shipping_cost = 5000;
+                        $shipping_cost = 1;
                     } else {
                         $shipping_cost = round($distance * $costPerKm); // Dibulatkan ke integer terdekat
                     }

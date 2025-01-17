@@ -249,21 +249,20 @@ function getFirstName($fullName) {
                                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                <h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Bayar:</h1>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="ratio ratio-4x3">
                                                     <iframe
-                                                        src="https://app.sandbox.midtrans.com/snap/v2/vtweb/<?php echo $snap_token ?>"
+                                                        src="https://app.midtrans.com/snap/v2/vtweb/<?php echo $snap_token ?>"
                                                         allowfullscreen style="border: none;"></iframe>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Understood</button>
                                             </div>
                                         </div>
                                     </div>
