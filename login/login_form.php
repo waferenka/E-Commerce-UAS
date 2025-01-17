@@ -1,7 +1,7 @@
 <!-- Seesion Start -->
 <?php
     session_start();
-    if (isset($_SESSION['login_input'])) {
+    if (isset($_SESSION['email']) || isset($_SESSION['no_telepon'])) {
         if ($_SESSION['level'] == "admin") {
             header("Location: ../admin/admin.php");
         } elseif ($_SESSION['level'] == "penjual") {
