@@ -1,0 +1,100 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    color: #212529;
+  }
+  .invoice-box {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background: #ffffff;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  }
+  .invoice-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .invoice-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #007bff;
+  }
+  .invoice-header img {
+    height: 60px;
+  }
+  .invoice-details table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  .invoice-details th,
+  .invoice-details td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  .invoice-details th {
+    background: #007bff;
+    color: #ffffff;
+  }
+  .total {
+    font-weight: bold;
+    text-align: right;
+  }
+  .footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #6c757d;
+  }
+</style>
+
+<div class="container">
+<div class="invoice-box">
+  <div class="invoice-header font-weight-bold">
+    <h1>Invoice</h1>
+    <h3>Alzi Petshop</h1>
+  </div>
+  <p>Order ID: $order_id</p>
+  <p>Customer Name: $customer_name</p>
+  <p>Customer Address: $customer_address</p>
+  <p>Phone: $customer_phone</p>
+  <p>Date: $transaction_date</p>
+  <div class="invoice-details">
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+        <th>Total</th>
+      </tr>
+      "; foreach ($items as $item) { $html .= "
+      <tr>
+        <td>{$item['name']}</td>
+        <td>{$item['quantity']}</td>
+        <td>IDR " . number_format($item['unit_price'], 0, ',', '.') . "</td>
+        <td>IDR " . number_format($item['total'], 0, ',', '.') . "</td>
+      </tr>
+      "; } $html .= "
+      <tr>
+        <td colspan="3" class="total">Total</td>
+        <td class="total">
+          IDR " . number_format($total_price, 0, ',', '.') . "
+        </td>
+      </tr>
+    </table>
+  </div>
+  <p>Status: $transaction_status</p>
+  <div class="footer">
+    <p>Thank you for shopping with us!</p>
+    <p>Contact us at: support@alzishop.com | +62 831 6107 6087</p>
+  </div>
+</div>
+</div>

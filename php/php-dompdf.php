@@ -18,17 +18,25 @@ if ($order_id <= 0) {
     die("Invalid Order ID.");
 }
 
+// Query informasi user
 $query_user = "
-        SELECT u.nama, u.email, d.alamat, d.no_telepon
-        FROM tbluser u
-        JOIN user_detail d ON u.id = d.id
-        WHERE u.id = '$user_id'
-    ";
-    
-    $result_user = mysqli_query($conn, $query_user);
-    $user = mysqli_fetch_assoc($result_user);
+    SELECT u.nama, u.email, d.alamat, d.no_telepon
+    FROM tbluser u
+    JOIN user_detail d ON u.id = d.id
+    WHERE u.id = ?
+";
 
-// Query transaksi menggunakan `Prepared Statement`
+$stmt_user = $conn->prepare($query_user);
+$stmt_user->bind_param("i", $user_id);
+$stmt_user->execute();
+$result_user = $stmt_user->get_result();
+$user = $result_user->fetch_assoc();
+
+if (!$result_user || !$user) {
+    die("User data not found.");
+}
+
+// Query transaksi
 $queryriwayat = "
     SELECT 
         t.*, 
@@ -49,14 +57,14 @@ if (!$resultriwayat || $resultriwayat->num_rows === 0) {
     die("Order not found.");
 }
 
-// Ambil data transaksi
 $transaction = $resultriwayat->fetch_assoc();
 $customer_name = htmlspecialchars($user['nama']);
+$customer_address = htmlspecialchars($user['alamat']);
+$customer_phone = htmlspecialchars($user['no_telepon']);
 $transaction_date = htmlspecialchars($transaction['update_time']);
 $transaction_status = htmlspecialchars($transaction['transaction_status']);
 $item_details = json_decode($transaction['item_details'], true);
 
-// Validasi data item
 $items = [];
 if (is_array($item_details)) {
     foreach ($item_details as $item) {
@@ -69,7 +77,6 @@ if (is_array($item_details)) {
     }
 }
 
-// Hitung total harga
 $total_price = array_sum(array_column($items, 'total'));
 
 // Informasi tambahan
@@ -81,14 +88,12 @@ $html = "
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
+        margin: 20px;
         color: #212529;
-        margin: 0;
-        padding: 0;
     }
     .invoice-box {
         max-width: 800px;
-        margin: 20px auto;
+        margin: auto;
         padding: 20px;
         border: 1px solid #ddd;
         background: #ffffff;
@@ -96,6 +101,7 @@ $html = "
     }
     .invoice-header {
         display: flex;
+        flex-direction: row;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
@@ -137,12 +143,13 @@ $html = "
 <div class='invoice-box'>
     <div class='invoice-header'>
         <h1>Invoice</h1>
-        <img src='$logo_url' alt='Petshop Logo'>
+        <h3><strong>$store_name</strong></h3>
     </div>
-    <p><strong>$store_name</strong></p>
     <p>Order ID: $order_id</p>
     <p>Customer Name: $customer_name</p>
+    <p>Phone: $customer_phone</p>
     <p>Date: $transaction_date</p>
+    <p>Customer Address: $customer_address</p>
     <div class='invoice-details'>
         <table>
             <tr>
@@ -177,12 +184,10 @@ $html .= "
 </div>
 ";
 
-// Buat PDF
 $dompdf = new Dompdf();
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 
-// Hapus buffer output sebelumnya dan unduh file
 ob_end_clean();
 $dompdf->stream("invoice_$order_id.pdf", ["Attachment" => true]);
