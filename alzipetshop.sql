@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 16, 2025 at 06:40 PM
+-- Generation Time: Jan 17, 2025 at 05:39 AM
 -- Server version: 8.0.40
 -- PHP Version: 8.2.12
 
@@ -46,7 +46,7 @@ INSERT INTO `cart` (`id`, `user_id`, `user_name`, `product_id`, `product_name`, 
 (14, 4, 'Tri Ambar Ningtias', 25, 'tes', 1, 1.00),
 (16, 4, 'Tri Ambar Ningtias', 5, 'Whiskas - Makanan Kucing', 10, 280000.00),
 (17, 4, 'Tri Ambar Ningtias', 13, 'Royal Canin 2KG - Makanan Kucing', 1, 250000.00),
-(18, 4, 'Tri Ambar Ningtias', 2, 'Lezato - Makanan Kucing', 2, 44000.00);
+(18, 4, 'Tri Ambar Ningtias', 2, 'Lezato - Makanan Kucing', 99, 2178000.00);
 
 -- --------------------------------------------------------
 
@@ -66,8 +66,11 @@ CREATE TABLE `detail_address` (
 --
 
 INSERT INTO `detail_address` (`id`, `user_id`, `latitude`, `longitude`) VALUES
-(3, 17, -2.90095300, 104.77273610),
-(4, 4, -2.98179810, 104.72709080);
+(4, 4, -2.97857850, 104.74578805),
+(5, 3, -3.26236100, 102.38027350),
+(6, 2, -3.00203090, 104.69663310),
+(7, 1, -2.98194256, 104.72721217),
+(8, 18, -3.02247180, 104.75031140);
 
 -- --------------------------------------------------------
 
@@ -145,7 +148,6 @@ CREATE TABLE `shipping_detail` (
 --
 
 INSERT INTO `shipping_detail` (`id`, `order_id`, `status_pengiriman`, `update_time`) VALUES
-(1, '851145274', 1, '2025-01-16 08:35:03'),
 (2, '319263484', 1, '2025-01-16 08:37:01'),
 (3, '283920371', 2, '2025-01-16 16:33:07'),
 (4, '1155714561', 1, '2025-01-16 08:39:37'),
@@ -155,12 +157,14 @@ INSERT INTO `shipping_detail` (`id`, `order_id`, `status_pengiriman`, `update_ti
 (8, '1286023323', 1, '2025-01-16 14:48:16'),
 (9, '1351228699', 1, '2025-01-16 14:52:07'),
 (10, '1144142166', 1, '2025-01-16 14:57:18'),
-(11, '1319328971', 2, '2025-01-16 16:34:46'),
+(11, '1319328971', 3, '2025-01-16 17:42:17'),
 (12, '1883628522', 1, '2025-01-16 15:04:54'),
 (13, '830314733', 1, '2025-01-16 15:08:48'),
 (14, '302058113', 1, '2025-01-16 15:11:35'),
 (15, '613266900', 1, '2025-01-16 15:13:31'),
-(16, '1814779420', 2, '2025-01-16 16:41:54');
+(16, '1814779420', 4, '2025-01-16 17:42:07'),
+(17, '619457939', 2, '2025-01-16 17:55:30'),
+(18, '1579478664', 2, '2025-01-16 17:59:12');
 
 -- --------------------------------------------------------
 
@@ -210,7 +214,7 @@ INSERT INTO `tbluser` (`id`, `nama`, `email`, `password`, `level`) VALUES
 (2, 'Aditiya Alif As Siddiq', 'adit@gmail.com', 'a368402126ad9e4704fbb1ceac9367ad4e2ccf5f', 'penjual'),
 (3, 'M. Andriano Alfarazi', 'aji@gmail.com', '7c33489720fccf682f22f2efb2cefc7aee7de177', 'pembeli'),
 (4, 'Tri Ambar Ningtias', 'ambar@gmail.com', '008599efdcb7822df1c91508d4ab3ee9622b6d5d', 'pembeli'),
-(17, 'ABCDEFG', 'abcd@gmail.com', '40bd001563085fc35165329ea1ff5c5ecbdbbeef', 'pembeli');
+(18, 'Nico Apriansyah', 'nico@gmail.com', '2687196fdf37168b479ed44617a145260026121e', 'pembeli');
 
 -- --------------------------------------------------------
 
@@ -235,7 +239,6 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`transaction_id`, `user_id`, `order_id`, `transaction_status`, `gross_amount`, `payment_time`, `update_time`, `item_details`, `snap_token`) VALUES
-(78, 4, '851145274', 'pending', 48558.00, '2025-01-16 08:35:03', '2025-01-16 08:35:03', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"1\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', '72ab7485-889f-4747-883b-c66734f217e7'),
 (79, 4, '319263484', 'pending', 22000.00, '2025-01-16 08:37:01', '2025-01-16 08:37:01', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"1\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', '12f26898-837c-4717-b8c7-27d004a37535'),
 (80, 4, '283920371', 'pending', 22000.00, '2025-01-16 08:37:45', '2025-01-16 08:37:45', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"1\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', 'c9782867-b72b-4e14-a1bf-5f5b2d89e8a9'),
 (81, 4, '1155714561', 'pending', 22000.00, '2025-01-16 08:39:37', '2025-01-16 08:39:37', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"1\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', '446bdf78-7464-4f32-b157-e2700bc879ad'),
@@ -250,7 +253,9 @@ INSERT INTO `transactions` (`transaction_id`, `user_id`, `order_id`, `transactio
 (90, 4, '830314733', 'cancel', 44000.00, '2025-01-16 15:08:48', '2025-01-16 15:39:42', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"2\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', NULL),
 (91, 4, '302058113', 'expire', 44000.00, '2025-01-16 15:11:35', '2025-01-16 15:39:31', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"2\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', NULL),
 (92, 4, '613266900', 'pending', 44000.00, '2025-01-16 15:13:31', '2025-01-16 15:13:31', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"2\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', NULL),
-(93, 4, '1814779420', 'success', 600559.00, '2025-01-16 16:35:24', '2025-01-16 16:41:54', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"2\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', '9a763b95-3175-4573-926f-84f4c7577f4f');
+(93, 4, '1814779420', 'success', 600559.00, '2025-01-16 16:35:24', '2025-01-16 16:41:54', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"2\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', '9a763b95-3175-4573-926f-84f4c7577f4f'),
+(94, 4, '619457939', 'success', 600559.00, '2025-01-16 17:54:58', '2025-01-16 17:55:30', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"2\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', '79d6ae09-1269-4991-8fb0-dea64baab2e1'),
+(95, 4, '1579478664', 'success', 2734559.00, '2025-01-16 17:58:48', '2025-01-16 17:59:12', '[{\"id\":\"25\",\"price\":\"1\",\"quantity\":\"1\",\"name\":\"tes\"},{\"id\":\"5\",\"price\":\"28000\",\"quantity\":\"10\",\"name\":\"Whiskas - Makanan Kucing\"},{\"id\":\"13\",\"price\":\"250000\",\"quantity\":\"1\",\"name\":\"Royal Canin 2KG - Makanan Kucing\"},{\"id\":\"2\",\"price\":\"22000\",\"quantity\":\"99\",\"name\":\"Lezato - Makanan Kucing\"},{\"id\":\"shipping\",\"price\":26558,\"quantity\":1,\"name\":\"Ongkos Kirim\"}]', '3ab7786e-96d6-4b68-b3c0-95e15dc217a6');
 
 --
 -- Triggers `transactions`
@@ -276,19 +281,20 @@ CREATE TABLE `user_detail` (
   `jenis_kelamin` enum('Laki-laki','Perempuan') COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tanggal_lahir` date DEFAULT NULL,
   `alamat` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `no_telepon` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `no_telepon` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `alamat_detail` varchar(200) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_detail`
 --
 
-INSERT INTO `user_detail` (`id`, `foto`, `jenis_kelamin`, `tanggal_lahir`, `alamat`, `no_telepon`) VALUES
-(1, 'imgs/user/rangga_gmail_com.png', 'Laki-laki', '1990-01-01', 'Jl. Contoh No. 1', '08123456789'),
-(2, 'imgs/user/adit_gmail_com.png', 'Laki-laki', '1992-02-02', 'Jl. Contoh No. 2', '08123456780'),
-(3, 'imgs/user/user.png', 'Laki-laki', '1993-03-03', 'Jl. Contoh No. 3', '08123456781'),
-(4, 'imgs/user/ambar_gmail_com.jpg', 'Perempuan', '1994-04-07', 'Los santos', '08123456781'),
-(17, 'imgs/user/default.png', 'Laki-laki', '2025-01-07', 'Kenten City', '01232142142');
+INSERT INTO `user_detail` (`id`, `foto`, `jenis_kelamin`, `tanggal_lahir`, `alamat`, `no_telepon`, `alamat_detail`) VALUES
+(1, 'imgs/user/rangga_gmail_com.png', 'Laki-laki', '1990-01-01', 'Jalan Lunjuk Jaya, Ilir Barat I, Palembang, South Sumatra, Sumatra, 30139, Indonesia', '08123456789', 'Kos Pakde Yono'),
+(2, 'imgs/user/adit_gmail_com.png', 'Laki-laki', '1992-02-02', 'Gandus, Palembang, South Sumatra, Sumatra, 30149, Indonesia', '08123456780', 'Dekat sungai'),
+(3, 'imgs/user/aji_gmail_com.jpg', 'Laki-laki', '1993-03-03', 'Jalan Lintas Curup - Muara Aman, Kutai Donok, Lebong, Bengkulu, Sumatra, Indonesia', '08123456782', 'Samping polsek'),
+(4, 'imgs/user/ambar_gmail_com.jpg', 'Perempuan', '1994-04-07', 'Palembang Icon, Jalan Angkatan 45, Ilir Barat I, Palembang, South Sumatra, Sumatra, 30137, Indonesia', '08123456781', 'dekat tugu pahlawan'),
+(18, 'imgs/user/default.png', 'Laki-laki', '2005-07-13', 'Kertapati, Palembang, South Sumatra, Sumatra, 30132, Indonesia', '08123456786', 'Samping Stasiun');
 
 --
 -- Indexes for dumped tables
@@ -354,7 +360,8 @@ ALTER TABLE `transactions`
 -- Indexes for table `user_detail`
 --
 ALTER TABLE `user_detail`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `no_telepon` (`no_telepon`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -370,7 +377,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `detail_address`
 --
 ALTER TABLE `detail_address`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `order`
@@ -388,7 +395,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `shipping_detail`
 --
 ALTER TABLE `shipping_detail`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `shipping_status`
@@ -400,7 +407,7 @@ ALTER TABLE `shipping_status`
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `transactions`

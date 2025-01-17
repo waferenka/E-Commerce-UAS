@@ -8,7 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = sha1($_POST['password']); // Enkripsi password
     $jenis_kelamin = trim($_POST['jenis_kelamin']);
     $tanggal_lahir = trim($_POST['tanggal_lahir']);
-    $alamat = trim($_POST['alamat']);
+    $alamat = trim($_POST['address']);
+    $alamat_detail = trim($_POST['alamat']);
     $no_telepon = trim($_POST['no_telepon']);
     $destination = explode(',', $_POST['destination']);
     $default_foto = 'imgs/user/default.png'; // Path foto default
@@ -33,9 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user_id = $stmt_user->insert_id; // Mendapatkan ID user yang baru ditambahkan
 
         // Insert ke tabel user_detail
-        $sql_insert_detail = "INSERT INTO user_detail (id, foto, jenis_kelamin, tanggal_lahir, alamat, no_telepon) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql_insert_detail = "INSERT INTO user_detail (id, foto, jenis_kelamin, tanggal_lahir, alamat, no_telepon, alamat_detail) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt_detail = $conn->prepare($sql_insert_detail);
-        $stmt_detail->bind_param('isssss', $user_id, $default_foto, $jenis_kelamin, $tanggal_lahir, $alamat, $no_telepon);
+        $stmt_detail->bind_param('issssss', $user_id, $default_foto, $jenis_kelamin, $tanggal_lahir, $alamat, $no_telepon, $alamat_detail);
         $stmt_detail->execute();
 
         // Insert ke tabel detail_address
@@ -175,13 +176,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     required autocomplete="off">
                             </div>
                             <div class="form-group mb-3">
-                                <label for="destination">Alamat (Harap perhatikan titik lokasinya):</label>
+                                <label for="alamat">Alamat detail / patokan rumah (Optional):</label>
+                                <textarea class="form-control" id="alamat" name="alamat" autocomplete="off"></textarea>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="address" class="form-label">Alamat (pilih titik lokasi):</label>
+                                <input type="text" id="address" name="address" class="form-control" readonly required>
                                 <input type="text" id="destination" name="destination" readonly required hidden><br>
                                 <div id="map" style="height: 500px; width: 100%;"></div>
 
                                 <script>
                                 // Inisialisasi peta
-                                var map = L.map('map').setView([-3.0, 104.7], 12);
+                                var map = L.map('map').setView([-3.0, 104.7], 12); // Lokasi awal di Palembang
                                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                     attribution: '&copy; OpenStreetMap contributors'
                                 }).addTo(map);
@@ -191,14 +197,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                 // Ikon untuk marker klik dan hasil pencarian
                                 var clickIcon = L.icon({
-                                    iconUrl: '../imgs/marker/klik_marker.png',
+                                    iconUrl: 'imgs/marker/klik_marker.png',
                                     iconSize: [25, 41],
                                     iconAnchor: [12, 41],
                                     popupAnchor: [1, -34]
                                 });
 
                                 var searchIcon = L.icon({
-                                    iconUrl: '../imgs/marker/search_marker.png',
+                                    iconUrl: 'imgs/marker/search_marker.png',
                                     iconSize: [25, 41],
                                     iconAnchor: [12, 41],
                                     popupAnchor: [1, -34]
@@ -210,9 +216,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         map.removeLayer(destinationMarker); // Hapus marker sebelumnya
                                     }
                                     destinationMarker = L.marker(latlng, {
-                                        icon: clickIcon
-                                    }).addTo(map).bindPopup('Lokasi Tujuan').openPopup();
+                                            icon: clickIcon
+                                        })
+                                        .addTo(map)
+                                        .bindPopup('Lokasi Tujuan')
+                                        .openPopup();
                                     document.getElementById('destination').value = latlng.lat + ',' + latlng.lng;
+                                    fetchAddress(latlng); // Ambil alamat dari koordinat
                                 }
 
                                 // Fungsi untuk memperbarui marker hasil pencarian
@@ -221,9 +231,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         map.removeLayer(searchMarker); // Hapus marker sebelumnya
                                     }
                                     searchMarker = L.marker(latlng, {
-                                        icon: searchIcon
-                                    }).addTo(map).bindPopup('Hasil Pencarian').openPopup();
+                                            icon: searchIcon
+                                        })
+                                        .addTo(map)
+                                        .bindPopup('Hasil Pencarian')
+                                        .openPopup();
                                     document.getElementById('destination').value = latlng.lat + ',' + latlng.lng;
+                                    fetchAddress(latlng); // Ambil alamat dari koordinat
+                                }
+
+                                // Fungsi untuk mendapatkan alamat detail dari koordinat
+                                async function fetchAddress(latlng) {
+                                    const url =
+                                        `https://nominatim.openstreetmap.org/reverse?lat=${latlng.lat}&lon=${latlng.lng}&format=json`;
+                                    try {
+                                        const response = await fetch(url);
+                                        if (!response.ok) throw new Error('Gagal mendapatkan data alamat');
+                                        const data = await response.json();
+                                        const address = data.display_name || 'Alamat tidak ditemukan';
+                                        document.getElementById('address').value =
+                                            address; // Perbarui input alamat detail
+                                    } catch (error) {
+                                        console.error(error);
+                                        document.getElementById('address').value = 'Gagal mendapatkan alamat';
+                                    }
                                 }
 
                                 // Tambahkan geocoder untuk pencarian lokasi
@@ -242,15 +273,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                 // Klik pada peta untuk memilih atau mengganti lokasi tujuan
                                 map.on('click', function(e) {
-                                    updateClickMarker(e.latlng);
+                                    updateClickMarker(e.latlng); // Perbarui marker klik
                                 });
                                 </script>
-                            </div>
 
-                            <div class="form-group mb-3">
-                                <label for="alamat">Alamat Detail:</label>
-                                <textarea class="form-control" id="alamat" name="alamat" required
-                                    autocomplete="off"></textarea>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="no_telepon">No. Telepon:</label>

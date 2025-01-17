@@ -12,7 +12,7 @@
     $user_id = $_SESSION['userid'];
 
     // Query untuk mengambil data dari kedua tabel
-    $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.no_telepon 
+    $sql = "SELECT u.id, u.nama, u.email, u.level, d.foto, d.jenis_kelamin, d.tanggal_lahir, d.alamat, d.alamat_detail, d.no_telepon 
             FROM tbluser u 
             LEFT JOIN user_detail d ON u.id = d.id 
             WHERE u.id = '$userid'";
@@ -28,6 +28,7 @@
         $jenis_kelamin = $row['jenis_kelamin'];
         $tanggal_lahir = $row['tanggal_lahir'];
         $alamat = $row['alamat'];
+        $alamat_detail = $row['alamat_detail'];
         $no_telepon = $row['no_telepon'];
     } else {
         echo "Data user tidak ditemukan.";
@@ -327,6 +328,11 @@
                             <th>Alamat</th>
                             <td>:</td>
                             <td><?php echo $alamat; ?></td>
+                        </tr>
+                        <tr>
+                            <th>Patokan Rumah</th>
+                            <td>:</td>
+                            <td><?php echo $alamat_detail; ?></td>
                         </tr>
                         <tr>
                             <th>No. Telepon</th>
