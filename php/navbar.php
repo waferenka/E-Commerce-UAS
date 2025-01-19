@@ -38,7 +38,7 @@
                 return $distance;
             }
             $distance = haversine($lat1, $lon1, $lat2, $lon2);
-            $costPerKm = 5000; // Biaya per km (contoh)
+            $costPerKm = 5; // Biaya per km (contoh)
             // Jika jarak kurang dari 1km, tetap dihitung Rp5000
             if ($distance < 1) {
                 $shipping_cost = 1;
@@ -194,7 +194,8 @@
     }
     $queryriwayat = "
         SELECT 
-        t.*, 
+        t.*,
+        u.nama AS nama_user,
         ss.status_pengiriman AS shipping_status 
         FROM transactions t
         LEFT JOIN tbluser u ON t.user_id = u.id
@@ -212,6 +213,7 @@
     $queryriwayatpembeli = "
         SELECT 
         t.*, 
+        u.nama AS nama_user,
         ss.status_pengiriman AS shipping_status 
         FROM transactions t
         LEFT JOIN tbluser u ON t.user_id = u.id
@@ -326,12 +328,12 @@
             </div>
             <?php endif; ?>
             <?php if ($user_level == 'penjual'): ?>
-                <?php if (basename($_SERVER['PHP_SELF']) == 'detail_order.php'): ?>
-                <?php else: ?>
-                    <div class="d-flex">
-                        <a href="tambah.php" class="btn btn-warning me-1" id="tambah">Tambah</a>
-                    </div>
-                <?php endif; ?>
+            <?php if (basename($_SERVER['PHP_SELF']) == 'detail_order.php'): ?>
+            <?php else: ?>
+            <div class="d-flex">
+                <a href="tambah.php" class="btn btn-warning me-1" id="tambah">Tambah</a>
+            </div>
+            <?php endif; ?>
             <?php endif; ?>
             <div class="navbar-item">
                 <?php if (basename($_SERVER['PHP_SELF']) == 'detail.php'): ?>
@@ -474,7 +476,7 @@
     <!-- Modal Riwayat Penjual -->
     <div class="modal fade" id="riwayatModalPembeli" tabindex="-1" aria-labelledby="riwayatModalLabelPembeli"
         aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title fw-bold" id="riwayatModalLabelPembeli">Riwayat</h5>
@@ -485,7 +487,8 @@
                         <table class="table table-striped table-bordered">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Nama</th>
+                                    <th>Nama Pelanggan</th>
+                                    <th>Nama Barang</th>
                                     <th>Quantity</th>
                                     <th>Order ID</th>
                                     <th>Harga</th>
@@ -498,6 +501,7 @@
                                 <?php if ($resultriwayatpembeli && $resultriwayatpembeli->num_rows > 0): ?>
                                 <?php while ($row = $resultriwayatpembeli->fetch_assoc()): ?>
                                 <tr>
+                                    <td><?= htmlspecialchars($row['nama_user']); ?></td>
                                     <?php 
                                             $item_details = json_decode($row['item_details'], true);
                                             if ($item_details): ?>
