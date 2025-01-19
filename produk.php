@@ -276,9 +276,9 @@ if ($result->num_rows > 0) {
                 $update_stmt->close();
             } else {
                 // Jika data tidak ada, lakukan insert
-                $insert_query = "INSERT INTO cart (user_id, user_name, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
+                $insert_query = "INSERT INTO cart (user_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
                 $insert_stmt = $conn->prepare($insert_query);
-                $insert_stmt->bind_param("isissi", $user_id, $user_name, $product_id, $product_name, $quantity, $price);
+                $insert_stmt->bind_param("iiii", $user_id, $product_id, $quantity, $price);
 
                 if ($insert_stmt->execute()) {
                     header("Location: #");
@@ -392,6 +392,7 @@ if ($result->num_rows > 0) {
     }
 
     footer {
+        bottom: 0;
         background-color: white;
         margin-top: 2rem;
         padding: 1rem 0 3rem 0;

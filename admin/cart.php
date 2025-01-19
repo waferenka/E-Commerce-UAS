@@ -44,6 +44,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -154,6 +155,7 @@
     }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -165,8 +167,8 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="products.php">Product</a></li>
-                    <li><a class="dropdown-item" href="admin.php">User</a></li>
                     <li><a class="dropdown-item" href="transaction.php">Transactions</a></li>
+                    <li><a class="dropdown-item" href="admin.php">User</a></li>
                 </ul>
             </div>
             <div class="d-flex ms-auto">
@@ -198,7 +200,17 @@
         }
 
         // Fetch All Items
-        $result = $conn->query("SELECT * FROM cart");
+        $result = $conn->query("
+            SELECT 
+                cart.id,
+                tbluser.nama AS user_name,
+                products.name AS product_name,
+                cart.quantity,
+                cart.price
+            FROM cart
+            INNER JOIN tbluser ON cart.user_id = tbluser.id
+            INNER JOIN products ON cart.product_id = products.id
+        ");
         ?>
 
         <!-- Items Table -->
@@ -215,17 +227,18 @@
             </thead>
             <tbody>
                 <?php while ($row = $result->fetch_assoc()) { ?>
-                    <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['user_name']; ?></td>
-                        <td><?php echo $row['product_name']; ?></td>
-                        <td><?php echo $row['quantity']; ?></td>
-                        <td><?php echo $row['price']; ?></td>
-                        <td>
-                            <a href="edit_cart.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['user_name']; ?></td>
+                    <td><?php echo $row['product_name']; ?></td>
+                    <td><?php echo $row['quantity']; ?></td>
+                    <td><?php echo $row['price']; ?></td>
+                    <td>
+                        <a href="edit_cart.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure?');">Delete</a>
+                    </td>
+                </tr>
                 <?php } ?>
             </tbody>
         </table>
@@ -237,4 +250,5 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 </body>
+
 </html>
